@@ -6,7 +6,8 @@
 
 #include <Planet.h>
 
-Planet::Planet(const sf::Vector2f &pos_km, const sf::Vector2f &vel_km, float r_km) : pos_km_(pos_km), vel_km_(vel_km),
+Planet::Planet(const sf::Vector2f &pos_km, const sf::Vector2f &vel_km, float r_km) : pos_km_(pos_km),
+                                                                                     vel_km_(vel_km),
                                                                                      r_km_(r_km) {
     std::random_device rd;
     std::mt19937 mt(rd());
