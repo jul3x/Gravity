@@ -30,10 +30,6 @@ float Planet::getRadius() const {
     return r_km_;
 }
 
-float Planet::getDensity() const {
-    return DENSITY_KG_M_;
-}
-
 sf::Color Planet::getColor() const {
     return color_;
 }

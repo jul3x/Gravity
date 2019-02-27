@@ -25,8 +25,6 @@ public:
     void setVelocity(const sf::Vector2f &vel_km);
 
 private:
-    constexpr static float DENSITY_KG_M_ = 5000000.0f;
-
     sf::Vector2f pos_km_;
     sf::Vector2f vel_km_;
 

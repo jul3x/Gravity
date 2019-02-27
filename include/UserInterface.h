@@ -8,6 +8,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <Config.h>
+
 class UserInterface {
     
 public:

@@ -32,7 +32,7 @@ void UserInterface::handleEvents() {
             auto mouse_pos = sf::Mouse::getPosition(window_);
             previous_mouse_pos_ = window_.mapPixelToCoords(mouse_pos);
 
-            Engine::getInstance().addPlanet(previous_mouse_pos_, sf::Vector2f(), 5.0f);
+            Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_, sf::Vector2f(), 5.0f);
         }
     }
 }
