@@ -22,9 +22,6 @@ public:
     const bool isWindowOpen() const;
     void handleEvents();
 
-    void ensureConstantFrameRate(int frame_rate);
-    void restartClock();
-
     void draw();
 
 private:
@@ -41,8 +38,6 @@ private:
 
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
-    sf::Clock clock_;
-    sf::Time time_;
     sf::View view_action_;
 
 };

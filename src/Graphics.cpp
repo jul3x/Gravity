@@ -11,7 +11,6 @@ Graphics::Graphics(const std::vector<Planet> &planets) :
                             view_action_(sf::FloatRect(0.0f, 0.0f, WINDOW_WIDTH_PIXELS_, WINDOW_HEIGHT_PIXELS_)),
                             window_(sf::VideoMode(WINDOW_WIDTH_PIXELS_, WINDOW_HEIGHT_PIXELS_),
                                     "Gravity", sf::Style::Default, settings_),
-                            clock_(),
                             background_color_(10,10,30) {
     window_.setView(view_action_);
 }
@@ -45,17 +44,6 @@ void Graphics::draw() {
     }
 
     window_.display();
-}
-
-void Graphics::ensureConstantFrameRate(const int frameRate) {
-    time_ = clock_.restart();
-    sf::Time time_for_sleep = sf::milliseconds(static_cast<int>(1000.0f / static_cast<float>(frameRate))) - time_;
-    sf::sleep(time_for_sleep);
-    time_ = clock_.restart();
-}
-
-void Graphics::restartClock() {
-    time_ = clock_.restart();
 }
 
 void Graphics::draw(const Planet &planet) {

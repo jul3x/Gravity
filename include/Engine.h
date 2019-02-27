@@ -28,7 +28,13 @@ public:
 private:
     Engine();
 
+    void ensureConstantFrameRate(int frame_rate);
+    void restartClock();
+
     Graphics graphics_;
+
+    sf::Clock clock_;
+    sf::Time time_;
 
     std::vector<Planet> planets_;
 };
