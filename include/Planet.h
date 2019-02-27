@@ -6,27 +6,33 @@
 #define GRAVITY_PLANET_H
 
 #include <SFML/System.hpp>
+#include <SFML/Graphics/Color.hpp>
 
 class Planet {
 
 public:
     Planet() = default;
-    Planet(const sf::Vector2f &pos, const sf::Vector2f &vel, double r);
+    Planet(const sf::Vector2f &pos_km, const sf::Vector2f &vel_km, float r_km);
 
     sf::Vector2f getPosition() const;
     sf::Vector2f getVelocity() const;
-    double getRadius() const;
-    double getDensity() const;
+    float getRadius() const;
+    float getDensity() const;
 
-    void setPosition(const sf::Vector2f &pos);
-    void setVelocity(const sf::Vector2f &vel);
+    sf::Color getColor() const;
+
+    void setPosition(const sf::Vector2f &pos_km);
+    void setVelocity(const sf::Vector2f &vel_km);
+
 private:
-    sf::Vector2f pos_;
-    sf::Vector2f vel_;
+    constexpr static float DENSITY_KG_M_ = 5000000.0f;
 
-    double r_;
+    sf::Vector2f pos_km_;
+    sf::Vector2f vel_km_;
 
-    constexpr static double DENSITY_ = 5000000;
+    float r_km_;
+
+    sf::Color color_;
 };
 
 

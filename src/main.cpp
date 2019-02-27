@@ -2,33 +2,28 @@
 // Created by jprolejko on 26.02.19.
 //
 
-#include <SFML/Graphics.hpp>
+#include <Graphics.h>
 
 int main()
 {
-    // create the window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Gravity");
+    constexpr int FRAME_RATE = 60;
 
-    // run the program as long as the window is open
-    while (window.isOpen())
+    std::vector<Planet> planets;
+
+    Graphics graphics(planets);
+
+    planets.emplace_back(sf::Vector2f(0.0, 0.0), sf::Vector2f(0.0, 0.0), 5.0f);
+    planets.emplace_back(sf::Vector2f(80.0, 200.0), sf::Vector2f(0.0, 0.0), 5.0f);
+    graphics.restartClock();
+
+    while (graphics.isWindowOpen())
     {
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+        graphics.handleEvents();
 
-        // clear the window with black color
-        window.clear(sf::Color::Black);
 
-        // draw everything here...
-        // window.draw(...);
 
-        // end the current frame
-        window.display();
+        graphics.draw();
+        graphics.ensureConstantFrameRate(FRAME_RATE);
     }
 
     return 0;
