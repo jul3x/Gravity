@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <Planet.h>
+#include <UserInterface.h>
 
 class Graphics {
 
@@ -38,8 +39,8 @@ private:
 
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
-    sf::View view_action_;
 
+    UserInterface user_interface_;
 };
 
 
