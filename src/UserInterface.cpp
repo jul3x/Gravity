@@ -2,9 +2,13 @@
 // Created by jprolejko on 27.02.19.
 //
 
+
+#include <iostream>
+
 #include <Engine.h>
 #include <UserInterface.h>
-#include <iostream>
+#include <Utils.h>
+
 
 UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {}
 
@@ -31,8 +35,19 @@ void UserInterface::handleEvents() {
         {
             auto mouse_pos = sf::Mouse::getPosition(window_);
             previous_mouse_pos_ = window_.mapPixelToCoords(mouse_pos);
+        }
 
-            Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_, sf::Vector2f(), 5.0f);
+        if (event.type == sf::Event::MouseButtonReleased)
+        {
+            auto mouse_pos = sf::Mouse::getPosition(window_);
+            auto new_mouse_pos = window_.mapPixelToCoords(mouse_pos);
+
+            auto mouse_difference = utils::vectorLengthLimit(new_mouse_pos - previous_mouse_pos_,
+                                                             Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
+
+            std::cout << mouse_difference.x << std::endl;
+            Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
+                                            mouse_difference / Config::PIXELS_PER_KM_, 5.0f);
         }
     }
 }
