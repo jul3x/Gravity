@@ -2,7 +2,9 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#include "UserInterface.h"
+#include <Engine.h>
+#include <UserInterface.h>
+#include <iostream>
 
 UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {}
 
@@ -11,7 +13,9 @@ void UserInterface::handleEvents() {
     while (window_.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
+        {
             window_.close();
+        }
 
         if (event.type == sf::Event::Resized)
         {
@@ -21,6 +25,14 @@ void UserInterface::handleEvents() {
             current_view.setSize(visible_area);
 
             window_.setView(current_view);
+        }
+
+        if (event.type == sf::Event::MouseButtonPressed)
+        {
+            auto mouse_pos = sf::Mouse::getPosition(window_);
+            previous_mouse_pos_ = window_.mapPixelToCoords(mouse_pos);
+
+            Engine::getInstance().addPlanet(previous_mouse_pos_, sf::Vector2f(), 5.0f);
         }
     }
 }

@@ -40,7 +40,11 @@ void Graphics::draw() {
 void Graphics::draw(const Planet &planet) {
     sf::CircleShape planet_shape;
     planet_shape.setPosition(planet.getPosition() * PIXELS_PER_KM_);
-    planet_shape.setRadius(planet.getRadius() * PIXELS_PER_KM_ * OBJECT_ZOOM_);
+
+    auto pixel_radius = planet.getRadius() * PIXELS_PER_KM_ * OBJECT_ZOOM_;
+    planet_shape.setRadius(pixel_radius);
+    planet_shape.setOrigin(pixel_radius, pixel_radius);
+
     planet_shape.setFillColor(planet.getColor());
 
     window_.draw(planet_shape);

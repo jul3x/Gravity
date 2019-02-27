@@ -21,6 +21,8 @@ public:
 private:
     sf::RenderWindow &window_;
 
+    sf::Vector2f previous_mouse_pos_;
+
 };
 
 
