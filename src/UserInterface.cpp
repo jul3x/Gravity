@@ -13,12 +13,9 @@
 UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {
     state_ = State::NOT_PRESSED;
 
-    cursor_planet_.setFillColor(sf::Color::White);
+    cursor_planet_.setFillColor(sf::Color(255, 255, 255, 100));
 
-    auto cursor_planet_r = 50.0f;
-
-    cursor_planet_.setOrigin(cursor_planet_r, cursor_planet_r);
-    cursor_planet_.setRadius(cursor_planet_r);
+    setCursorRadius(5.0f);
 }
 
 void UserInterface::handleEvents() {
@@ -56,11 +53,15 @@ void UserInterface::handleEvents() {
             auto mouse_difference = utils::vectorLengthLimit(new_mouse_pos - previous_mouse_pos_,
                                                              Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
 
-            std::cout << mouse_difference.x << std::endl;
             Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
-                                            mouse_difference / Config::PIXELS_PER_KM_, 5.0f);
+                                            mouse_difference / Config::PIXELS_PER_KM_, cursor_r_);
 
             state_ = State::NOT_PRESSED;
+        }
+
+        if (event.type == sf::Event::MouseWheelScrolled)
+        {
+            setCursorRadius(cursor_r_ + event.mouseWheelScroll.delta / 4.0f);
         }
     }
 }
@@ -83,3 +84,15 @@ void UserInterface::drawCursorPlanet() {
     window_.draw(cursor_planet_);
 }
 
+void UserInterface::setCursorRadius(float new_r) {
+    if (new_r <= 0.0)
+    {
+        return;
+    }
+
+    cursor_r_ = new_r;
+
+    cursor_planet_.setOrigin(cursor_r_ * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_,
+                             cursor_r_ * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_);
+    cursor_planet_.setRadius(cursor_r_ * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_);
+}

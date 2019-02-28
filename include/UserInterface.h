@@ -27,8 +27,8 @@ private:
         PRESSED
     };
 
-
     void drawCursorPlanet();
+    void setCursorRadius(float new_r);
 
     sf::RenderWindow &window_;
 
