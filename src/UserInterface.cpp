@@ -67,7 +67,17 @@ void UserInterface::handleEvents() {
 
         if (event.type == sf::Event::MouseWheelScrolled)
         {
-            setCursorRadius(cursor_r_ + event.mouseWheelScroll.delta / 4.0f);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+            {
+                setCursorRadius(cursor_r_ + event.mouseWheelScroll.delta / 4.0f);
+            }
+            else
+            {
+                auto view = window_.getView();
+                view.zoom(1.0f - event.mouseWheelScroll.delta * 0.1f);
+
+                window_.setView(view);
+            }
         }
 
         if (event.type == sf::Event::KeyPressed)
