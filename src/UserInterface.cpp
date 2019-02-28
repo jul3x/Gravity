@@ -10,7 +10,16 @@
 #include <Utils.h>
 
 
-UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {}
+UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {
+    state_ = State::NOT_PRESSED;
+
+    cursor_planet_.setFillColor(sf::Color::White);
+
+    auto cursor_planet_r = 50.0f;
+
+    cursor_planet_.setOrigin(cursor_planet_r, cursor_planet_r);
+    cursor_planet_.setRadius(cursor_planet_r);
+}
 
 void UserInterface::handleEvents() {
     sf::Event event;
@@ -35,6 +44,8 @@ void UserInterface::handleEvents() {
         {
             auto mouse_pos = sf::Mouse::getPosition(window_);
             previous_mouse_pos_ = window_.mapPixelToCoords(mouse_pos);
+
+            state_ = State::PRESSED;
         }
 
         if (event.type == sf::Event::MouseButtonReleased)
@@ -48,6 +59,27 @@ void UserInterface::handleEvents() {
             std::cout << mouse_difference.x << std::endl;
             Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
                                             mouse_difference / Config::PIXELS_PER_KM_, 5.0f);
+
+            state_ = State::NOT_PRESSED;
         }
     }
 }
+
+void UserInterface::draw() {
+    drawCursorPlanet();
+}
+
+void UserInterface::drawCursorPlanet() {
+    if (state_ == State::NOT_PRESSED)
+    {
+        auto mouse_pos = window_.mapPixelToCoords(sf::Mouse::getPosition(window_));
+        cursor_planet_.setPosition(mouse_pos);
+    }
+    else if (state_ == State::PRESSED)
+    {
+        cursor_planet_.setPosition(previous_mouse_pos_);
+    }
+
+    window_.draw(cursor_planet_);
+}
+

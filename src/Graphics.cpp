@@ -34,6 +34,8 @@ void Graphics::draw() {
         draw(planet);
     }
 
+    user_interface_.draw();
+
     window_.display();
 }
 

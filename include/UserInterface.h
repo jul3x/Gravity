@@ -19,12 +19,24 @@ public:
     UserInterface& operator=(const UserInterface&) = delete;
 
     void handleEvents();
+    void draw();
 
 private:
+    enum class State {
+        NOT_PRESSED,
+        PRESSED
+    };
+
+
+    void drawCursorPlanet();
+
     sf::RenderWindow &window_;
 
-    sf::Vector2f previous_mouse_pos_;
+    State state_;
 
+    sf::Vector2f previous_mouse_pos_;
+    sf::CircleShape cursor_planet_;
+    float cursor_r_;
 };
 
 
