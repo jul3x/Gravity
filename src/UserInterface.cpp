@@ -4,6 +4,7 @@
 
 
 #include <iostream>
+#include <cmath>
 
 #include <Engine.h>
 #include <UserInterface.h>
@@ -13,9 +14,14 @@
 UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {
     state_ = State::NOT_PRESSED;
 
-    cursor_planet_.setFillColor(sf::Color(255, 255, 255, 100));
-
+    cursor_planet_.setFillColor(sf::Color(Config::CURSOR_PLANET_COLOR_R_, Config::CURSOR_PLANET_COLOR_G_,
+                                          Config::CURSOR_PLANET_COLOR_B_, Config::CURSOR_PLANET_COLOR_A_));
     setCursorRadius(5.0f);
+
+    arrow_.setFillColor(sf::Color(Config::ARROW_COLOR_R_, Config::ARROW_COLOR_G_,
+                                  Config::ARROW_COLOR_B_, Config::ARROW_COLOR_A_));
+
+    arrow_.setOrigin(0.0f, Config::ARROW_WIDTH_ / 2.0f);
 }
 
 void UserInterface::handleEvents() {
@@ -49,12 +55,12 @@ void UserInterface::handleEvents() {
         {
             auto mouse_pos = sf::Mouse::getPosition(window_);
             auto new_mouse_pos = window_.mapPixelToCoords(mouse_pos);
-
-            auto mouse_difference = utils::vectorLengthLimit(new_mouse_pos - previous_mouse_pos_,
-                                                             Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
+            auto mouse_difference = new_mouse_pos - previous_mouse_pos_;
+            auto velocity = utils::vectorLengthLimit(mouse_difference,
+                                                     Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
 
             Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
-                                            mouse_difference / Config::PIXELS_PER_KM_, cursor_r_);
+                                            velocity / Config::PIXELS_PER_KM_, cursor_r_);
 
             state_ = State::NOT_PRESSED;
         }
@@ -68,6 +74,7 @@ void UserInterface::handleEvents() {
 
 void UserInterface::draw() {
     drawCursorPlanet();
+    drawArrow();
 }
 
 void UserInterface::drawCursorPlanet() {
@@ -82,6 +89,23 @@ void UserInterface::drawCursorPlanet() {
     }
 
     window_.draw(cursor_planet_);
+}
+
+void UserInterface::drawArrow() {
+    if (state_ == State::PRESSED)
+    {
+        auto mouse_pos = window_.mapPixelToCoords(sf::Mouse::getPosition(window_));
+
+        auto mouse_difference = mouse_pos - previous_mouse_pos_;
+        auto velocity = utils::vectorLengthLimit(mouse_difference,
+                                                 Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
+
+        arrow_.setPosition(previous_mouse_pos_);
+        arrow_.setSize({std::hypot(velocity.x, velocity.y), Config::ARROW_WIDTH_});
+        arrow_.setRotation(static_cast<float>(std::atan2(velocity.y, velocity.x) / M_PI * 180.0f));
+
+        window_.draw(arrow_);
+    }
 }
 
 void UserInterface::setCursorRadius(float new_r) {
