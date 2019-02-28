@@ -69,6 +69,37 @@ void UserInterface::handleEvents() {
         {
             setCursorRadius(cursor_r_ + event.mouseWheelScroll.delta / 4.0f);
         }
+
+        if (event.type == sf::Event::KeyPressed)
+        {
+            auto view = window_.getView();
+            auto delta_x = 0.0f;
+            auto delta_y = 0.0f;
+            auto scrolling_speed = 10.0f;
+
+            if (event.key.code == sf::Keyboard::Left)
+            {
+                delta_x -= scrolling_speed;
+            }
+
+            if (event.key.code == sf::Keyboard::Right)
+            {
+                delta_x += scrolling_speed;
+            }
+
+            if (event.key.code == sf::Keyboard::Up)
+            {
+                delta_y -= scrolling_speed;
+            }
+
+            if (event.key.code == sf::Keyboard::Down)
+            {
+                delta_y += scrolling_speed;
+            }
+
+            view.move(delta_x, delta_y);
+            window_.setView(view);
+        }
     }
 }
 
