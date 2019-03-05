@@ -74,7 +74,15 @@ void UserInterface::handleEvents() {
             else
             {
                 auto view = window_.getView();
+
+                auto mouse_pos_from_center = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window_)) -
+                                             static_cast<sf::Vector2f>(window_.getSize()) / 2.0f;
+
+                auto factor = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
+
+                view.setCenter(view.getCenter() + factor * mouse_pos_from_center / 5.0f);
                 view.zoom(1.0f - event.mouseWheelScroll.delta * 0.1f);
+
 
                 window_.setView(view);
             }
