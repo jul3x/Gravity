@@ -8,12 +8,14 @@
 Graphics::Graphics(const std::vector<Planet> &planets) :
                             planets_(planets),
                             settings_(0, 0, 8),
-                            view_action_(sf::FloatRect(0.0f, 0.0f, WINDOW_WIDTH_PIXELS_, WINDOW_HEIGHT_PIXELS_)),
-                            window_(sf::VideoMode(WINDOW_WIDTH_PIXELS_, WINDOW_HEIGHT_PIXELS_),
+                            window_(sf::VideoMode(Config::WINDOW_WIDTH_PIXELS_, Config::WINDOW_HEIGHT_PIXELS_),
                                     "Gravity", sf::Style::Default, settings_),
-                            clock_(),
+                            user_interface_(window_),
                             background_color_(10,10,30) {
-    window_.setView(view_action_);
+    auto current_view = window_.getView();
+    current_view.setSize(Config::WINDOW_WIDTH_PIXELS_, Config::WINDOW_HEIGHT_PIXELS_);
+    current_view.setCenter(0.0f, 0.0f);
+    window_.setView(current_view);
 }
 
 const bool Graphics::isWindowOpen() const {
@@ -21,19 +23,7 @@ const bool Graphics::isWindowOpen() const {
 }
 
 void Graphics::handleEvents() {
-    sf::Event event;
-    while (window_.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-            window_.close();
-
-        if (event.type == sf::Event::Resized)
-        {
-            auto visible_area = sf::Vector2f(event.size.width, event.size.height);
-
-            view_action_.setSize(visible_area);
-        }
-    }
+    user_interface_.handleEvents();
 }
 
 void Graphics::draw() {
@@ -44,24 +34,19 @@ void Graphics::draw() {
         draw(planet);
     }
 
+    user_interface_.draw();
+
     window_.display();
-}
-
-void Graphics::ensureConstantFrameRate(const int frameRate) {
-    time_ = clock_.restart();
-    sf::Time time_for_sleep = sf::milliseconds(static_cast<int>(1000.0f / static_cast<float>(frameRate))) - time_;
-    sf::sleep(time_for_sleep);
-    time_ = clock_.restart();
-}
-
-void Graphics::restartClock() {
-    time_ = clock_.restart();
 }
 
 void Graphics::draw(const Planet &planet) {
     sf::CircleShape planet_shape;
-    planet_shape.setPosition(planet.getPosition() * PIXELS_PER_KM_);
-    planet_shape.setRadius(planet.getRadius() * PIXELS_PER_KM_ * OBJECT_ZOOM_);
+    planet_shape.setPosition(planet.getPosition() * Config::PIXELS_PER_KM_);
+
+    auto pixel_radius = planet.getRadius() * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_;
+    planet_shape.setRadius(pixel_radius);
+    planet_shape.setOrigin(pixel_radius, pixel_radius);
+
     planet_shape.setFillColor(planet.getColor());
 
     window_.draw(planet_shape);
