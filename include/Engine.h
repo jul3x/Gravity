@@ -10,6 +10,7 @@
 
 #include <Planet.h>
 #include <Graphics.h>
+#include <Physics.h>
 
 class Engine {
 
@@ -32,6 +33,7 @@ private:
     void restartClock();
 
     Graphics graphics_;
+    Physics physics_;
 
     sf::Clock clock_;
     sf::Time time_;

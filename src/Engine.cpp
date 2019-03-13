@@ -5,10 +5,7 @@
 #include "Engine.h"
 
 
-Engine::Engine() : graphics_(planets_) {
-    planets_.emplace_back(sf::Vector2f(0.0, 0.0), sf::Vector2f(0.0, 0.0), 5.0f);
-    planets_.emplace_back(sf::Vector2f(80.0, 200.0), sf::Vector2f(0.0, 0.0), 5.0f);
-}
+Engine::Engine() : graphics_(planets_), physics_(planets_) { addPlanet(sf::Vector2f(0.1230f, 0.1230f), sf::Vector2f(), 5.0f); }
 
 void Engine::update(int frame_rate) {
     restartClock();
@@ -16,6 +13,8 @@ void Engine::update(int frame_rate) {
     while (graphics_.isWindowOpen())
     {
         graphics_.handleEvents();
+
+        physics_.update(1.0f / static_cast<float>(frame_rate));
 
         graphics_.draw();
         ensureConstantFrameRate(frame_rate);

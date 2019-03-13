@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(EXECUTABLE_NAME "Gravity")
 
 add_executable(${EXECUTABLE_NAME} src/main.cpp src/Planet.cpp src/Graphics.cpp src/Engine.cpp src/UserInterface.cpp
-                                  src/Utils.cpp)
+                                  src/Utils.cpp src/Physics.cpp)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2 REQUIRED COMPONENTS network audio graphics window system)

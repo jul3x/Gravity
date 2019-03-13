@@ -2,7 +2,7 @@
 // Created by jprolejko on 27.02.19.
 //
 
-
+#include <iostream>
 #include <cmath>
 
 #include <Utils.h>
@@ -20,6 +20,10 @@ namespace utils {
         }
 
         return out;
+    }
+
+    bool isNearlyEqual(const sf::Vector2f &a, const sf::Vector2f &b, float abs_error) {
+        return std::fabs(a.x - b.x) < abs_error && std::fabs(a.y - b.y) < abs_error;
     }
 
 } // namespace utils

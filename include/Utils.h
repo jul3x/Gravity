@@ -11,6 +11,8 @@ namespace utils {
 
     sf::Vector2f vectorLengthLimit(const sf::Vector2f &vector_in, float max_length);
 
+    bool isNearlyEqual(const sf::Vector2f &a, const sf::Vector2f &b, float abs_error);
+
 } // namespace utils
 
 #endif //GRAVITY_UTILS_H
