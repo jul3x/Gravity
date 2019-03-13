@@ -5,7 +5,7 @@
 #include "Engine.h"
 
 
-Engine::Engine() : graphics_(planets_), physics_(planets_) { }
+Engine::Engine() : graphics_(planets_), physics_(planets_) { addPlanet(sf::Vector2f(0.1230f, 0.1230f), sf::Vector2f(), 5.0f); }
 
 void Engine::update(int frame_rate) {
     restartClock();

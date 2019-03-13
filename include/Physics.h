@@ -6,8 +6,12 @@
 #define GRAVITY_PHYSICS_H
 
 #include <vector>
+#include <cmath>
 
+#include <Utils.h>
+#include <Config.h>
 #include <Planet.h>
+
 
 class Physics {
 
@@ -20,6 +24,9 @@ public:
     void update(float time_elapsed);
 
 private:
+    std::vector<float> applyRungeKutta(const std::vector<float> &in_values, float step, unsigned int planet_number);
+    std::vector<float> applyGravityForceEquations(const std::vector<float> &in_values, unsigned int planet_number);
+
     std::vector<Planet> &planets_;
 
 };

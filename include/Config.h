@@ -27,8 +27,9 @@ public:
     static constexpr float ARROW_WIDTH_ = 5.0f;
 
     // Physics
-    static constexpr float DENSITY_KG_M_ = 5000000.0f;
-    static constexpr float MAX_SET_VELOCITY_ = 200.0f;
+    static constexpr float DENSITY_KG_M_ = 5000.0f;
+    static constexpr float MAX_SET_VELOCITY_ = 2000.0f;
+    static constexpr float GRAVITY_CONST = 6.67f; // TODO CHECK THOSE PARAMETERS
 };
 
 #endif //GRAVITY_CONFIG_H

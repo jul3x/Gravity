@@ -17,7 +17,6 @@ public:
     sf::Vector2f getPosition() const;
     sf::Vector2f getVelocity() const;
     float getRadius() const;
-    float getDensity() const;
 
     sf::Color getColor() const;
 
