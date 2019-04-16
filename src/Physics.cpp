@@ -7,27 +7,30 @@
 
 #include <Physics.h>
 
-Physics::Physics(std::vector<Planet> &planets) : planets_(planets) {}
+Physics::Physics(std::list<Planet> &planets) : planets_(planets) {}
 
 void Physics::update(float time_elapsed) {
-    for (auto planet = planets_.begin(); planet != planets_.end(); ++planet)
+    handleMovement(time_elapsed);
+}
+
+void Physics::handleMovement(float time_elapsed) {
+    for (auto current_planet = planets_.begin(); current_planet != planets_.end(); ++current_planet)
     {
         std::vector<float> equation_vars(4);
-        equation_vars.at(0) = planet->getPosition().x;
-        equation_vars.at(1) = planet->getPosition().y;
-        equation_vars.at(2) = planet->getVelocity().x;
-        equation_vars.at(3) = planet->getVelocity().y;
+        equation_vars.at(0) = current_planet->getPosition().x;
+        equation_vars.at(1) = current_planet->getPosition().y;
+        equation_vars.at(2) = current_planet->getVelocity().x;
+        equation_vars.at(3) = current_planet->getVelocity().y;
 
-        equation_vars = applyRungeKutta(equation_vars, time_elapsed,
-                                        static_cast<unsigned int>(std::distance(planets_.begin(), planet)));
+        equation_vars = applyRungeKutta(equation_vars, time_elapsed, current_planet);
 
-        planet->setPosition({equation_vars.at(0), equation_vars.at(1)});
-        planet->setVelocity({equation_vars.at(2), equation_vars.at(3)});
+        current_planet->setPosition({equation_vars.at(0), equation_vars.at(1)});
+        current_planet->setVelocity({equation_vars.at(2), equation_vars.at(3)});
     }
 }
 
 std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> &in_values,
-                                                       unsigned int planet_number) {
+                                                       const std::list<Planet>::iterator &current_planet) {
     if (in_values.size() != 4)
     {
         throw std::runtime_error("Wrong size of vector of equations!");
@@ -42,8 +45,7 @@ std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> 
 
     for (auto planet = planets_.begin(); planet != planets_.end(); ++planet)
     {
-        // check if it is not the same planet
-        if (std::distance(planets_.begin(), planet) != planet_number)
+        if (planet != current_planet)
         {
             float distance = std::hypot(planet->getPosition().x - in_values.at(0),
                                         planet->getPosition().y - in_values.at(1));
@@ -63,20 +65,12 @@ std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> 
 
 
 std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values, float step,
-                                            unsigned int planet_number) {
+                                            const std::list<Planet>::iterator &current_planet) {
     auto vectors_size = in_values.size();
     std::vector<float> k1(vectors_size), k2(vectors_size), k3(vectors_size), k4(vectors_size);
     std::vector<float> temporary_vec(vectors_size), out_values(vectors_size);
 
-    // TEST
-    //     k1 = applyGravityForceEquations(in_values);
-    //    for (size_t i = 0; i < out_values.size(); i++)
-    //    {
-    //        out_values.at(i) = in_values.at(i) + k1.at(i) * step;
-    //    }
-    //    return out_values;
-
-    k1 = applyGravityForceEquations(in_values, planet_number);
+    k1 = applyGravityForceEquations(in_values, current_planet);
 
     for (size_t i = 0; i < k1.size(); i++)
     {
@@ -84,7 +78,7 @@ std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values,
         temporary_vec.at(i) = in_values.at(i) + k1.at(i) / 2.0f;
     }
 
-    k2 = applyGravityForceEquations(temporary_vec, planet_number);
+    k2 = applyGravityForceEquations(temporary_vec, current_planet);
 
     for (size_t i = 0; i < k2.size(); i++)
     {
@@ -92,7 +86,7 @@ std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values,
         temporary_vec.at(i) = in_values.at(i) + k2.at(i) / 2.0f;
     }
 
-    k3 = applyGravityForceEquations(temporary_vec, planet_number);
+    k3 = applyGravityForceEquations(temporary_vec, current_planet);
 
     for (size_t i = 0; i < k3.size(); i++)
     {
@@ -100,7 +94,7 @@ std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values,
         temporary_vec.at(i) = in_values.at(i) + k3.at(i);
     }
 
-    k4 = applyGravityForceEquations(temporary_vec, planet_number);
+    k4 = applyGravityForceEquations(temporary_vec, current_planet);
 
     for (auto &k : k4)
     {

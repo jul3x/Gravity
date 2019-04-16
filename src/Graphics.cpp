@@ -5,7 +5,7 @@
 #include <Graphics.h>
 
 
-Graphics::Graphics(const std::vector<Planet> &planets) :
+Graphics::Graphics(const std::list<Planet> &planets) :
                             planets_(planets),
                             settings_(0, 0, 8),
                             window_(sf::VideoMode(Config::WINDOW_WIDTH_PIXELS_, Config::WINDOW_HEIGHT_PIXELS_),

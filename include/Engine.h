@@ -38,7 +38,7 @@ private:
     sf::Clock clock_;
     sf::Time time_;
 
-    std::vector<Planet> planets_;
+    std::list<Planet> planets_;
 };
 
 
