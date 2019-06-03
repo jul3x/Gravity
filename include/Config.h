@@ -10,7 +10,7 @@ class Config {
 public:
     // Graphics
     static constexpr float PIXELS_PER_KM_ = 1.0f;
-    static constexpr float OBJECT_ZOOM_ = 10.0f;
+    static constexpr float OBJECT_ZOOM_ = 1.0f;
     static constexpr int WINDOW_WIDTH_PIXELS_ = 1000;
     static constexpr int WINDOW_HEIGHT_PIXELS_ = 600;
 
@@ -31,7 +31,7 @@ public:
     // Physics
     static constexpr float DENSITY_KG_M_ = 5000.0f;
     static constexpr float MAX_SET_VELOCITY_ = 2000.0f;
-    static constexpr float GRAVITY_CONST = 6.67f; // TODO CHECK THOSE PARAMETERS
+    static constexpr float GRAVITY_CONST = 0.067f; // TODO CHECK THOSE PARAMETERS
 };
 
 #endif //GRAVITY_CONFIG_H

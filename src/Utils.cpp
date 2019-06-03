@@ -26,4 +26,8 @@ namespace utils {
         return std::fabs(a.x - b.x) < abs_error && std::fabs(a.y - b.y) < abs_error;
     }
 
+    double getDistance(const sf::Vector2f &a, const sf::Vector2f &b) {
+        return std::hypot(b.x - a.x, b.y - a.y);
+    }
+
 } // namespace utils

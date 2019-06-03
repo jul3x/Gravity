@@ -25,12 +25,13 @@ public:
     void update(float time_elapsed);
 
 private:
+    inline void handleCollisions(float time_elapsed);
     inline void handleMovement(float time_elapsed);
     
-    std::vector<float> applyRungeKutta(const std::vector<float> &in_values, float step,
-                                       const std::list<Planet>::iterator &current_planet);
-    std::vector<float> applyGravityForceEquations(const std::vector<float> &in_values,
-                                                  const std::list<Planet>::iterator &current_planet);
+    inline std::vector<float> applyRungeKutta(const std::vector<float> &in_values, float step,
+                                              const std::list<Planet>::iterator &current_planet);
+    inline std::vector<float> applyGravityForceEquations(const std::vector<float> &in_values,
+                                                         const std::list<Planet>::iterator &current_planet);
 
     std::list<Planet> &planets_;
 

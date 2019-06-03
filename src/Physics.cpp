@@ -3,14 +3,60 @@
 //
 
 #include <iostream>
+#include <iterator>
 #include <cassert>
 
 #include <Physics.h>
+#include <Utils.h>
 
 Physics::Physics(std::list<Planet> &planets) : planets_(planets) {}
 
 void Physics::update(float time_elapsed) {
+    handleCollisions(time_elapsed);
     handleMovement(time_elapsed);
+}
+
+void Physics::handleCollisions(float time_elapsed) {
+    auto current_planet = planets_.begin();
+    bool move_forward;
+
+    while (current_planet != planets_.end())
+    {
+        move_forward = true;
+        auto other_planet = std::next(current_planet);
+        while (other_planet != planets_.end())
+        {
+            double distance = utils::getDistance(current_planet->getPosition(), other_planet->getPosition());
+            double max_distance = current_planet->getRadius() + other_planet->getRadius();
+            
+            if (distance < max_distance)
+            {
+                move_forward = false;
+                auto new_current_planet = std::next(current_planet);
+            
+                if (std::distance(current_planet, other_planet) == 1)
+                {
+                    new_current_planet = std::next(new_current_planet);
+                }
+                
+                planets_.erase(current_planet);
+                planets_.erase(other_planet);
+                
+                current_planet = new_current_planet;
+
+                break;
+            }
+            else
+            {
+                ++other_planet;
+            }
+        }
+
+        if (move_forward)
+        {
+            ++current_planet;
+        }
+    }
 }
 
 void Physics::handleMovement(float time_elapsed) {

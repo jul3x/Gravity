@@ -13,6 +13,8 @@ namespace utils {
 
     bool isNearlyEqual(const sf::Vector2f &a, const sf::Vector2f &b, float abs_error);
 
+    double getDistance(const sf::Vector2f &a, const sf::Vector2f &b);
+
 } // namespace utils
 
 #endif //GRAVITY_UTILS_H
