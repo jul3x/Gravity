@@ -26,10 +26,7 @@ void Physics::handleCollisions(float time_elapsed) {
         auto other_planet = std::next(current_planet);
         while (other_planet != planets_.end())
         {
-            double distance = utils::getDistance(current_planet->getPosition(), other_planet->getPosition());
-            double max_distance = current_planet->getRadius() + other_planet->getRadius();
-            
-            if (distance < max_distance)
+            if (utils::isCollidable(*current_planet, *other_planet, time_elapsed))
             {
                 move_forward = false;
                 auto new_current_planet = std::next(current_planet);

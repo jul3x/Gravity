@@ -7,6 +7,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <Planet.h>
+
 namespace utils {
 
     sf::Vector2f vectorLengthLimit(const sf::Vector2f &vector_in, float max_length);
@@ -15,6 +17,8 @@ namespace utils {
 
     double getDistance(const sf::Vector2f &a, const sf::Vector2f &b);
 
+    bool isCollidable(const Planet &first, const Planet &second, float time_elapsed);
+    
 } // namespace utils
 
 #endif //GRAVITY_UTILS_H

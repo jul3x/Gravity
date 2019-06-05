@@ -30,4 +30,16 @@ namespace utils {
         return std::hypot(b.x - a.x, b.y - a.y);
     }
 
+    bool isCollidable(const Planet &first, const Planet &second, float time_elapsed) {
+        double distance = utils::getDistance(first.getPosition(), second.getPosition());
+        double max_distance = first.getRadius() + second.getRadius();
+            
+        if (distance < max_distance)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 } // namespace utils
