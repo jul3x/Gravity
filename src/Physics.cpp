@@ -12,11 +12,13 @@
 Physics::Physics(std::list<Planet> &planets) : planets_(planets) {}
 
 void Physics::update(float time_elapsed) {
-    handleCollisions(time_elapsed);
     handleMovement(time_elapsed);
+    handleCollisions(time_elapsed);
 }
 
 void Physics::handleCollisions(float time_elapsed) {
+    static constexpr double MASS_TOLERANCE_FACTOR = 1.5;
+
     auto current_planet = planets_.begin();
     bool move_forward;
 
@@ -29,17 +31,34 @@ void Physics::handleCollisions(float time_elapsed) {
             if (utils::isCollidable(*current_planet, *other_planet, time_elapsed))
             {
                 move_forward = false;
-                auto new_current_planet = std::next(current_planet);
-            
-                if (std::distance(current_planet, other_planet) == 1)
+                if (current_planet->getMass() >= other_planet->getMass() * MASS_TOLERANCE_FACTOR)
                 {
-                    new_current_planet = std::next(new_current_planet);
+                    planets_.erase(other_planet);
+                    
+                    current_planet = std::next(current_planet);
                 }
+                else if (current_planet->getMass() * MASS_TOLERANCE_FACTOR <= other_planet->getMass())
+                {           
+                    auto new_current_planet = std::next(current_planet);
+
+                    planets_.erase(current_planet);
+                        
+                    current_planet = new_current_planet;
+                }
+                else
+                {        
+                    auto new_current_planet = std::next(current_planet);
                 
-                planets_.erase(current_planet);
-                planets_.erase(other_planet);
-                
-                current_planet = new_current_planet;
+                    if (std::distance(current_planet, other_planet) == 1)
+                    {
+                        new_current_planet = std::next(new_current_planet);
+                    }
+                    
+                    planets_.erase(current_planet);
+                    planets_.erase(other_planet);
+                    
+                    current_planet = new_current_planet;
+                }
 
                 break;
             }
