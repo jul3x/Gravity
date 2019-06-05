@@ -5,6 +5,7 @@
 #include <random>
 
 #include <Planet.h>
+#include <Config.h>
 
 Planet::Planet(const sf::Vector2f &pos_km, const sf::Vector2f &vel_km, float r_km) : pos_km_(pos_km),
                                                                                      vel_km_(vel_km),
@@ -29,6 +30,10 @@ sf::Vector2f Planet::getVelocity() const {
 
 float Planet::getRadius() const {
     return r_km_;
+}
+
+float Planet::getMass() const {
+    return Config::DENSITY_KG_M_ * 4.0f / 3.0f * static_cast<float>(M_PI) * std::pow(this->getRadius(), 3.0f);
 }
 
 sf::Color Planet::getColor() const {

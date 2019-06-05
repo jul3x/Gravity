@@ -95,11 +95,8 @@ std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> 
             float alfa = std::atan2(planet->getPosition().y - in_values.at(1),
                                     planet->getPosition().x - in_values.at(0));
 
-            float mass = Config::DENSITY_KG_M_ *
-                    4.0f / 3.0f * static_cast<float>(M_PI) * std::pow(planet->getRadius(), 3.0f);
-
-            out_values.at(2) += Config::GRAVITY_CONST * mass / std::pow(distance, 2.0f) * std::cos(alfa);
-            out_values.at(3) += Config::GRAVITY_CONST * mass / std::pow(distance, 2.0f) * std::sin(alfa);
+            out_values.at(2) += Config::GRAVITY_CONST * planet->getMass() / std::pow(distance, 2.0f) * std::cos(alfa);
+            out_values.at(3) += Config::GRAVITY_CONST * planet->getMass() / std::pow(distance, 2.0f) * std::sin(alfa);
         }
     }
 
