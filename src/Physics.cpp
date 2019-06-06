@@ -12,8 +12,8 @@
 Physics::Physics(std::list<Planet> &planets) : planets_(planets) {}
 
 void Physics::update(float time_elapsed) {
-    handleMovement(time_elapsed);
     handleCollisions(time_elapsed);
+    handleMovement(time_elapsed);
 }
 
 void Physics::handleCollisions(float time_elapsed) {
@@ -33,12 +33,22 @@ void Physics::handleCollisions(float time_elapsed) {
                 move_forward = false;
                 if (current_planet->getMass() >= other_planet->getMass() * MASS_TOLERANCE_FACTOR)
                 {
+                    // momentum conservation
+                    sf::Vector2f velocity = current_planet->getVelocity() +
+                        other_planet->getMass() / current_planet->getMass() * other_planet->getVelocity();
+                    current_planet->setVelocity(velocity);
+
                     planets_.erase(other_planet);
                     
                     current_planet = std::next(current_planet);
                 }
                 else if (current_planet->getMass() * MASS_TOLERANCE_FACTOR <= other_planet->getMass())
-                {           
+                {
+                    // momentum conservation
+                    sf::Vector2f velocity = other_planet->getVelocity() +
+                        current_planet->getMass() / other_planet->getMass() * current_planet->getVelocity();
+                    other_planet->setVelocity(velocity);
+
                     auto new_current_planet = std::next(current_planet);
 
                     planets_.erase(current_planet);
