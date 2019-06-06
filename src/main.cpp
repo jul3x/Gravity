@@ -6,7 +6,7 @@
 
 int main()
 {
-    constexpr int FRAME_RATE = 30;
+    constexpr int FRAME_RATE = 60;
 
     Engine::getInstance().update(FRAME_RATE);
 

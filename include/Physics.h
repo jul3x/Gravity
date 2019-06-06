@@ -6,6 +6,7 @@
 #define GRAVITY_PHYSICS_H
 
 #include <vector>
+#include <list>
 #include <cmath>
 
 #include <Utils.h>
@@ -16,7 +17,7 @@
 class Physics {
 
 public:
-    explicit Physics(std::vector<Planet> &planets);
+    explicit Physics(std::list<Planet> &planets);
 
     Physics(const Physics&) = delete;
     Physics& operator=(const Physics&) = delete;
@@ -24,10 +25,15 @@ public:
     void update(float time_elapsed);
 
 private:
-    std::vector<float> applyRungeKutta(const std::vector<float> &in_values, float step, unsigned int planet_number);
-    std::vector<float> applyGravityForceEquations(const std::vector<float> &in_values, unsigned int planet_number);
+    inline void handleCollisions(float time_elapsed);
+    inline void handleMovement(float time_elapsed);
+    
+    inline std::vector<float> applyRungeKutta(const std::vector<float> &in_values, float step,
+                                              const std::list<Planet>::iterator &current_planet);
+    inline std::vector<float> applyGravityForceEquations(const std::vector<float> &in_values,
+                                                         const std::list<Planet>::iterator &current_planet);
 
-    std::vector<Planet> &planets_;
+    std::list<Planet> &planets_;
 
 };
 

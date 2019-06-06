@@ -158,7 +158,7 @@ void UserInterface::drawArrow() {
 }
 
 void UserInterface::setCursorRadius(float new_r) {
-    if (new_r <= 0.0)
+    if (new_r <= 0.0 || new_r >= Config::MAX_PLANET_RADIUS_)
     {
         return;
     }

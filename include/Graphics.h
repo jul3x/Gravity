@@ -5,7 +5,7 @@
 #ifndef GRAVITY_GRAPHICS_H
 #define GRAVITY_GRAPHICS_H
 
-#include <vector>
+#include <list>
 
 #include <SFML/Graphics.hpp>
 
@@ -16,7 +16,7 @@
 class Graphics {
 
 public:
-    explicit Graphics(const std::vector<Planet> &planets);
+    explicit Graphics(const std::list<Planet> &planets);
 
     Graphics(const Graphics&) = delete;
     Graphics& operator=(const Graphics&) = delete;
@@ -31,7 +31,7 @@ private:
 
     const sf::Color background_color_;
 
-    const std::vector<Planet> &planets_;
+    const std::list<Planet> &planets_;
 
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
