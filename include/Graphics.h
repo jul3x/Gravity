@@ -12,6 +12,7 @@
 #include <Planet.h>
 #include <UserInterface.h>
 #include <Config.h>
+#include <Background.h>
 
 class Graphics {
 
@@ -24,17 +25,17 @@ public:
     const bool isWindowOpen() const;
     void handleEvents();
 
-    void draw();
+    void draw(float time_elapsed);
 
 private:
     void draw(const Planet &planet);
 
-    const sf::Color background_color_;
-
+    Background background_;
     const std::list<Planet> &planets_;
 
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
+    sf::View standard_view_;
 
     UserInterface user_interface_;
 };
