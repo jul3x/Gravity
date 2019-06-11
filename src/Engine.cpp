@@ -29,6 +29,7 @@ void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r
 void Engine::ensureConstantFrameRate(const int frame_rate) {
     time_ = clock_.restart();
     sf::Time time_for_sleep = sf::milliseconds(static_cast<int>(1000.0f / static_cast<float>(frame_rate))) - time_;
+    std::cout << time_for_sleep.asMilliseconds() << std::endl;
     sf::sleep(time_for_sleep);
     time_ = clock_.restart();
 }
