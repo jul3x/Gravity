@@ -17,8 +17,6 @@ void Physics::update(float time_elapsed) {
 }
 
 void Physics::handleCollisions(float time_elapsed) {
-    static constexpr double MASS_TOLERANCE_FACTOR = 1.5;
-
     auto current_planet = planets_.begin();
     bool move_forward;
 
@@ -28,47 +26,11 @@ void Physics::handleCollisions(float time_elapsed) {
         auto other_planet = std::next(current_planet);
         while (other_planet != planets_.end())
         {
-            if (utils::isCollidable(*current_planet, *other_planet, time_elapsed))
+            if (utils::isCollidable(*current_planet, *other_planet))
             {
                 move_forward = false;
-                if (current_planet->getMass() >= other_planet->getMass() * MASS_TOLERANCE_FACTOR)
-                {
-                    // momentum conservation
-                    sf::Vector2f velocity = current_planet->getVelocity() +
-                        other_planet->getMass() / current_planet->getMass() * other_planet->getVelocity();
-                    current_planet->setVelocity(velocity);
 
-                    planets_.erase(other_planet);
-                    
-                    current_planet = std::next(current_planet);
-                }
-                else if (current_planet->getMass() * MASS_TOLERANCE_FACTOR <= other_planet->getMass())
-                {
-                    // momentum conservation
-                    sf::Vector2f velocity = other_planet->getVelocity() +
-                        current_planet->getMass() / other_planet->getMass() * current_planet->getVelocity();
-                    other_planet->setVelocity(velocity);
-
-                    auto new_current_planet = std::next(current_planet);
-
-                    planets_.erase(current_planet);
-                        
-                    current_planet = new_current_planet;
-                }
-                else
-                {        
-                    auto new_current_planet = std::next(current_planet);
-                
-                    if (std::distance(current_planet, other_planet) == 1)
-                    {
-                        new_current_planet = std::next(new_current_planet);
-                    }
-                    
-                    planets_.erase(current_planet);
-                    planets_.erase(other_planet);
-                    
-                    current_planet = new_current_planet;
-                }
+                applyDestruction(current_planet, other_planet);
 
                 break;
             }
@@ -86,15 +48,16 @@ void Physics::handleCollisions(float time_elapsed) {
 }
 
 void Physics::handleMovement(float time_elapsed) {
+    static std::vector<float> equation_vars(4);
+    
     for (auto current_planet = planets_.begin(); current_planet != planets_.end(); ++current_planet)
     {
-        std::vector<float> equation_vars(4);
         equation_vars.at(0) = current_planet->getPosition().x;
         equation_vars.at(1) = current_planet->getPosition().y;
         equation_vars.at(2) = current_planet->getVelocity().x;
         equation_vars.at(3) = current_planet->getVelocity().y;
 
-        equation_vars = applyRungeKutta(equation_vars, time_elapsed, current_planet);
+        applyRungeKutta(equation_vars, time_elapsed, current_planet);
 
         current_planet->setPosition({equation_vars.at(0), equation_vars.at(1)});
         current_planet->setVelocity({equation_vars.at(2), equation_vars.at(3)});
@@ -108,7 +71,7 @@ std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> 
         throw std::runtime_error("Wrong size of vector of equations!");
     }
 
-    std::vector<float> out_values(in_values.size());
+    static std::vector<float> out_values(in_values.size());
 
     out_values.at(0) = in_values.at(2);
     out_values.at(1) = in_values.at(3);
@@ -119,8 +82,7 @@ std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> 
     {
         if (planet != current_planet)
         {
-            float distance = std::hypot(planet->getPosition().x - in_values.at(0),
-                                        planet->getPosition().y - in_values.at(1));
+            float distance = utils::getDistance(planet->getPosition(), {in_values.at(0), in_values.at(1)});
             float alfa = std::atan2(planet->getPosition().y - in_values.at(1),
                                     planet->getPosition().x - in_values.at(0));
 
@@ -132,19 +94,63 @@ std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> 
     return out_values;
 }
 
+inline void Physics::applyMomentumConservation(Planet &first, const Planet &second) {
+    // first planet gets momentum from the second one
+    sf::Vector2f velocity = first.getVelocity() +
+        second.getMass() / first.getMass() * second.getVelocity();
+    first.setVelocity(velocity);
+}
 
-std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values, float step,
-                                            const std::list<Planet>::iterator &current_planet) {
-    auto vectors_size = in_values.size();
-    std::vector<float> k1(vectors_size), k2(vectors_size), k3(vectors_size), k4(vectors_size);
-    std::vector<float> temporary_vec(vectors_size), out_values(vectors_size);
+inline void Physics::applyDestruction(std::list<Planet>::iterator &first, std::list<Planet>::iterator &second) {
+    static constexpr double MASS_TOLERANCE_FACTOR = 1.5;
 
-    k1 = applyGravityForceEquations(in_values, current_planet);
+    auto new_first = std::next(first);
+
+    if (first->getMass() >= second->getMass() * MASS_TOLERANCE_FACTOR)
+    {
+        applyMomentumConservation(*first, *second);
+        planets_.erase(second);
+        
+        first = std::next(first);
+    }
+    else if (first->getMass() * MASS_TOLERANCE_FACTOR <= second->getMass())
+    {
+        applyMomentumConservation(*first, *second);
+        planets_.erase(first);
+            
+        first = new_first;
+    }
+    else
+    {        
+        if (std::distance(first, second) == 1)
+        {
+            new_first = std::next(new_first);
+        }
+        
+        planets_.erase(first);
+        planets_.erase(second);
+        
+        first = new_first;
+    }
+}
+
+void Physics::applyRungeKutta(std::vector<float> &values, float step,
+                              const std::list<Planet>::iterator &current_planet) {
+    if (values.empty())
+    {
+        throw std::runtime_error("Values vector in applyRungeKutta function cannot be empty");
+    }
+                            
+    auto vectors_size = values.size();
+    static std::vector<float> k1(vectors_size), k2(vectors_size), k3(vectors_size), k4(vectors_size);
+    static std::vector<float> temporary_vec(vectors_size);
+
+    k1 = applyGravityForceEquations(values, current_planet);
 
     for (size_t i = 0; i < k1.size(); i++)
     {
         k1.at(i) = k1.at(i) * step;
-        temporary_vec.at(i) = in_values.at(i) + k1.at(i) / 2.0f;
+        temporary_vec.at(i) = values.at(i) + k1.at(i) / 2.0f;
     }
 
     k2 = applyGravityForceEquations(temporary_vec, current_planet);
@@ -152,7 +158,7 @@ std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values,
     for (size_t i = 0; i < k2.size(); i++)
     {
         k2.at(i) = k2.at(i) * step;
-        temporary_vec.at(i) = in_values.at(i) + k2.at(i) / 2.0f;
+        temporary_vec.at(i) = values.at(i) + k2.at(i) / 2.0f;
     }
 
     k3 = applyGravityForceEquations(temporary_vec, current_planet);
@@ -160,7 +166,7 @@ std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values,
     for (size_t i = 0; i < k3.size(); i++)
     {
         k3.at(i) = k3.at(i) * step;
-        temporary_vec.at(i) = in_values.at(i) + k3.at(i);
+        temporary_vec.at(i) = values.at(i) + k3.at(i);
     }
 
     k4 = applyGravityForceEquations(temporary_vec, current_planet);
@@ -170,10 +176,8 @@ std::vector<float> Physics::applyRungeKutta(const std::vector<float> &in_values,
         k = k * step;
     }
 
-    for (size_t i = 0; i < out_values.size(); i++)
+    for (size_t i = 0; i < values.size(); i++)
     {
-        out_values.at(i) = in_values.at(i) + (k1.at(i) + 2.0f * k2.at(i) + 2.0f * k3.at(i) + k4.at(i)) / 6.0f;
+        values.at(i) = values.at(i) + (k1.at(i) + 2.0f * k2.at(i) + 2.0f * k3.at(i) + k4.at(i)) / 6.0f;
     }
-
-    return out_values;
 }

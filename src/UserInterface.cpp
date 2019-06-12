@@ -25,7 +25,7 @@ UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {
 }
 
 void UserInterface::handleEvents() {
-    sf::Event event;
+    static sf::Event event;
     while (window_.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)

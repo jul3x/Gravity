@@ -38,7 +38,7 @@ namespace utils {
         return std::hypot(b.x - a.x, b.y - a.y);
     }
 
-    inline bool isCollidable(const Planet &first, const Planet &second, float time_elapsed) {
+    inline bool isCollidable(const Planet &first, const Planet &second) {
         // circle - circle collision
         {
             double distance = utils::getDistance(first.getPosition(), second.getPosition());
