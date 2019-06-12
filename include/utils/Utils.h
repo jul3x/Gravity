@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <objects/Planet.h>
+#include <utils/Random.h>
 
 namespace utils {
 

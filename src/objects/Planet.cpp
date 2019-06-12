@@ -2,8 +2,8 @@
 // Created by jprolejko on 26.02.19.
 //
 
-#include <random>
 
+#include <utils/Random.h>
 #include <Config.h>
 
 #include <objects/Planet.h>
@@ -12,13 +12,9 @@ Planet::Planet(const sf::Vector2f &pos_km, const sf::Vector2f &vel_km, float r_k
                                                                                      vel_km_(vel_km),
                                                                                      r_km_(r_km) {
     // random color initialization
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<float> dist(0.0f, 255.0f);
-
-    color_.r = static_cast<int>(dist(mt));
-    color_.g = static_cast<int>(dist(mt));
-    color_.b = static_cast<int>(dist(mt));
+    color_.r = utils::getRandom<int>(0, 255);
+    color_.g = utils::getRandom<int>(0, 255);
+    color_.b = utils::getRandom<int>(0, 255);
 }
 
 sf::Vector2f Planet::getPosition() const {
