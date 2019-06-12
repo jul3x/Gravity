@@ -5,7 +5,9 @@
 #include "Engine.h"
 
 
-Engine::Engine() : graphics_(planets_), physics_(planets_) { addPlanet({0.1230f, 0.1230f}, {}, 15.0f); }
+Engine::Engine() : graphics_(planets_), physics_(planets_) { 
+    addPlanet({Config::WINDOW_WIDTH_PIXELS_ / 2.0f, Config::WINDOW_HEIGHT_PIXELS_ / 2.0f}, {}, 15.0f); 
+}
 
 void Engine::update(int frame_rate) {
     restartClock();
@@ -13,6 +15,7 @@ void Engine::update(int frame_rate) {
     while (graphics_.isWindowOpen())
     {
         float time_elapsed = 1.0f / static_cast<float>(frame_rate);
+
         graphics_.handleEvents();
 
         physics_.update(time_elapsed);

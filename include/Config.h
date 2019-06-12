@@ -11,8 +11,8 @@ public:
     // Graphics
     static constexpr float PIXELS_PER_KM_ = 1.0f;
     static constexpr float OBJECT_ZOOM_ = 1.0f;
-    static constexpr int WINDOW_WIDTH_PIXELS_ = 1000;
-    static constexpr int WINDOW_HEIGHT_PIXELS_ = 600;
+    static constexpr int WINDOW_WIDTH_PIXELS_ = 1400;
+    static constexpr int WINDOW_HEIGHT_PIXELS_ = 1000;
 
     // UI
     static constexpr int CURSOR_PLANET_COLOR_R_ = 255;

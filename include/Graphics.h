@@ -35,7 +35,9 @@ private:
 
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
+    sf::RenderTexture background_texture_, background_texture_2_;
     sf::View standard_view_;
+    sf::Shader shader_;
 
     UserInterface user_interface_;
 };
