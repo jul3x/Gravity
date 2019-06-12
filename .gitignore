@@ -33,6 +33,14 @@
 
 # IDE
 .idea/*
+.vscode/*
 
 # CMake
 cmake-build-debug/*
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# Make
+Makefile
+build/*

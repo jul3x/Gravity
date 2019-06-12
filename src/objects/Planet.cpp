@@ -4,8 +4,9 @@
 
 #include <random>
 
-#include <Planet.h>
 #include <Config.h>
+
+#include <objects/Planet.h>
 
 Planet::Planet(const sf::Vector2f &pos_km, const sf::Vector2f &vel_km, float r_km) : pos_km_(pos_km),
                                                                                      vel_km_(vel_km),

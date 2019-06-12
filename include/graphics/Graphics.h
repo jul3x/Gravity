@@ -2,17 +2,18 @@
 // Created by jprolejko on 26.02.19.
 //
 
-#ifndef GRAVITY_GRAPHICS_H
-#define GRAVITY_GRAPHICS_H
+#ifndef GRAVITY_GRAPHICS_GRAPHICS_H
+#define GRAVITY_GRAPHICS_GRAPHICS_H
 
 #include <list>
 
 #include <SFML/Graphics.hpp>
 
-#include <Planet.h>
-#include <UserInterface.h>
+#include <objects/Planet.h>
+#include <objects/Background.h>
+#include <graphics/UserInterface.h>
 #include <Config.h>
-#include <Background.h>
+
 
 class Graphics {
 
@@ -43,4 +44,4 @@ private:
 };
 
 
-#endif //GRAVITY_GRAPHICS_H
+#endif //GRAVITY_GRAPHICS_GRAPHICS_H

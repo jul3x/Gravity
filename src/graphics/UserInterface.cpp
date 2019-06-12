@@ -7,8 +7,8 @@
 #include <cmath>
 
 #include <Engine.h>
-#include <UserInterface.h>
-#include <Utils.h>
+#include <graphics/UserInterface.h>
+#include <utils/Utils.h>
 
 
 UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {

@@ -2,8 +2,8 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#ifndef GRAVITY_USERINTERFACE_H
-#define GRAVITY_USERINTERFACE_H
+#ifndef GRAVITY_GRAPHICS_USERINTERFACE_H
+#define GRAVITY_GRAPHICS_USERINTERFACE_H
 
 
 #include <SFML/Graphics.hpp>
@@ -44,4 +44,4 @@ private:
 };
 
 
-#endif //GRAVITY_USERINTERFACE_H
+#endif //GRAVITY_GRAPHICS_USERINTERFACE_H

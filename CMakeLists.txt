@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 # Define sources and executable
 set(EXECUTABLE_NAME "Gravity")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/build")
 
 file(GLOB_RECURSE GRAVITY_MAIN_SRC "src/*.cpp")
 

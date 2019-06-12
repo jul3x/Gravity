@@ -6,8 +6,8 @@
 #include <iterator>
 #include <cassert>
 
-#include <Physics.h>
-#include <Utils.h>
+#include <physics/Physics.h>
+#include <utils/Utils.h>
 
 Physics::Physics(std::list<Planet> &planets) : planets_(planets) {}
 

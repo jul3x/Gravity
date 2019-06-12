@@ -2,16 +2,16 @@
 // Created by jprolejko on 06.03.19.
 //
 
-#ifndef GRAVITY_PHYSICS_H
-#define GRAVITY_PHYSICS_H
+#ifndef GRAVITY_PHYSICS_PHYSICS_H
+#define GRAVITY_PHYSICS_PHYSICS_H
 
 #include <vector>
 #include <list>
 #include <cmath>
 
-#include <Utils.h>
+#include <objects/Planet.h>
+#include <utils/Utils.h>
 #include <Config.h>
-#include <Planet.h>
 
 
 class Physics {
@@ -41,4 +41,4 @@ private:
 };
 
 
-#endif //GRAVITY_PHYSICS_H
+#endif //GRAVITY_PHYSICS_PHYSICS_H

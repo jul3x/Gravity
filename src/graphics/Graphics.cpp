@@ -2,7 +2,7 @@
 // Created by jprolejko on 26.02.19.
 //
 
-#include <Graphics.h>
+#include <graphics/Graphics.h>
 
 
 Graphics::Graphics(const std::list<Planet> &planets) :
