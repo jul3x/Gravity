@@ -8,9 +8,10 @@
 
 #include <vector>
 
-#include <Planet.h>
-#include <Graphics.h>
-#include <Physics.h>
+#include <objects/Planet.h>
+#include <graphics/Graphics.h>
+#include <physics/Physics.h>
+
 
 class Engine {
 
