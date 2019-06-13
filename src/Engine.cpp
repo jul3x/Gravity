@@ -2,21 +2,25 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#include "Engine.h"
+#include <Engine.h>
 
 
-Engine::Engine() : graphics_(planets_), physics_(planets_) { addPlanet({0.1230f, 0.1230f}, {}, 5.0f); }
+Engine::Engine() : graphics_(planets_), physics_(planets_) { 
+    addPlanet({Config::WINDOW_WIDTH_PIXELS_ / 2.0f, Config::WINDOW_HEIGHT_PIXELS_ / 2.0f}, {}, 15.0f); 
+}
 
 void Engine::update(int frame_rate) {
     restartClock();
 
     while (graphics_.isWindowOpen())
     {
+        float time_elapsed = 1.0f / static_cast<float>(frame_rate);
+
         graphics_.handleEvents();
 
-        physics_.update(1.0f / static_cast<float>(frame_rate));
+        physics_.update(time_elapsed);
 
-        graphics_.draw();
+        graphics_.draw(time_elapsed);
         ensureConstantFrameRate(frame_rate);
     }
 }

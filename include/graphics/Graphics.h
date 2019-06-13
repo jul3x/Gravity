@@ -2,16 +2,18 @@
 // Created by jprolejko on 26.02.19.
 //
 
-#ifndef GRAVITY_GRAPHICS_H
-#define GRAVITY_GRAPHICS_H
+#ifndef GRAVITY_GRAPHICS_GRAPHICS_H
+#define GRAVITY_GRAPHICS_GRAPHICS_H
 
 #include <list>
 
 #include <SFML/Graphics.hpp>
 
-#include <Planet.h>
-#include <UserInterface.h>
+#include <objects/Planet.h>
+#include <objects/Background.h>
+#include <graphics/UserInterface.h>
 #include <Config.h>
+
 
 class Graphics {
 
@@ -24,20 +26,22 @@ public:
     const bool isWindowOpen() const;
     void handleEvents();
 
-    void draw();
+    void draw(float time_elapsed);
 
 private:
     void draw(const Planet &planet);
 
-    const sf::Color background_color_;
-
+    Background background_;
     const std::list<Planet> &planets_;
 
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
+    sf::RenderTexture background_texture_, background_texture_2_;
+    sf::View standard_view_;
+    sf::Shader shader_;
 
     UserInterface user_interface_;
 };
 
 
-#endif //GRAVITY_GRAPHICS_H
+#endif //GRAVITY_GRAPHICS_GRAPHICS_H

@@ -2,11 +2,12 @@
 // Created by jprolejko on 26.02.19.
 //
 
-#ifndef GRAVITY_PLANET_H
-#define GRAVITY_PLANET_H
+#ifndef GRAVITY_OBJECTS_PLANET_H
+#define GRAVITY_OBJECTS_PLANET_H
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics/Color.hpp>
+
 
 class Planet {
 
@@ -34,4 +35,4 @@ private:
 };
 
 
-#endif //GRAVITY_PLANET_H
+#endif //GRAVITY_OBJECTS_PLANET_H
