@@ -37,10 +37,13 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ## Changelog
 
+* 13-06-2019 - Gravity 0.2.0
+    - Added procedurally generated background with moving and glowing stars.
+
 * 06-06-2019 - Gravity 0.1.0
 
 ---
 
 ~jprolejko
 
-[VERSION]: https://img.shields.io/badge/version-0.1.0-blue.svg
+[VERSION]: https://img.shields.io/badge/version-0.2.0-blue.svg
