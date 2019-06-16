@@ -4,6 +4,7 @@
 
 #include <graphics/Graphics.h>
 
+//  BIG TODO: Graphics only stores a list of AbstractDrawableObjects, as well as Physics -> AbstractPhysicalObjects
 
 Graphics::Graphics(const std::list<Planet> &planets) :
                             planets_(planets),
@@ -74,23 +75,10 @@ void Graphics::draw(float time_elapsed) {
 
     for (const auto &planet : planets_)
     {
-        draw(planet);
+        window_.draw(planet);
     }
 
     user_interface_.draw();
 
     window_.display();
-}
-
-void Graphics::draw(const Planet &planet) {
-    static sf::CircleShape planet_shape;
-    planet_shape.setPosition(planet.getPosition() * Config::PIXELS_PER_KM_);
-
-    auto pixel_radius = planet.getRadius() * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_;
-    planet_shape.setRadius(pixel_radius);
-    planet_shape.setOrigin(pixel_radius, pixel_radius);
-
-    planet_shape.setFillColor(planet.getColor());
-
-    window_.draw(planet_shape);
 }

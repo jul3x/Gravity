@@ -5,34 +5,21 @@
 #ifndef GRAVITY_OBJECTS_PLANET_H
 #define GRAVITY_OBJECTS_PLANET_H
 
-#include <SFML/System.hpp>
-#include <SFML/Graphics/Color.hpp>
+#include <objects/AbstractCelestialBody.h>
 
 
-class Planet {
+class Planet : public AbstractCelestialBody {
 
 public:
     Planet() = default;
-    Planet(const sf::Vector2f &pos_km, const sf::Vector2f &vel_km, float r_km);
 
-    sf::Vector2f getPosition() const;
-    sf::Vector2f getVelocity() const;
-    float getRadius() const;
-    float getMass() const;
+    Planet(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius);
 
-    sf::Color getColor() const;
+    void setPosition(const sf::Vector2f &position); // TODO applyRungeKutta HERE AND ERASE THOSE METHODS
+    void setVelocity(const sf::Vector2f &velocity); // TODO applyRungeKutta HERE AND ERASE THOSE METHODS
 
-    void setPosition(const sf::Vector2f &pos_km);
-    void setVelocity(const sf::Vector2f &vel_km);
-
-private:
-    sf::Vector2f pos_km_;
-    sf::Vector2f vel_km_;
-
-    float r_km_;
-
-    sf::Color color_;
+    void update(float time_elapsed); // TODO applyRungeKutta HERE
 };
 
 
-#endif //GRAVITY_OBJECTS_PLANET_H
+#endif // GRAVITY_OBJECTS_PLANET_H

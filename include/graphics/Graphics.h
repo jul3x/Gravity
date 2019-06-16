@@ -29,8 +29,6 @@ public:
     void draw(float time_elapsed);
 
 private:
-    void draw(const Planet &planet);
-
     Background background_;
     const std::list<Planet> &planets_;
 

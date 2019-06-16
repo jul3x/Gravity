@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include <objects/Planet.h>
 #include <utils/Random.h>
