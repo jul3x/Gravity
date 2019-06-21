@@ -5,30 +5,20 @@
 #ifndef GRAVITY_OBJECTS_STAR_H
 #define GRAVITY_OBJECTS_STAR_H
 
-#include <SFML/Graphics.hpp>
+#include <objects/AbstractCelestialBody.h>
 
-
-class Star : public sf::Drawable {
+class Star : public AbstractCelestialBody {
 public:
     Star() = default;
 
-    Star(const sf::Vector2f &position, const sf::Vector2f &velocity, const float radius, const float color_alpha);
-
-    const sf::Vector2f& getPosition() const;
-    void setPosition(const sf::Vector2f &position);
+    Star(const sf::Vector2f &position, const sf::Vector2f &velocity, const float radius, const sf::Color &color);
 
     void update(float time_elapsed);
-
+    
 private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-    int color_alpha_;
-    int alfa_change_velocity_;
-
-    sf::Vector2f position_;
-    sf::Vector2f velocity_;
-    float radius_;
+    static constexpr float ALPHA_CHANGE_VELOCITY_ = 100.0f;
 };
+
 
 #endif // GRAVITY_OBJECTS_STAR_H
 

@@ -6,6 +6,8 @@
 #ifndef GRAVITY_OBJECTS_ABSTRACTDRAWABLEOBJECT_H
 #define GRAVITY_OBJECTS_ABSTRACTDRAWABLEOBJECT_H
 
+#include <cmath>
+
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Color.hpp>
 
@@ -25,17 +27,36 @@ public:
         return position_;
     }
 
+    void setPosition(const sf::Vector2f &position) {
+        position_ = position;
+    }
+
+    void setPosition(const float x, const float y) {
+        position_.x = x;
+        position_.y = y;
+    }
+
     const sf::Color& getColor() const {
         return color_;
     }
 
-protected:
-    sf::Vector2f position_;
+    void setColor(const sf::Color &color) {
+        color_ = color;
+    }
+
+    int getTransparency() const {
+        return color_.a;
+    }
+
+    void setTransparency(const int transparency) {
+        color_.a = std::max(std::min(255, transparency), 0);
+    }
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
     sf::Color color_;
+    sf::Vector2f position_;
 };
 
 #endif // GRAVITY_OBJECTS_ABSTRACTDRAWABLEOBJECT_H

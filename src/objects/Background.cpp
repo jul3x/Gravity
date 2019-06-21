@@ -17,7 +17,7 @@ Background::Background() : background_color_(20, 20, 20) {
                                  utils::getRandom<float>(1.0f, 5.0f)};
         float radius = utils::getRandom<float>(1.0f, 5.0f);
         float alpha = utils::getRandom<float>(0.0f, 255.0f);
-        stars_.emplace_back(position, velocity, radius, alpha);
+        stars_.emplace_back(position, velocity, radius, sf::Color(255, 255, 255, alpha));
     }
 }
 

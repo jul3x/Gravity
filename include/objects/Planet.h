@@ -15,9 +15,6 @@ public:
 
     Planet(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius);
 
-    void setPosition(const sf::Vector2f &position); // TODO applyRungeKutta HERE AND ERASE THOSE METHODS
-    void setVelocity(const sf::Vector2f &velocity); // TODO applyRungeKutta HERE AND ERASE THOSE METHODS
-
     void update(float time_elapsed); // TODO applyRungeKutta HERE
 };
 

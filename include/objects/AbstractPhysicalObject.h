@@ -26,6 +26,15 @@ public:
         return velocity_;
     }
 
+    void setVelocity(const sf::Vector2f &velocity) {
+        velocity_ = velocity;
+    }
+
+    void setVelocity(const float x, const float y) {
+        velocity_.x = x;
+        velocity_.y = y;
+    }
+
     virtual float getMass() const = 0;
 
     virtual void update(float time_elapsed) = 0;
