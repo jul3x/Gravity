@@ -5,7 +5,7 @@
 #include <Engine.h>
 
 
-Engine::Engine() : graphics_(planets_), physics_(planets_) { 
+Engine::Engine() : graphics_(), physics_(planets_) { 
     addPlanet({Config::WINDOW_WIDTH_PIXELS_ / 2.0f, Config::WINDOW_HEIGHT_PIXELS_ / 2.0f}, {}, 15.0f); 
 }
 
@@ -19,8 +19,15 @@ void Engine::update(int frame_rate) {
         graphics_.handleEvents();
 
         physics_.update(time_elapsed);
+        
+        graphics_.drawBackground();
 
-        graphics_.draw(time_elapsed);
+        for (const auto &planet : planets_)
+        {
+            graphics_.draw(planet);
+        }
+        graphics_.display();
+
         ensureConstantFrameRate(frame_rate);
     }
 }

@@ -18,7 +18,7 @@
 class Graphics {
 
 public:
-    explicit Graphics(const std::list<Planet> &planets);
+    explicit Graphics();
 
     Graphics(const Graphics&) = delete;
     Graphics& operator=(const Graphics&) = delete;
@@ -26,11 +26,12 @@ public:
     const bool isWindowOpen() const;
     void handleEvents();
 
-    void draw(float time_elapsed);
+    void draw(const AbstractDrawableObject &object);
+    void drawBackground();
+    void display();
 
 private:
     Background background_;
-    const std::list<Planet> &planets_;
 
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
