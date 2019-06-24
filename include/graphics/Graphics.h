@@ -12,6 +12,7 @@
 #include <objects/Planet.h>
 #include <objects/Background.h>
 #include <graphics/UserInterface.h>
+#include <graphics/EffectGenerator.h>
 #include <Config.h>
 
 
@@ -31,6 +32,9 @@ public:
     const bool isWindowOpen() const;
     void handleEvents();
 
+    void setStaticView();
+    void setDynamicView();
+
     void clear();
     void draw(const AbstractDrawableObject &object, const Graphics::EffectType &effect);
     void display();
@@ -38,9 +42,8 @@ public:
 private:
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
-    sf::RenderTexture background_texture_, background_texture_2_;
-    sf::View standard_view_;
-    sf::Shader shader_;
+    sf::View standard_view_, current_view_;
+    EffectGenerator effect_generator_;
 
     UserInterface user_interface_;
 };

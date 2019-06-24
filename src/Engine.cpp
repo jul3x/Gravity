@@ -21,13 +21,18 @@ void Engine::update(int frame_rate) {
         background_.update(time_elapsed);
         physics_.update(time_elapsed);
         
-        graphics_.clear();
-        graphics_.draw(background_, Graphics::EffectType::GAUSSIAN_BLUR);
-        for (const auto &planet : planets_)
+        // drawing
         {
-            graphics_.draw(planet, Graphics::EffectType::NONE);
+            graphics_.clear();
+            graphics_.setStaticView();
+            graphics_.draw(background_, Graphics::EffectType::GAUSSIAN_BLUR);
+            graphics_.setDynamicView();
+            for (const auto &planet : planets_)
+            {
+                graphics_.draw(planet, Graphics::EffectType::NONE);
+            }
+            graphics_.display();
         }
-        graphics_.display();
 
         ensureConstantFrameRate(frame_rate);
     }

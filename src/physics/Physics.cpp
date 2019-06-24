@@ -52,15 +52,13 @@ void Physics::handleMovement(float time_elapsed) {
     
     for (auto current_planet = planets_.begin(); current_planet != planets_.end(); ++current_planet)
     {
-        equation_vars.at(0) = current_planet->getPosition().x;
-        equation_vars.at(1) = current_planet->getPosition().y;
-        equation_vars.at(2) = current_planet->getVelocity().x;
-        equation_vars.at(3) = current_planet->getVelocity().y;
+        equation_vars = {current_planet->getPosition().x, current_planet->getPosition().y,
+                         current_planet->getVelocity().x, current_planet->getVelocity().y};
 
         applyRungeKutta(equation_vars, time_elapsed, current_planet);
 
-        current_planet->setPosition({equation_vars.at(0), equation_vars.at(1)});
-        current_planet->setVelocity({equation_vars.at(2), equation_vars.at(3)});
+        current_planet->setPosition(equation_vars.at(0), equation_vars.at(1));
+        current_planet->setVelocity(equation_vars.at(2), equation_vars.at(3));
     }
 }
 
