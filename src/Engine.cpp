@@ -18,13 +18,14 @@ void Engine::update(int frame_rate) {
 
         graphics_.handleEvents();
 
+        background_.update(time_elapsed);
         physics_.update(time_elapsed);
         
-        graphics_.drawBackground();
-
+        graphics_.clear();
+        graphics_.draw(background_, Graphics::EffectType::GAUSSIAN_BLUR);
         for (const auto &planet : planets_)
         {
-            graphics_.draw(planet);
+            graphics_.draw(planet, Graphics::EffectType::NONE);
         }
         graphics_.display();
 

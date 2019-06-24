@@ -45,36 +45,44 @@ void Graphics::handleEvents() {
     user_interface_.handleEvents();
 }
 
-void Graphics::draw(const AbstractDrawableObject &object) {
-    window_.draw(object);
+void Graphics::clear() {
+    background_texture_2_.clear();
+    background_texture_.clear();
+    window_.clear();
 }
 
-void Graphics::drawBackground() {
-    window_.clear(sf::Color::Black);
-    // background_.update(time_elapsed); TODO Move to physics
-    auto current_view = window_.getView();
-    window_.setView(standard_view_);
+void Graphics::draw(const AbstractDrawableObject &object, const Graphics::EffectType &effect) {
+    // will be changed next time, don't worry
+    if (effect == Graphics::EffectType::NONE)
+    {
+        window_.draw(object);
+    }
+    else if (effect == Graphics::EffectType::GAUSSIAN_BLUR)
+    {
+        auto current_view = window_.getView();
+        window_.setView(standard_view_);
 
-    // drawing uses the same functions
-    background_texture_.clear(sf::Color::Black);
-    background_texture_.draw(background_); // or any other drawable
-    background_texture_.display();
+        // drawing uses the same functions
 
-    shader_.setUniform("texture", sf::Shader::CurrentTexture);
-    shader_.setUniform("blur_radius", sf::Vector2f(0.5f / Config::WINDOW_WIDTH_PIXELS_, 0.0f));
-    // draw it to the window
-    static sf::Sprite sprite(background_texture_.getTexture());
+        background_texture_.draw(object); // or any other drawable
+        background_texture_.display();
 
-    background_texture_2_.clear(sf::Color::Black);
-    background_texture_2_.display();
-    background_texture_2_.draw(sprite, &shader_);
-    static sf::Sprite sprite2(background_texture_2_.getTexture());
-    shader_.setUniform("texture", sf::Shader::CurrentTexture);
-    shader_.setUniform("blur_radius", sf::Vector2f(0.0f, 0.5f / Config::WINDOW_HEIGHT_PIXELS_));
-    window_.draw(sprite2, &shader_);
+        shader_.setUniform("texture", sf::Shader::CurrentTexture);
+        shader_.setUniform("blur_radius", sf::Vector2f(0.5f / Config::WINDOW_WIDTH_PIXELS_, 0.0f));
+        // draw it to the window
+        static sf::Sprite sprite(background_texture_.getTexture());
 
-    window_.setView(current_view);
+        background_texture_2_.display();
+        background_texture_2_.draw(sprite, &shader_);
+        static sf::Sprite sprite2(background_texture_2_.getTexture());
+        shader_.setUniform("texture", sf::Shader::CurrentTexture);
+        shader_.setUniform("blur_radius", sf::Vector2f(0.0f, 0.5f / Config::WINDOW_HEIGHT_PIXELS_));
+        window_.draw(sprite2, &shader_);
+
+        window_.setView(current_view);
+    }
 }
+
 
 void Graphics::display() {
     user_interface_.draw();

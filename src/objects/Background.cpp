@@ -34,6 +34,8 @@ void Background::update(float time_elapsed) {
 }
 
 void Background::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    target.clear(this->getColor());
+    
     for (const auto &star : stars_)
     {
         target.draw(star, states);

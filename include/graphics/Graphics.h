@@ -18,6 +18,11 @@
 class Graphics {
 
 public:
+    enum class EffectType {
+        NONE,
+        GAUSSIAN_BLUR
+    };
+
     explicit Graphics();
 
     Graphics(const Graphics&) = delete;
@@ -26,13 +31,11 @@ public:
     const bool isWindowOpen() const;
     void handleEvents();
 
-    void draw(const AbstractDrawableObject &object);
-    void drawBackground();
+    void clear();
+    void draw(const AbstractDrawableObject &object, const Graphics::EffectType &effect);
     void display();
 
 private:
-    Background background_;
-
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
     sf::RenderTexture background_texture_, background_texture_2_;

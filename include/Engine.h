@@ -40,6 +40,7 @@ private:
     sf::Time time_;
 
     std::list<Planet> planets_;
+    Background background_;
 };
 
 

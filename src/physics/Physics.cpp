@@ -147,7 +147,7 @@ void Physics::applyRungeKutta(std::vector<float> &values, float step,
 
     k1 = applyGravityForceEquations(values, current_planet);
 
-    for (size_t i = 0; i < k1.size(); i++)
+    for (size_t i = 0; i < k1.size(); ++i)
     {
         k1.at(i) = k1.at(i) * step;
         temporary_vec.at(i) = values.at(i) + k1.at(i) / 2.0f;
@@ -155,7 +155,7 @@ void Physics::applyRungeKutta(std::vector<float> &values, float step,
 
     k2 = applyGravityForceEquations(temporary_vec, current_planet);
 
-    for (size_t i = 0; i < k2.size(); i++)
+    for (size_t i = 0; i < k2.size(); ++i)
     {
         k2.at(i) = k2.at(i) * step;
         temporary_vec.at(i) = values.at(i) + k2.at(i) / 2.0f;
@@ -163,7 +163,7 @@ void Physics::applyRungeKutta(std::vector<float> &values, float step,
 
     k3 = applyGravityForceEquations(temporary_vec, current_planet);
 
-    for (size_t i = 0; i < k3.size(); i++)
+    for (size_t i = 0; i < k3.size(); ++i)
     {
         k3.at(i) = k3.at(i) * step;
         temporary_vec.at(i) = values.at(i) + k3.at(i);
@@ -176,7 +176,7 @@ void Physics::applyRungeKutta(std::vector<float> &values, float step,
         k = k * step;
     }
 
-    for (size_t i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); ++i)
     {
         values.at(i) = values.at(i) + (k1.at(i) + 2.0f * k2.at(i) + 2.0f * k3.at(i) + k4.at(i)) / 6.0f;
     }
