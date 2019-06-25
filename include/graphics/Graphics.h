@@ -19,11 +19,6 @@
 class Graphics {
 
 public:
-    enum class EffectType {
-        NONE,
-        GAUSSIAN_BLUR
-    };
-
     explicit Graphics();
 
     Graphics(const Graphics&) = delete;
@@ -36,7 +31,8 @@ public:
     void setDynamicView();
 
     void clear();
-    void draw(const AbstractDrawableObject &object, const Graphics::EffectType &effect);
+    void draw(const Background &object);
+    void draw(const AbstractDrawableObject &object);
     void display();
 
 private:

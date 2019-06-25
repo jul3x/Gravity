@@ -25,11 +25,11 @@ void Engine::update(int frame_rate) {
         {
             graphics_.clear();
             graphics_.setStaticView();
-            graphics_.draw(background_, Graphics::EffectType::GAUSSIAN_BLUR);
+            graphics_.draw(background_);
             graphics_.setDynamicView();
             for (const auto &planet : planets_)
             {
-                graphics_.draw(planet, Graphics::EffectType::NONE);
+                graphics_.draw(planet);
             }
             graphics_.display();
         }

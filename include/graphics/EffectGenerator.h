@@ -23,6 +23,7 @@ public:
     void clear();
 
     void addToTexture(const AbstractDrawableObject &object);
+    void addToTexture(const sf::Sprite &object);
     void renderCurrentGaussianBlur(sf::RenderTarget &target);
 
 private:

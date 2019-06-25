@@ -66,7 +66,7 @@ std::vector<float> Physics::applyGravityForceEquations(const std::vector<float> 
                                                        const std::list<Planet>::iterator &current_planet) {
     if (in_values.size() != 4)
     {
-        throw std::runtime_error("Wrong size of vector of equations!");
+        throw std::runtime_error("[Physics] Wrong size of vector of equations!");
     }
 
     static std::vector<float> out_values(in_values.size());
@@ -136,7 +136,7 @@ void Physics::applyRungeKutta(std::vector<float> &values, float step,
                               const std::list<Planet>::iterator &current_planet) {
     if (values.empty())
     {
-        throw std::runtime_error("Values vector in applyRungeKutta function cannot be empty");
+        throw std::runtime_error("[Physics] Values vector in applyRungeKutta function cannot be empty");
     }
                             
     auto vectors_size = values.size();

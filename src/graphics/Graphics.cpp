@@ -36,22 +36,18 @@ void Graphics::setDynamicView() {
 }
 
 void Graphics::clear() {
+    effect_generator_.clear();
     window_.clear();
 }
 
-void Graphics::draw(const AbstractDrawableObject &object, const Graphics::EffectType &effect) {
-    // will be changed next time, don't worry
-    if (effect == Graphics::EffectType::NONE)
-    {
-        window_.draw(object);
-    }
-    else if (effect == Graphics::EffectType::GAUSSIAN_BLUR)
-    {
-        // drawing uses the same functions
-        effect_generator_.clear();
-        effect_generator_.addToTexture(object);
-        effect_generator_.renderCurrentGaussianBlur(window_);
-    }
+void Graphics::draw(const Background &object) {
+    effect_generator_.addToTexture(object);
+    effect_generator_.renderCurrentGaussianBlur(window_);
+    effect_generator_.clear();
+}
+
+void Graphics::draw(const AbstractDrawableObject &object) {
+    window_.draw(object);
 }
 
 
