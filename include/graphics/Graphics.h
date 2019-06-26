@@ -5,8 +5,6 @@
 #ifndef GRAVITY_GRAPHICS_GRAPHICS_H
 #define GRAVITY_GRAPHICS_GRAPHICS_H
 
-#include <list>
-
 #include <SFML/Graphics.hpp>
 
 #include <objects/Planet.h>

@@ -9,6 +9,8 @@
 #include <physics/Physics.h>
 #include <utils/Utils.h>
 
+// TODO: Rethink about physics class and some other classes
+
 Physics::Physics(std::list<Planet> &planets) : planets_(planets) {}
 
 void Physics::update(float time_elapsed) {

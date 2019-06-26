@@ -28,7 +28,6 @@ public:
 
 private:
     sf::RenderTexture texture_, texture_2_;
-    sf::Shader shader_;
 
 };
 

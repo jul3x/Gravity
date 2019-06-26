@@ -9,6 +9,7 @@
 #include <map>
 
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Shader.hpp>
 
 class ResourceManager {
 
@@ -16,38 +17,19 @@ public:
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
 
-    static ResourceManager& getInstance() {
-        static ResourceManager resource_manager_instance;
-        return resource_manager_instance;
-    }
+    static ResourceManager& getInstance();
 
-    const sf::Texture& getTexture(const std::string &key) const {
-        if (textures_.find(key) == textures_.end())
-        {
-            std::runtime_error(key + " is not a texture!");
-        }
-
-        return textures_.at(key);
-    }
+    sf::Texture& getTexture(const std::string &key);
+    sf::Shader& getShader(const std::string &key);
 
 private:
-    ResourceManager() {
-        // change to more generic solution
-        loadTexture("planet");
-    }
+    ResourceManager() = default;
 
-    void loadTexture(const std::string &key) {
-        sf::Texture texture;
-
-        if (!texture.loadFromFile("data/" + key + ".png"))
-        {
-            std::runtime_error(key + " texture file not successfully loaded.");
-        }
-
-        textures_[key] = texture;
-    }
+    void loadTexture(const std::string &key);
+    void loadShader(const std::string &key);
 
     std::map<std::string, sf::Texture> textures_;
+    std::map<std::string, sf::Shader> shaders_;
 };
 
 

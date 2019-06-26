@@ -20,22 +20,7 @@ public:
     void update(float time_elapsed); // TODO applyRungeKutta HERE
 
 private:
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
-        static sf::CircleShape body_shape;
-        body_shape.setTexture(&ResourceManager::getInstance().getTexture("planet"));
-        body_shape.setPosition(this->getPosition() * Config::PIXELS_PER_KM_);
-
-        auto pixel_radius = this->getRadius() * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_;
-        body_shape.setRadius(pixel_radius);
-        body_shape.setOrigin(pixel_radius, pixel_radius);
-
-        body_shape.setFillColor(this->getColor());
-
-        target.draw(body_shape, states);
-    }
-
-    static sf::Texture planet_texture_;
-
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 };
 
 
