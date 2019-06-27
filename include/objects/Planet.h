@@ -15,7 +15,9 @@ class Planet : public AbstractCelestialBody {
 public:
     Planet() = default;
 
-    Planet(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius);
+    Planet(const sf::Vector2f &position,
+           const sf::Vector2f &velocity,
+           float radius);
 
     void update(float time_elapsed);
 

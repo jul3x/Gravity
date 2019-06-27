@@ -5,8 +5,6 @@
 #ifndef GRAVITY_OBJECTS_ABSTRACTCELESTIALBODY_H
 #define GRAVITY_OBJECTS_ABSTRACTCELESTIALBODY_H
 
-#include <cmath>
-
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
@@ -19,13 +17,19 @@ class AbstractCelestialBody : public AbstractPhysicalObject {
 public:
     AbstractCelestialBody() = default;
 
-    AbstractCelestialBody(const AbstractPhysicalObject &object, float radius) : 
+    AbstractCelestialBody(const AbstractPhysicalObject &object,
+                          float radius) : 
         AbstractPhysicalObject(object), radius_(radius) {}
 
-    AbstractCelestialBody(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius) : 
+    AbstractCelestialBody(const sf::Vector2f &position,
+                          const sf::Vector2f &velocity,
+                          float radius) : 
         AbstractPhysicalObject(position, velocity), radius_(radius) {}
 
-    AbstractCelestialBody(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius, const sf::Color &color) : 
+    AbstractCelestialBody(const sf::Vector2f &position,
+                          const sf::Vector2f &velocity,
+                          float radius,
+                          const sf::Color &color) : 
         AbstractPhysicalObject(position, velocity, color), radius_(radius) {}
 
     const float getRadius() const {

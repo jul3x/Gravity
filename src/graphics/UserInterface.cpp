@@ -3,12 +3,9 @@
 //
 
 
-#include <iostream>
-#include <cmath>
-
 #include <Engine.h>
 #include <ResourceManager.h>
-#include <utils/Utils.h>
+#include <utils/Geometry.h>
 
 #include <graphics/UserInterface.h>
 

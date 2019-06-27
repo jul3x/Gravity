@@ -13,13 +13,17 @@ class AbstractPhysicalObject : public AbstractDrawableObject {
 public:
     AbstractPhysicalObject() = default;
 
-    AbstractPhysicalObject(const AbstractDrawableObject &object, const sf::Vector2f &velocity) : 
+    AbstractPhysicalObject(const AbstractDrawableObject &object,
+                           const sf::Vector2f &velocity) : 
         AbstractDrawableObject(object), velocity_(velocity) {}
 
-    AbstractPhysicalObject(const sf::Vector2f &position, const sf::Vector2f &velocity) : 
+    AbstractPhysicalObject(const sf::Vector2f &position,
+                           const sf::Vector2f &velocity) : 
         AbstractDrawableObject(position), velocity_(velocity) {}
     
-    AbstractPhysicalObject(const sf::Vector2f &position, const sf::Vector2f &velocity, const sf::Color color) : 
+    AbstractPhysicalObject(const sf::Vector2f &position,
+                           const sf::Vector2f &velocity,
+                           const sf::Color color) : 
         AbstractDrawableObject(position, color), velocity_(velocity) {}
 
     const sf::Vector2f& getVelocity() const {

@@ -2,12 +2,11 @@
 // Created by jprolejko on 06.03.19.
 //
 
-#include <iostream>
-#include <iterator>
-
 #include <Engine.h>
+#include <utils/Geometry.h>
+
 #include <physics/Physics.h>
-#include <utils/Utils.h>
+
 
 Physics::Physics(std::list<Planet> &planets) : planets_(planets), equation_(planets_), solver_(equation_) {}
 

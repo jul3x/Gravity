@@ -7,6 +7,8 @@
 
 #include <graphics/EffectGenerator.h>
 
+#include <Config.h>
+
 
 void EffectGenerator::initialize() {
     if (!texture_.create(Config::WINDOW_WIDTH_PIXELS_, Config::WINDOW_HEIGHT_PIXELS_) ||

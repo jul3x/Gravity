@@ -5,14 +5,11 @@
 #ifndef GRAVITY_PHYSICS_PHYSICS_H
 #define GRAVITY_PHYSICS_PHYSICS_H
 
-#include <vector>
 #include <list>
-#include <cmath>
 
 #include <physics/RungeKuttaSolver.h>
 #include <physics/GravityEquation.h>
 #include <objects/Planet.h>
-#include <utils/Utils.h>
 #include <Config.h>
 
 class Physics {
@@ -29,8 +26,10 @@ private:
     inline void applyCollisions(float time_elapsed);
     inline void applyGravitationalMovement(float time_elapsed);
     
-    inline void applyMomentumConservation(Planet &first, const Planet &second);
-    inline void applyDestruction(std::list<Planet>::iterator &first, std::list<Planet>::iterator &second);
+    inline void applyMomentumConservation(Planet &first,
+                                          const Planet &second);
+    inline void applyDestruction(std::list<Planet>::iterator &first,
+                                 std::list<Planet>::iterator &second);
 
     std::list<Planet> &planets_;
 

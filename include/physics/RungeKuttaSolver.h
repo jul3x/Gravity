@@ -5,15 +5,22 @@
 #ifndef GRAVITY_PHYSICS_RUNGEKUTTASOLVER_H
 #define GRAVITY_PHYSICS_RUNGEKUTTASOLVER_H
 
+#include <vector>
+
+
 template<class T>
 class EquationParameters {
 
 public:
-    EquationParameters(const std::vector<T> &parameters) : parameters_(parameters) {}
-    EquationParameters(const T &parameter) { parameters_.push_back(parameter); }
     EquationParameters() = default;
+    EquationParameters(const std::vector<T> &parameters) : parameters_(parameters) {}
+    EquationParameters(const T &parameter) {
+        parameters_.push_back(parameter);
+    }
 
-    const std::vector<T>& get() const { return parameters_; }
+    const std::vector<T>& get() const {
+        return parameters_;
+    }
 
 private:
     std::vector<T> parameters_;
@@ -27,7 +34,9 @@ public:
     virtual std::vector<T> operator()(const std::vector<T> &values, 
                                       const EquationParameters<K> &parameters) = 0;
     
-    size_t getSize() { return size_; }
+    size_t getSize() {
+        return size_;
+    }
 
 protected:
     size_t size_;
@@ -39,6 +48,9 @@ class RungeKuttaSolver {
 
 public:
     RungeKuttaSolver() = delete;
+    RungeKuttaSolver(const RungeKuttaSolver&) = delete;
+    RungeKuttaSolver& operator=(const RungeKuttaSolver&) = delete;
+
     RungeKuttaSolver(IEquation<T, K> &equation) : equation_(equation) {       
         changeEquation(equation);
     }

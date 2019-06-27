@@ -2,10 +2,11 @@
 // Created by jprolejko on 12.06.19.
 //
 
+#include <utils/Numeric.h>
 #include <Config.h>
-#include <utils/Random.h>
 
 #include <objects/Background.h>
+
 
 Background::Background() {
     this->setColor(sf::Color(20, 20, 20));

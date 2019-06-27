@@ -9,9 +9,7 @@
 
 class Star : public AbstractCelestialBody {
 public:
-    Star() = default;
-
-    Star(const sf::Vector2f &position, const sf::Vector2f &velocity, const float radius, const sf::Color &color);
+    using AbstractCelestialBody::AbstractCelestialBody;
 
     void update(float time_elapsed);
     

@@ -6,8 +6,6 @@
 #define GRAVITY_ENGINE_H
 
 
-#include <vector>
-
 #include <objects/Planet.h>
 #include <graphics/Graphics.h>
 #include <physics/Physics.h>
@@ -25,7 +23,9 @@ public:
     }
 
     void update(int frame_rate);
-    void addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r);
+    void addPlanet(const sf::Vector2f &pos,
+                   const sf::Vector2f &vel,
+                   float r);
     void destroyPlanet(const std::list<Planet>::iterator &current_planet);
 
 private:

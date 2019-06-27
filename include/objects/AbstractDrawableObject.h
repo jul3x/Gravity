@@ -6,18 +6,17 @@
 #ifndef GRAVITY_OBJECTS_ABSTRACTDRAWABLEOBJECT_H
 #define GRAVITY_OBJECTS_ABSTRACTDRAWABLEOBJECT_H
 
-#include <cmath>
-
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Color.hpp>
 
-#include <utils/Random.h>
+#include <utils/Numeric.h>
 
 class AbstractDrawableObject : public sf::Drawable {
 public:
     AbstractDrawableObject() = default;
 
-    AbstractDrawableObject(const sf::Vector2f &position, const sf::Color color) : 
+    AbstractDrawableObject(const sf::Vector2f &position,
+                           const sf::Color color) : 
         position_(position), color_(color) {}
 
     AbstractDrawableObject(const sf::Vector2f &position) : 

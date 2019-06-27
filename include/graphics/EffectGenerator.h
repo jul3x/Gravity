@@ -8,7 +8,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <objects/AbstractDrawableObject.h>
-#include <Config.h>
+
 
 class EffectGenerator {
 

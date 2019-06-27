@@ -7,10 +7,6 @@
 
 #include <objects/Star.h>
 
-
-Star::Star(const sf::Vector2f &position, const sf::Vector2f &velocity, const float radius, const sf::Color &color) :
-    AbstractCelestialBody(position, velocity, radius, color) {}
-
 void Star::update(float time_elapsed) {
     // alpha change
     static float change_direction = ALPHA_CHANGE_VELOCITY_;
