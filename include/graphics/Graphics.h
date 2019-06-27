@@ -5,20 +5,19 @@
 #ifndef GRAVITY_GRAPHICS_GRAPHICS_H
 #define GRAVITY_GRAPHICS_GRAPHICS_H
 
-#include <list>
-
 #include <SFML/Graphics.hpp>
 
 #include <objects/Planet.h>
 #include <objects/Background.h>
 #include <graphics/UserInterface.h>
+#include <graphics/EffectGenerator.h>
 #include <Config.h>
 
 
 class Graphics {
 
 public:
-    explicit Graphics(const std::list<Planet> &planets);
+    explicit Graphics();
 
     Graphics(const Graphics&) = delete;
     Graphics& operator=(const Graphics&) = delete;
@@ -26,19 +25,19 @@ public:
     const bool isWindowOpen() const;
     void handleEvents();
 
-    void draw(float time_elapsed);
+    void setStaticView();
+    void setDynamicView();
+
+    void clear();
+    void draw(const Background &object);
+    void draw(const AbstractDrawableObject &object);
+    void display();
 
 private:
-    void draw(const Planet &planet);
-
-    Background background_;
-    const std::list<Planet> &planets_;
-
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
-    sf::RenderTexture background_texture_, background_texture_2_;
-    sf::View standard_view_;
-    sf::Shader shader_;
+    sf::View standard_view_, current_view_;
+    EffectGenerator effect_generator_;
 
     UserInterface user_interface_;
 };

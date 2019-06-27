@@ -5,14 +5,12 @@
 #ifndef GRAVITY_PHYSICS_PHYSICS_H
 #define GRAVITY_PHYSICS_PHYSICS_H
 
-#include <vector>
 #include <list>
-#include <cmath>
 
+#include <physics/RungeKuttaSolver.h>
+#include <physics/GravityEquation.h>
 #include <objects/Planet.h>
-#include <utils/Utils.h>
 #include <Config.h>
-
 
 class Physics {
 
@@ -25,18 +23,18 @@ public:
     void update(float time_elapsed);
 
 private:
-    inline void handleCollisions(float time_elapsed);
-    inline void handleMovement(float time_elapsed);
+    inline void applyCollisions(float time_elapsed);
+    inline void applyGravitationalMovement(float time_elapsed);
     
-    inline std::vector<float> applyGravityForceEquations(const std::vector<float> &in_values,
-                                                         const std::list<Planet>::iterator &current_planet);
-    inline void applyMomentumConservation(Planet &first, const Planet &second);
-    inline void applyDestruction(std::list<Planet>::iterator &first, std::list<Planet>::iterator &second);
-
-    inline void applyRungeKutta(std::vector<float> &values, float step,
-                                const std::list<Planet>::iterator &current_planet);
+    inline void applyMomentumConservation(Planet &first,
+                                          const Planet &second);
+    inline void applyDestruction(std::list<Planet>::iterator &first,
+                                 std::list<Planet>::iterator &second);
 
     std::list<Planet> &planets_;
+
+    GravityEquation equation_;
+    RungeKuttaSolver<float, Planet*> solver_;
 
 };
 

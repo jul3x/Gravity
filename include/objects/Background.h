@@ -5,21 +5,24 @@
 #ifndef GRAVITY_OBJECTS_BACKGROUND_H
 #define GRAVITY_OBJECTS_BACKGROUND_H
 
+#include <list>
 
 #include <objects/Star.h>
 
 
-class Background : public sf::Drawable {
+class Background : public AbstractPhysicalObject {
 public:
     Background();
 
+    virtual float getMass() const;
     void update(float time_elapsed);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    const sf::Color background_color_;
-    std::vector<Star> stars_;
+    static constexpr int NUMBER_OF_STARS_ = 200;
+
+    std::list<Star> stars_;
 };
 
 
