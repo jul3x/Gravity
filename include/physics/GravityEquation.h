@@ -10,9 +10,7 @@
 #include <utils/Utils.h>
 #include <Config.h>
 
-#include <iostream>
-
-class GravityEquation : public IEquation<float, int> {
+class GravityEquation : public IEquation<float, Planet*> {
 
 public:
     GravityEquation(const std::list<Planet> &planets) : planets_(planets) {
@@ -20,7 +18,7 @@ public:
     }
     
     virtual std::vector<float> operator()(const std::vector<float> &values, 
-                                          const EquationParameters<int> &parameters) {
+                                          const EquationParameters<Planet*> &parameters) {
         static std::vector<float> out_values(this->getSize());
         
         if (parameters.get().size() != 1) 
@@ -29,7 +27,7 @@ public:
                                         "in parameters vector");
         }
 
-        auto planet_id = parameters.get().front();
+        auto planet_addr = parameters.get().front();
         out_values.at(0) = values.at(2);
         out_values.at(1) = values.at(3);
         out_values.at(2) = 0.0;
@@ -37,14 +35,16 @@ public:
 
         for (const auto &planet : planets_)
         {
-            if (planet.getId() != planet_id)
+            if (&planet != planet_addr)
             {
                 float distance = utils::getDistance(planet.getPosition(), {values.at(0), values.at(1)});
                 float alfa = std::atan2(planet.getPosition().y - values.at(1),
                                         planet.getPosition().x - values.at(0));
 
-                out_values.at(2) += Config::GRAVITY_CONST * planet.getMass() / std::pow(distance, 2.0f) * std::cos(alfa);
-                out_values.at(3) += Config::GRAVITY_CONST * planet.getMass() / std::pow(distance, 2.0f) * std::sin(alfa);
+                out_values.at(2) += Config::GRAVITY_CONST * planet.getMass() /
+                                    std::pow(distance, 2.0f) * std::cos(alfa);
+                out_values.at(3) += Config::GRAVITY_CONST * planet.getMass() /
+                                    std::pow(distance, 2.0f) * std::sin(alfa);
             }
         }
         

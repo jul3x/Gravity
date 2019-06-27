@@ -15,8 +15,6 @@
 #include <utils/Utils.h>
 #include <Config.h>
 
-// list planet -> list physical objects
-
 class Physics {
 
 public:
@@ -37,7 +35,7 @@ private:
     std::list<Planet> &planets_;
 
     GravityEquation equation_;
-    RungeKuttaSolver<float, int> solver_;
+    RungeKuttaSolver<float, Planet*> solver_;
 
 };
 

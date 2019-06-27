@@ -4,19 +4,11 @@
 
 #include <objects/Planet.h>
 
-#include <utils/Random.h>
-
 Planet::Planet(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius) : 
-    AbstractCelestialBody(position, velocity, radius) {
-    id_ = utils::getRandom<int>(1, 1000000); // IMPORTANT TO CHANGE!!
-}
+    AbstractCelestialBody(position, velocity, radius) {}
 
 void Planet::update(float time_elapsed) {
     // TODO APPLY RUNGE KUTTA SOLVING
-}
-
-int Planet::getId() const {
-    return id_;
 }
 
 void Planet::draw(sf::RenderTarget &target, sf::RenderStates states) const {

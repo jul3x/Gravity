@@ -9,8 +9,6 @@
 #include <physics/Physics.h>
 #include <utils/Utils.h>
 
-// TODO: Rethink about physics class and some other classes
-
 Physics::Physics(std::list<Planet> &planets) : planets_(planets), equation_(planets_), solver_(equation_) {}
 
 void Physics::update(float time_elapsed) {
@@ -52,15 +50,15 @@ inline void Physics::handleCollisions(float time_elapsed) {
 inline void Physics::applyGravitationalMovement(float time_elapsed) {
     static std::vector<float> equation_vars(4);
     
-    for (auto current_planet = planets_.begin(); current_planet != planets_.end(); ++current_planet)
+    for (auto &planet : planets_)
     {
-        equation_vars = {current_planet->getPosition().x, current_planet->getPosition().y,
-                         current_planet->getVelocity().x, current_planet->getVelocity().y};
+        equation_vars = {planet.getPosition().x, planet.getPosition().y,
+                         planet.getVelocity().x, planet.getVelocity().y};
 
-        solver_.apply(equation_vars, time_elapsed, EquationParameters<int>(current_planet->getId()));
+        solver_.apply(equation_vars, time_elapsed, &planet);
 
-        current_planet->setPosition(equation_vars.at(0), equation_vars.at(1));
-        current_planet->setVelocity(equation_vars.at(2), equation_vars.at(3));
+        planet.setPosition(equation_vars.at(0), equation_vars.at(1));
+        planet.setVelocity(equation_vars.at(2), equation_vars.at(3));
     }
 }
 

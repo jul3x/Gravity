@@ -55,7 +55,6 @@ public:
     inline void apply(std::vector<T> &values,
                       const float step,
                       const EquationParameters<K> &parameters) {
-        
         if (values.size() != equation_.getSize())
         {
             throw std::invalid_argument("[RungeKuttaSolver] Vector with initial values for ODE"
