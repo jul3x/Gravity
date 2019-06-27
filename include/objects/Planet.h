@@ -17,7 +17,7 @@ public:
 
     Planet(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius);
 
-    void update(float time_elapsed); // TODO applyRungeKutta HERE
+    void update(float time_elapsed);
 
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

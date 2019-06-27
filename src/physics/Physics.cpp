@@ -12,11 +12,11 @@
 Physics::Physics(std::list<Planet> &planets) : planets_(planets), equation_(planets_), solver_(equation_) {}
 
 void Physics::update(float time_elapsed) {
-    handleCollisions(time_elapsed);
+    applyCollisions(time_elapsed);
     applyGravitationalMovement(time_elapsed);
 }
 
-inline void Physics::handleCollisions(float time_elapsed) {
+inline void Physics::applyCollisions(float time_elapsed) {
     auto current_planet = planets_.begin();
     bool move_forward;
 

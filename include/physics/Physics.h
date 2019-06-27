@@ -26,7 +26,7 @@ public:
     void update(float time_elapsed);
 
 private:
-    inline void handleCollisions(float time_elapsed);
+    inline void applyCollisions(float time_elapsed);
     inline void applyGravitationalMovement(float time_elapsed);
     
     inline void applyMomentumConservation(Planet &first, const Planet &second);
