@@ -3,17 +3,16 @@
 //
 
 
-#include <iostream>
-#include <cmath>
-
 #include <Engine.h>
+#include <ResourceManager.h>
+#include <utils/Geometry.h>
+
 #include <graphics/UserInterface.h>
-#include <utils/Utils.h>
 
 
 UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {
     state_ = State::NOT_PRESSED;
-
+    cursor_planet_.setTexture(&ResourceManager::getInstance().getTexture("planet"));
     cursor_planet_.setFillColor(sf::Color(Config::CURSOR_PLANET_COLOR_R_, Config::CURSOR_PLANET_COLOR_G_,
                                           Config::CURSOR_PLANET_COLOR_B_, Config::CURSOR_PLANET_COLOR_A_));
     setCursorRadius(5.0f);

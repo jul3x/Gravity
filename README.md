@@ -14,7 +14,7 @@ To move the view of your own planetary system use ``keyboard arrows``. If you wa
 
 ## Build Options
 
-Build is as **simple** as it is possible [CMake]. Use provided in package ``build_and_run.bash`` script to build and open window with application.
+Build is as **simple** as it is possible [CMake]. Use provided in package ``build_and_run.bash`` script to build and open window with application. Additionally, ``run.bash`` script runs already builded **Gravity** app.  
 
 ## Dependencies
 
@@ -37,6 +37,11 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ## Changelog
 
+* 27-06-2019 - Gravity 0.3.0
+    - Added textures for planets.
+    - Minor fixes.
+    - Code fully refactored and prepared for future development.
+
 * 13-06-2019 - Gravity 0.2.0
     - Added procedurally generated background with moving and glowing stars.
 
@@ -46,4 +51,4 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ~jprolejko
 
-[VERSION]: https://img.shields.io/badge/version-0.2.0-blue.svg
+[VERSION]: https://img.shields.io/badge/version-0.3.0-blue.svg
