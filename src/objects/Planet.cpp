@@ -8,7 +8,7 @@ Planet::Planet(const sf::Vector2f &position, const sf::Vector2f &velocity, float
     AbstractCelestialBody(position, velocity, radius) {}
 
 void Planet::update(float time_elapsed) {
-    // TODO APPLY RUNGE KUTTA SOLVING
+    return; // for now   
 }
 
 void Planet::draw(sf::RenderTarget &target, sf::RenderStates states) const {
