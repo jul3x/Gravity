@@ -9,10 +9,13 @@
 #include <list>
 #include <cmath>
 
+#include <physics/RungeKuttaSolver.h>
+#include <physics/GravityEquation.h>
 #include <objects/Planet.h>
 #include <utils/Utils.h>
 #include <Config.h>
 
+// list planet -> list physical objects
 
 class Physics {
 
@@ -26,17 +29,15 @@ public:
 
 private:
     inline void handleCollisions(float time_elapsed);
-    inline void handleMovement(float time_elapsed);
+    inline void applyGravitationalMovement(float time_elapsed);
     
-    inline std::vector<float> applyGravityForceEquations(const std::vector<float> &in_values,
-                                                         const std::list<Planet>::iterator &current_planet);
     inline void applyMomentumConservation(Planet &first, const Planet &second);
     inline void applyDestruction(std::list<Planet>::iterator &first, std::list<Planet>::iterator &second);
 
-    inline void applyRungeKutta(std::vector<float> &values, float step,
-                                const std::list<Planet>::iterator &current_planet);
-
     std::list<Planet> &planets_;
+
+    GravityEquation equation_;
+    RungeKuttaSolver<float, int> solver_;
 
 };
 
