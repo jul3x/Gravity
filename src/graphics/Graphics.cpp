@@ -50,7 +50,6 @@ void Graphics::draw(const AbstractDrawableObject &object) {
     window_.draw(object);
 }
 
-
 void Graphics::display() {
     user_interface_.draw();
 

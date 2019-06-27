@@ -26,6 +26,7 @@ public:
 
     void update(int frame_rate);
     void addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r);
+    void destroyPlanet(const std::list<Planet>::iterator &current_planet);
 
 private:
     Engine();

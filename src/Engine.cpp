@@ -42,6 +42,11 @@ void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r
     planets_.emplace_back(pos, vel, r);
 }
 
+void Engine::destroyPlanet(const std::list<Planet>::iterator &planet) {
+    planets_.erase(planet);
+    // explosion will be created and triggered here
+}
+
 void Engine::ensureConstantFrameRate(const int frame_rate) {
     time_ = clock_.restart();
     sf::Time time_for_sleep = sf::milliseconds(static_cast<int>(1000.0f / static_cast<float>(frame_rate))) - time_;

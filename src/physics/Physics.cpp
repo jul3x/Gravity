@@ -6,6 +6,7 @@
 #include <iterator>
 #include <cassert>
 
+#include <Engine.h>
 #include <physics/Physics.h>
 #include <utils/Utils.h>
 
@@ -109,14 +110,14 @@ inline void Physics::applyDestruction(std::list<Planet>::iterator &first, std::l
     if (first->getMass() >= second->getMass() * MASS_TOLERANCE_FACTOR)
     {
         applyMomentumConservation(*first, *second);
-        planets_.erase(second);
+        Engine::getInstance().destroyPlanet(second);
         
         first = std::next(first);
     }
     else if (first->getMass() * MASS_TOLERANCE_FACTOR <= second->getMass())
     {
-        applyMomentumConservation(*first, *second);
-        planets_.erase(first);
+        applyMomentumConservation(*second, *first);
+        Engine::getInstance().destroyPlanet(first);
             
         first = new_first;
     }
@@ -127,8 +128,8 @@ inline void Physics::applyDestruction(std::list<Planet>::iterator &first, std::l
             new_first = std::next(new_first);
         }
         
-        planets_.erase(first);
-        planets_.erase(second);
+        Engine::getInstance().destroyPlanet(first);
+        Engine::getInstance().destroyPlanet(second);
         
         first = new_first;
     }
