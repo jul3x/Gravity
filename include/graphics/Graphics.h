@@ -9,21 +9,23 @@
 
 #include <objects/Planet.h>
 #include <objects/Background.h>
-#include <graphics/UserInterface.h>
 #include <graphics/EffectGenerator.h>
+#include <UserInterface.h>
 #include <Config.h>
 
 
 class Graphics {
 
 public:
-    explicit Graphics();
-
     Graphics(const Graphics&) = delete;
     Graphics& operator=(const Graphics&) = delete;
 
+    static Graphics& getInstance() {
+        static Graphics graphics_instance;
+        return graphics_instance;
+    }
+
     const bool isWindowOpen() const;
-    void handleEvents();
 
     void setStaticView();
     void setDynamicView();
@@ -34,12 +36,23 @@ public:
     void display();
 
 private:
+    Graphics();
+
+    void setStaticView(sf::View &view);
+    void setDynamicView(sf::View &view);
+
+    sf::RenderWindow& getWindow();
+
+    sf::View& getStaticView();
+    sf::View& getDynamicView();
+
     sf::ContextSettings settings_;
     sf::RenderWindow window_;
     sf::View standard_view_, current_view_;
     EffectGenerator effect_generator_;
 
-    UserInterface user_interface_;
+    friend class UserInterface;
+
 };
 
 

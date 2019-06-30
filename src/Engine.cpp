@@ -5,33 +5,34 @@
 #include <Engine.h>
 
 
-Engine::Engine() : graphics_(), physics_(planets_) { 
+Engine::Engine() : physics_(planets_) { 
     addPlanet({Config::WINDOW_WIDTH_PIXELS_ / 2.0f, Config::WINDOW_HEIGHT_PIXELS_ / 2.0f}, {}, 50.0f); 
 }
 
 void Engine::update(int frame_rate) {
     restartClock();
 
-    while (graphics_.isWindowOpen())
+    while (Graphics::getInstance().isWindowOpen())
     {
         float time_elapsed = 1.0f / static_cast<float>(frame_rate);
 
-        graphics_.handleEvents();
+        user_interface_.handleEvents();
 
         background_.update(time_elapsed);
         physics_.update(time_elapsed);
         
         // drawing
         {
-            graphics_.clear();
-            graphics_.setStaticView();
-            graphics_.draw(background_);
-            graphics_.setDynamicView();
+            Graphics::getInstance().clear();
+            Graphics::getInstance().setStaticView();
+            Graphics::getInstance().draw(background_);
+            Graphics::getInstance().setDynamicView();
             for (const auto &planet : planets_)
             {
-                graphics_.draw(planet);
+                Graphics::getInstance().draw(planet);
             }
-            graphics_.display();
+            Graphics::getInstance().draw(user_interface_);
+            Graphics::getInstance().display();
         }
 
         ensureConstantFrameRate(frame_rate);
@@ -49,7 +50,8 @@ void Engine::destroyPlanet(const std::list<Planet>::iterator &planet) {
 
 void Engine::ensureConstantFrameRate(const int frame_rate) {
     time_ = clock_.restart();
-    sf::Time time_for_sleep = sf::milliseconds(static_cast<int>(1000.0f / static_cast<float>(frame_rate))) - time_;
+    sf::Time time_for_sleep =
+        sf::milliseconds(static_cast<int>(1000.0f / static_cast<float>(frame_rate))) - time_;
     sf::sleep(time_for_sleep);
     time_ = clock_.restart();
 }

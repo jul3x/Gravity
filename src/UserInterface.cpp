@@ -6,11 +6,12 @@
 #include <Engine.h>
 #include <ResourceManager.h>
 #include <utils/Geometry.h>
+#include <graphics/Graphics.h>
 
-#include <graphics/UserInterface.h>
+#include <UserInterface.h>
 
 
-UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {
+UserInterface::UserInterface() {
     state_ = State::NOT_PRESSED;
     cursor_planet_.setTexture(&ResourceManager::getInstance().getTexture("planet"));
     cursor_planet_.setFillColor(sf::Color(Config::CURSOR_PLANET_COLOR_R_, Config::CURSOR_PLANET_COLOR_G_,
@@ -25,41 +26,40 @@ UserInterface::UserInterface(sf::RenderWindow &window) : window_(window) {
 
 void UserInterface::handleEvents() {
     static sf::Event event;
-    while (window_.pollEvent(event))
+    static auto &graphics_window = Graphics::getInstance().getWindow();
+    auto mouse_pos = graphics_window.mapPixelToCoords(sf::Mouse::getPosition(graphics_window));
+    auto mouse_difference = mouse_pos - previous_mouse_pos_;
+    auto current_velocity = utils::vectorLengthLimit(mouse_difference,
+                                                     Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
+
+    while (graphics_window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
         {
-            window_.close();
+            graphics_window.close();
         }
 
         if (event.type == sf::Event::Resized)
         {
             auto visible_area = sf::Vector2f(event.size.width, event.size.height);
-            auto current_view = window_.getView();
+            auto current_view = graphics_window.getView();
 
             current_view.setSize(visible_area);
 
-            window_.setView(current_view);
+            graphics_window.setView(current_view);
         }
 
         if (event.type == sf::Event::MouseButtonPressed)
         {
-            auto mouse_pos = sf::Mouse::getPosition(window_);
-            previous_mouse_pos_ = window_.mapPixelToCoords(mouse_pos);
+            previous_mouse_pos_ = mouse_pos;
 
             state_ = State::PRESSED;
         }
 
         if (event.type == sf::Event::MouseButtonReleased)
         {
-            auto mouse_pos = sf::Mouse::getPosition(window_);
-            auto new_mouse_pos = window_.mapPixelToCoords(mouse_pos);
-            auto mouse_difference = new_mouse_pos - previous_mouse_pos_;
-            auto velocity = utils::vectorLengthLimit(mouse_difference,
-                                                     Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
-
             Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
-                                            velocity / Config::PIXELS_PER_KM_, cursor_r_);
+                                            current_velocity / Config::PIXELS_PER_KM_, cursor_r_);
 
             state_ = State::NOT_PRESSED;
         }
@@ -72,10 +72,11 @@ void UserInterface::handleEvents() {
             }
             else
             {
-                auto view = window_.getView();
+                auto view = graphics_window.getView();
 
-                auto mouse_pos_from_center = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window_)) -
-                                             static_cast<sf::Vector2f>(window_.getSize()) / 2.0f;
+                auto mouse_pos_from_center =
+                    static_cast<sf::Vector2f>(sf::Mouse::getPosition(graphics_window)) -
+                    static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
 
                 auto factor = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
 
@@ -83,80 +84,77 @@ void UserInterface::handleEvents() {
                 view.zoom(1.0f - event.mouseWheelScroll.delta * 0.1f);
 
 
-                window_.setView(view);
+                graphics_window.setView(view);
             }
         }
 
         if (event.type == sf::Event::KeyPressed)
         {
-            auto view = window_.getView();
-            auto delta_x = 0.0f;
-            auto delta_y = 0.0f;
+            auto view = graphics_window.getView();
+            auto delta = sf::Vector2f(0.0f, 0.0f);
             auto scrolling_speed = 10.0f;
 
             if (event.key.code == sf::Keyboard::Left)
             {
-                delta_x -= scrolling_speed;
+                delta.x -= scrolling_speed;
             }
 
             if (event.key.code == sf::Keyboard::Right)
             {
-                delta_x += scrolling_speed;
+                delta.x += scrolling_speed;
             }
 
             if (event.key.code == sf::Keyboard::Up)
             {
-                delta_y -= scrolling_speed;
+                delta.y -= scrolling_speed;
             }
 
             if (event.key.code == sf::Keyboard::Down)
             {
-                delta_y += scrolling_speed;
+                delta.y += scrolling_speed;
             }
 
-            view.move(delta_x, delta_y);
-            window_.setView(view);
+            view.move(delta);
+            graphics_window.setView(view);
+        }
+    }
+
+    switch (state_)
+    {
+        case State::NOT_PRESSED:
+        {
+            cursor_planet_.setPosition(mouse_pos);
+            previous_mouse_pos_ = mouse_pos;
+            break;
+        }
+        case State::PRESSED:
+        {
+            cursor_planet_.setPosition(previous_mouse_pos_);
+            arrow_.setPosition(previous_mouse_pos_);
+            arrow_.setSize({std::hypot(current_velocity.x, current_velocity.y), Config::ARROW_WIDTH_});
+            arrow_.setRotation(static_cast<float>(
+                std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
+
+            break;
+        }
+        default:
+        {
+            throw std::runtime_error("[UserInterface] Wrong state!");
+            break;
         }
     }
 }
 
-void UserInterface::draw() {
-    drawCursorPlanet();
-    drawArrow();
-}
-
-void UserInterface::drawCursorPlanet() {
-    if (state_ == State::NOT_PRESSED)
-    {
-        auto mouse_pos = window_.mapPixelToCoords(sf::Mouse::getPosition(window_));
-        cursor_planet_.setPosition(mouse_pos);
-    }
-    else if (state_ == State::PRESSED)
-    {
-        cursor_planet_.setPosition(previous_mouse_pos_);
-    }
-
-    window_.draw(cursor_planet_);
-}
-
-void UserInterface::drawArrow() {
+void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     if (state_ == State::PRESSED)
     {
-        auto mouse_pos = window_.mapPixelToCoords(sf::Mouse::getPosition(window_));
-
-        auto mouse_difference = mouse_pos - previous_mouse_pos_;
-        auto velocity = utils::vectorLengthLimit(mouse_difference,
-                                                 Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
-
-        arrow_.setPosition(previous_mouse_pos_);
-        arrow_.setSize({std::hypot(velocity.x, velocity.y), Config::ARROW_WIDTH_});
-        arrow_.setRotation(static_cast<float>(std::atan2(velocity.y, velocity.x) / M_PI * 180.0f));
-
-        window_.draw(arrow_);
+        target.draw(arrow_, states);
     }
+
+    target.draw(cursor_planet_, states);
 }
 
-void UserInterface::setCursorRadius(float new_r) {
+inline void UserInterface::setCursorRadius(float new_r) {
     if (new_r <= 0.0 || new_r >= Config::MAX_PLANET_RADIUS_)
     {
         return;

@@ -6,20 +6,18 @@
 #define GRAVITY_GRAPHICS_USERINTERFACE_H
 
 
-#include <SFML/Graphics.hpp>
-
+#include <objects/AbstractDrawableObject.h>
 #include <Config.h>
 
-class UserInterface {
+class UserInterface : public AbstractDrawableObject {
     
 public:
-    explicit UserInterface(sf::RenderWindow &window);
+    explicit UserInterface();
 
     UserInterface(const UserInterface&) = delete;
     UserInterface& operator=(const UserInterface&) = delete;
 
     void handleEvents();
-    void draw();
 
 private:
     enum class State {
@@ -27,11 +25,9 @@ private:
         PRESSED
     };
 
-    void drawCursorPlanet();
-    void drawArrow();
-    void setCursorRadius(float new_r);
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
-    sf::RenderWindow &window_;
+    inline void setCursorRadius(float new_r);
 
     State state_;
 

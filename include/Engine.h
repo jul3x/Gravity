@@ -8,6 +8,7 @@
 
 #include <objects/Planet.h>
 #include <graphics/Graphics.h>
+#include <UserInterface.h>
 #include <physics/Physics.h>
 
 
@@ -34,8 +35,9 @@ private:
     void ensureConstantFrameRate(int frame_rate);
     void restartClock();
 
-    Graphics graphics_;
     Physics physics_;
+
+    UserInterface user_interface_;
 
     sf::Clock clock_;
     sf::Time time_;
