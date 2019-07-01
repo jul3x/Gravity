@@ -72,6 +72,7 @@ void UserInterface::handleEvents() {
             }
             else
             {
+                static auto current_zoom = 1.0f;
                 auto view = graphics_window.getView();
 
                 auto mouse_pos_from_center =
@@ -80,9 +81,9 @@ void UserInterface::handleEvents() {
 
                 auto factor = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
 
-                view.setCenter(view.getCenter() + factor * mouse_pos_from_center / 5.0f);
+                view.setCenter(view.getCenter() + factor * mouse_pos_from_center * current_zoom / 10.0f);
                 view.zoom(1.0f - event.mouseWheelScroll.delta * 0.1f);
-
+                current_zoom = current_zoom * (1.0f - event.mouseWheelScroll.delta * 0.1f);
 
                 graphics_window.setView(view);
             }
