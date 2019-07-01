@@ -36,6 +36,7 @@ void Graphics::setStaticView(sf::View &view) {
 
 void Graphics::setDynamicView(sf::View &view) {
     current_view_ = view;
+    window_.setView(current_view_);
 }
 
 sf::View& Graphics::getStaticView() {

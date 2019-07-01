@@ -68,7 +68,7 @@ void UserInterface::handleEvents() {
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
             {
-                setCursorRadius(cursor_r_ + event.mouseWheelScroll.delta / 4.0f);
+                setCursorRadius(cursor_r_ + cursor_r_ * event.mouseWheelScroll.delta / 4.0f);
             }
             else
             {
