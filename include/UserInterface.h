@@ -35,6 +35,7 @@ private:
 
     sf::CircleShape cursor_planet_;
     float cursor_r_;
+    float current_zoom_;
 
     sf::RectangleShape arrow_;
 };

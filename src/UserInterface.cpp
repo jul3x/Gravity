@@ -22,11 +22,13 @@ UserInterface::UserInterface() {
                                   Config::ARROW_COLOR_B_, Config::ARROW_COLOR_A_));
 
     arrow_.setOrigin(0.0f, Config::ARROW_WIDTH_ / 2.0f);
+    current_zoom_ = 1.0f;
 }
 
 void UserInterface::handleEvents() {
     static sf::Event event;
     static auto &graphics_window = Graphics::getInstance().getWindow();
+    auto view = graphics_window.getView();
     auto mouse_pos = graphics_window.mapPixelToCoords(sf::Mouse::getPosition(graphics_window));
     auto mouse_difference = mouse_pos - previous_mouse_pos_;
     auto current_velocity = utils::vectorLengthLimit(mouse_difference,
@@ -34,89 +36,103 @@ void UserInterface::handleEvents() {
 
     while (graphics_window.pollEvent(event))
     {
-        if (event.type == sf::Event::Closed)
+        switch (event.type)
         {
-            graphics_window.close();
-        }
-
-        if (event.type == sf::Event::Resized)
-        {
-            auto visible_area = sf::Vector2f(event.size.width, event.size.height);
-            auto current_view = graphics_window.getView();
-
-            current_view.setSize(visible_area);
-
-            graphics_window.setView(current_view);
-        }
-
-        if (event.type == sf::Event::MouseButtonPressed)
-        {
-            previous_mouse_pos_ = mouse_pos;
-
-            state_ = State::PRESSED;
-        }
-
-        if (event.type == sf::Event::MouseButtonReleased)
-        {
-            Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
-                                            current_velocity / Config::PIXELS_PER_KM_, cursor_r_);
-
-            state_ = State::NOT_PRESSED;
-        }
-
-        if (event.type == sf::Event::MouseWheelScrolled)
-        {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+            case sf::Event::Closed:
             {
-                setCursorRadius(cursor_r_ + cursor_r_ * event.mouseWheelScroll.delta / 4.0f);
+                graphics_window.close();
+                break;
             }
-            else
+            case sf::Event::Resized:
             {
-                static auto current_zoom = 1.0f;
-                auto view = graphics_window.getView();
-
-                auto mouse_pos_from_center =
-                    static_cast<sf::Vector2f>(sf::Mouse::getPosition(graphics_window)) -
-                    static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
-
-                auto factor = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
-
-                view.setCenter(view.getCenter() + factor * mouse_pos_from_center * current_zoom / 10.0f);
-                view.zoom(1.0f - event.mouseWheelScroll.delta * 0.1f);
-                current_zoom = current_zoom * (1.0f - event.mouseWheelScroll.delta * 0.1f);
+                auto visible_area = sf::Vector2f(event.size.width, event.size.height);
+                view.setSize(visible_area);
 
                 graphics_window.setView(view);
+                break;
             }
-        }
-
-        if (event.type == sf::Event::KeyPressed)
-        {
-            auto view = graphics_window.getView();
-            auto delta = sf::Vector2f(0.0f, 0.0f);
-            auto scrolling_speed = 10.0f;
-
-            if (event.key.code == sf::Keyboard::Left)
+            case sf::Event::MouseButtonPressed:
             {
-                delta.x -= scrolling_speed;
-            }
+                previous_mouse_pos_ = mouse_pos;
 
-            if (event.key.code == sf::Keyboard::Right)
+                state_ = State::PRESSED;
+                break;
+            }
+            case sf::Event::MouseButtonReleased:
             {
-                delta.x += scrolling_speed;
-            }
+                Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
+                                                current_velocity / Config::PIXELS_PER_KM_, cursor_r_);
 
-            if (event.key.code == sf::Keyboard::Up)
+                state_ = State::NOT_PRESSED;
+                break;
+            }
+            case sf::Event::MouseWheelScrolled:
             {
-                delta.y -= scrolling_speed;
-            }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+                {
+                    setCursorRadius(cursor_r_ + cursor_r_ * event.mouseWheelScroll.delta / 4.0f);
+                }
+                else
+                {
+                    static auto current_zoom_ = 1.0f;
 
-            if (event.key.code == sf::Keyboard::Down)
+                    auto mouse_pos_from_center =
+                        static_cast<sf::Vector2f>(sf::Mouse::getPosition(graphics_window)) -
+                        static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
+
+                    auto factor = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
+                    auto zoom = 1.0f - event.mouseWheelScroll.delta * 0.1f;
+
+                    view.setCenter(view.getCenter() + factor * mouse_pos_from_center * current_zoom_ / 10.0f);
+                    current_zoom_ = current_zoom_ * zoom;
+                    view.zoom(zoom);
+
+                    graphics_window.setView(view);
+                }
+
+                break;
+            }
+            case sf::Event::KeyPressed:
             {
-                delta.y += scrolling_speed;
-            }
+                auto delta = sf::Vector2f(0.0f, 0.0f);
+                auto scrolling_speed = 30.0f * current_zoom_;
 
-            view.move(delta);
-            graphics_window.setView(view);
+                switch (event.key.code)
+                {
+                    case sf::Keyboard::Left:
+                    {
+                        delta.x -= scrolling_speed;
+                        break;
+                    }
+                    case sf::Keyboard::Right:
+                    {
+                        delta.x += scrolling_speed;
+                        break;
+                    }
+                    case sf::Keyboard::Up:
+                    {
+                        delta.y -= scrolling_speed;
+                        break;
+                    }
+                    case sf::Keyboard::Down:
+                    {
+                        delta.y += scrolling_speed;
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
+
+                view.move(delta);
+                graphics_window.setView(view);
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
     }
 
