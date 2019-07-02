@@ -29,9 +29,9 @@ void UserInterface::handleEvents() {
     static sf::Event event;
     static auto &graphics_window = Graphics::getInstance().getWindow();
     auto view = graphics_window.getView();
-    auto mouse_pos = graphics_window.mapPixelToCoords(sf::Mouse::getPosition(graphics_window));
+    auto mouse_pos = sf::Mouse::getPosition(graphics_window);
     auto mouse_difference = mouse_pos - previous_mouse_pos_;
-    auto current_velocity = utils::vectorLengthLimit(mouse_difference,
+    auto current_velocity = utils::vectorLengthLimit(static_cast<sf::Vector2f>(mouse_difference),
                                                      Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
 
     while (graphics_window.pollEvent(event))
@@ -60,7 +60,8 @@ void UserInterface::handleEvents() {
             }
             case sf::Event::MouseButtonReleased:
             {
-                Engine::getInstance().addPlanet(previous_mouse_pos_ / Config::PIXELS_PER_KM_,
+                Engine::getInstance().addPlanet(graphics_window.mapPixelToCoords(previous_mouse_pos_) /
+                                                    Config::PIXELS_PER_KM_,
                                                 current_velocity / Config::PIXELS_PER_KM_, cursor_r_);
 
                 state_ = State::NOT_PRESSED;
@@ -74,16 +75,16 @@ void UserInterface::handleEvents() {
                 }
                 else
                 {
-                    static auto current_zoom_ = 1.0f;
-
                     auto mouse_pos_from_center =
                         static_cast<sf::Vector2f>(sf::Mouse::getPosition(graphics_window)) -
                         static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
 
-                    auto factor = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
-                    auto zoom = 1.0f - event.mouseWheelScroll.delta * 0.1f;
+                    auto signum = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
+                    static constexpr float FACTOR = 0.1f;
 
-                    view.setCenter(view.getCenter() + factor * mouse_pos_from_center * current_zoom_ / 10.0f);
+                    auto zoom = 1.0f - event.mouseWheelScroll.delta * FACTOR;
+
+                    view.setCenter(view.getCenter() + signum * mouse_pos_from_center * current_zoom_ * FACTOR);
                     current_zoom_ = current_zoom_ * zoom;
                     view.zoom(zoom);
 
@@ -140,14 +141,14 @@ void UserInterface::handleEvents() {
     {
         case State::NOT_PRESSED:
         {
-            cursor_planet_.setPosition(mouse_pos);
+            cursor_planet_.setPosition(graphics_window.mapPixelToCoords(mouse_pos));
             previous_mouse_pos_ = mouse_pos;
             break;
         }
         case State::PRESSED:
         {
-            cursor_planet_.setPosition(previous_mouse_pos_);
-            arrow_.setPosition(previous_mouse_pos_);
+            cursor_planet_.setPosition(graphics_window.mapPixelToCoords(previous_mouse_pos_));
+            arrow_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
             arrow_.setSize({std::hypot(current_velocity.x, current_velocity.y), Config::ARROW_WIDTH_});
             arrow_.setRotation(static_cast<float>(
                 std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
@@ -167,8 +168,9 @@ void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) cons
     {
         target.draw(arrow_, states);
     }
-
+    Graphics::getInstance().setDynamicView();
     target.draw(cursor_planet_, states);
+    Graphics::getInstance().setStaticView();
 }
 
 inline void UserInterface::setCursorRadius(float new_r) {

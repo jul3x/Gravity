@@ -31,7 +31,7 @@ private:
 
     State state_;
 
-    sf::Vector2f previous_mouse_pos_;
+    sf::Vector2i previous_mouse_pos_;
 
     sf::CircleShape cursor_planet_;
     float cursor_r_;

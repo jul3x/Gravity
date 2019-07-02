@@ -31,7 +31,9 @@ void Engine::update(int frame_rate) {
             {
                 Graphics::getInstance().draw(planet);
             }
+            Graphics::getInstance().setStaticView();
             Graphics::getInstance().draw(user_interface_);
+            Graphics::getInstance().setDynamicView();
             Graphics::getInstance().display();
         }
 
