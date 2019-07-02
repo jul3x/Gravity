@@ -226,7 +226,6 @@ inline void UserInterface::setCursorRadius(float new_r) {
 
     cursor_r_ = new_r;
 
-    cursor_planet_.setOrigin(cursor_r_ * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_,
-                             cursor_r_ * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_);
-    cursor_planet_.setRadius(cursor_r_ * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_);
+    cursor_planet_.setOrigin(cursor_r_ * Config::PIXELS_PER_KM_, cursor_r_ * Config::PIXELS_PER_KM_);
+    cursor_planet_.setRadius(cursor_r_ * Config::PIXELS_PER_KM_);
 }

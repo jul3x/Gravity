@@ -10,7 +10,6 @@ class Config {
 public:
     // Graphics
     static constexpr float PIXELS_PER_KM_ = 1.0f;
-    static constexpr float OBJECT_ZOOM_ = 1.0f;
     static constexpr int WINDOW_WIDTH_PIXELS_ = 1500;
     static constexpr int WINDOW_HEIGHT_PIXELS_ = 900;
 
