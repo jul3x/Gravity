@@ -2,6 +2,7 @@
 // Created by jprolejko on 27.02.19.
 //
 
+#include <iostream> 
 
 #include <Engine.h>
 #include <ResourceManager.h>
@@ -168,32 +169,28 @@ void UserInterface::handleEvents() {
             arrow_l_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
             arrow_r_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
 
-            shaft_.setPoint(0, sf::Vector2f(0, 0));
-            shaft_.setPoint(1, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
-                               -Config::ARROW_WIDTH_ / 2.0f));
-            shaft_.setPoint(2, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
-                               Config::ARROW_WIDTH_ / 2.0f));
+            auto shaft_length = std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f;
+            auto arrow_rotation = 
+                static_cast<float>(std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f);
+
+            shaft_length = utils::isNearlyEqual(shaft_length, 
+                - Config::ARROW_WIDTH_ * 3.0f, Config::ARROW_WIDTH_ * 6.0f) ? 0.0f : shaft_length;
+
+            shaft_.setPoint(0, {0, 0});
+            shaft_.setPoint(1, {shaft_length, - Config::ARROW_WIDTH_ / 2.0f});
+            shaft_.setPoint(2, {shaft_length, Config::ARROW_WIDTH_ / 2.0f});
             
-            arrow_l_.setPoint(0, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
-                                 0));
-            arrow_l_.setPoint(1, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y),
-                                 0));
-            arrow_l_.setPoint(2, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 6.0f,
-                                 -Config::ARROW_WIDTH_ * 3.0f));
+            arrow_l_.setPoint(0, {shaft_length, 0});
+            arrow_l_.setPoint(1, {shaft_length + Config::ARROW_WIDTH_ * 3.0f, 0});
+            arrow_l_.setPoint(2, {shaft_length - Config::ARROW_WIDTH_ * 3.0f, - Config::ARROW_WIDTH_ * 3.0f});
 
-            arrow_r_.setPoint(0, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
-                                 0));
-            arrow_r_.setPoint(1, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y),
-                                 0));
-            arrow_r_.setPoint(2, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 6.0f,
-                                 Config::ARROW_WIDTH_ * 3.0f));
+            arrow_r_.setPoint(0, {shaft_length, 0});
+            arrow_r_.setPoint(1, {shaft_length + Config::ARROW_WIDTH_ * 3.0f, 0});
+            arrow_r_.setPoint(2, {shaft_length - Config::ARROW_WIDTH_ * 3.0f, Config::ARROW_WIDTH_ * 3.0f});
 
-            shaft_.setRotation(static_cast<float>(
-                std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
-            arrow_l_.setRotation(static_cast<float>(
-                std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
-            arrow_r_.setRotation(static_cast<float>(
-                std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
+            shaft_.setRotation(arrow_rotation);
+            arrow_l_.setRotation(arrow_rotation);
+            arrow_r_.setRotation(arrow_rotation);
 
             break;
         }
@@ -206,7 +203,7 @@ void UserInterface::handleEvents() {
 }
 
 void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    if (state_ == State::PRESSED)
+    if (state_ == State::PRESSED && !utils::isNearlyEqual(shaft_.getLocalBounds().width, 0.0f, 0.01f))
     {
         target.draw(shaft_, states);
         target.draw(arrow_l_, states);
