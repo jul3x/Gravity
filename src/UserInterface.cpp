@@ -41,8 +41,9 @@ void UserInterface::handleEvents() {
     static auto &graphics_window = Graphics::getInstance().getWindow();
     auto view = graphics_window.getView();
     auto mouse_pos = sf::Mouse::getPosition(graphics_window);
-    auto mouse_difference = mouse_pos - previous_mouse_pos_;
-    auto current_velocity = utils::vectorLengthLimit(static_cast<sf::Vector2f>(mouse_difference),
+    auto mouse_difference = graphics_window.mapPixelToCoords(mouse_pos) -
+        graphics_window.mapPixelToCoords(previous_mouse_pos_);
+    auto current_velocity = utils::vectorLengthLimit(mouse_difference,
                                                      Config::MAX_SET_VELOCITY_ * Config::PIXELS_PER_KM_);
 
     while (graphics_window.pollEvent(event))
@@ -59,7 +60,11 @@ void UserInterface::handleEvents() {
                 auto visible_area = sf::Vector2f(event.size.width, event.size.height);
                 view.setSize(visible_area);
 
-                graphics_window.setView(view);
+                auto dynamic_view = Graphics::getInstance().getDynamicView();
+                dynamic_view.setSize(visible_area);
+                dynamic_view.zoom(current_zoom_);
+                Graphics::getInstance().setDynamicView(dynamic_view);
+                
                 break;
             }
             case sf::Event::MouseButtonPressed:
@@ -106,9 +111,7 @@ void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) cons
         target.draw(arrow_r_, states);
     }
 
-    Graphics::getInstance().setDynamicView();
     target.draw(cursor_planet_, states);
-    Graphics::getInstance().setStaticView();
 }
 
 inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf::View &view,
@@ -188,10 +191,12 @@ inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_wind
         case State::PRESSED:
         {
             static constexpr float ARROW_LENGTH = Config::ARROW_WIDTH_ * 3.0f;
-            cursor_planet_.setPosition(graphics_window.mapPixelToCoords(previous_mouse_pos_));
-            shaft_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
-            arrow_l_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
-            arrow_r_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
+            auto mouse_coords = graphics_window.mapPixelToCoords(previous_mouse_pos_);
+            cursor_planet_.setPosition(mouse_coords);
+
+            shaft_.setPosition(mouse_coords);
+            arrow_l_.setPosition(mouse_coords);
+            arrow_r_.setPosition(mouse_coords);
 
             auto shaft_length = std::hypot(current_velocity.x, current_velocity.y) - ARROW_LENGTH;
             auto arrow_rotation = 
