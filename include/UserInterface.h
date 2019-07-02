@@ -25,8 +25,19 @@ private:
         PRESSED
     };
 
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    virtual void draw(sf::RenderTarget &target,
+                      sf::RenderStates states) const;
 
+    inline void handleScrolling(sf::RenderWindow &graphics_window,
+                                sf::View &view,
+                                const sf::Vector2i &mouse_pos,
+                                float zoom_delta);
+    inline void handleKeyPressed(sf::RenderWindow &graphics_window,
+                                 sf::View &view,
+                                 const sf::Keyboard::Key &key_code);
+    inline void handleInterfaceStates(sf::RenderWindow &graphics_window,
+                                      const sf::Vector2i &mouse_pos,
+                                      const sf::Vector2f &current_velocity);
     inline void setCursorRadius(float new_r);
 
     State state_;

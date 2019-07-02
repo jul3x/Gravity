@@ -80,70 +80,12 @@ void UserInterface::handleEvents() {
             }
             case sf::Event::MouseWheelScrolled:
             {
-                // TODO move to another method
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-                {
-                    setCursorRadius(cursor_r_ + cursor_r_ * event.mouseWheelScroll.delta / 4.0f);
-                }
-                else
-                {
-                    auto signum = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
-                    static constexpr float FACTOR = 0.1f;
-
-                    auto zoom = 1.0f - event.mouseWheelScroll.delta * FACTOR;
-                    
-                    if (current_zoom_ * zoom <= Config::MAX_WINDOW_ZOOMOUT_ &&
-                        current_zoom_ * zoom >= Config::MIN_WINDOW_ZOOMOUT_)
-                    {
-                        auto mouse_pos_from_center =
-                            static_cast<sf::Vector2f>(sf::Mouse::getPosition(graphics_window)) -
-                            static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
-                        view.setCenter(view.getCenter() + signum * mouse_pos_from_center * current_zoom_ * FACTOR);
-                        current_zoom_ = current_zoom_ * zoom;
-                        view.zoom(zoom);
-
-                        graphics_window.setView(view);
-                    }
-                }
-
+                handleScrolling(graphics_window, view, mouse_pos, event.mouseWheelScroll.delta);
                 break;
             }
             case sf::Event::KeyPressed:
             {
-                // TODO move to another method
-                auto delta = sf::Vector2f(0.0f, 0.0f);
-                auto scrolling_speed = 30.0f * current_zoom_;
-
-                switch (event.key.code)
-                {
-                    case sf::Keyboard::Left:
-                    {
-                        delta.x -= scrolling_speed;
-                        break;
-                    }
-                    case sf::Keyboard::Right:
-                    {
-                        delta.x += scrolling_speed;
-                        break;
-                    }
-                    case sf::Keyboard::Up:
-                    {
-                        delta.y -= scrolling_speed;
-                        break;
-                    }
-                    case sf::Keyboard::Down:
-                    {
-                        delta.y += scrolling_speed;
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
-
-                view.move(delta);
-                graphics_window.setView(view);
+                handleKeyPressed(graphics_window, view, event.key.code);
                 break;
             }
             default:
@@ -153,53 +95,7 @@ void UserInterface::handleEvents() {
         }
     }
 
-    switch (state_)
-    {
-        case State::NOT_PRESSED:
-        {
-            cursor_planet_.setPosition(graphics_window.mapPixelToCoords(mouse_pos));
-            previous_mouse_pos_ = mouse_pos;
-            break;
-        }
-        case State::PRESSED:
-        {
-            // TODO Move to another method
-            cursor_planet_.setPosition(graphics_window.mapPixelToCoords(previous_mouse_pos_));
-            shaft_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
-            arrow_l_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
-            arrow_r_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
-
-            auto shaft_length = std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f;
-            auto arrow_rotation = 
-                static_cast<float>(std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f);
-
-            shaft_length = utils::isNearlyEqual(shaft_length, 
-                - Config::ARROW_WIDTH_ * 3.0f, Config::ARROW_WIDTH_ * 6.0f) ? 0.0f : shaft_length;
-
-            shaft_.setPoint(0, {0, 0});
-            shaft_.setPoint(1, {shaft_length, - Config::ARROW_WIDTH_ / 2.0f});
-            shaft_.setPoint(2, {shaft_length, Config::ARROW_WIDTH_ / 2.0f});
-            
-            arrow_l_.setPoint(0, {shaft_length, 0});
-            arrow_l_.setPoint(1, {shaft_length + Config::ARROW_WIDTH_ * 3.0f, 0});
-            arrow_l_.setPoint(2, {shaft_length - Config::ARROW_WIDTH_ * 3.0f, - Config::ARROW_WIDTH_ * 3.0f});
-
-            arrow_r_.setPoint(0, {shaft_length, 0});
-            arrow_r_.setPoint(1, {shaft_length + Config::ARROW_WIDTH_ * 3.0f, 0});
-            arrow_r_.setPoint(2, {shaft_length - Config::ARROW_WIDTH_ * 3.0f, Config::ARROW_WIDTH_ * 3.0f});
-
-            shaft_.setRotation(arrow_rotation);
-            arrow_l_.setRotation(arrow_rotation);
-            arrow_r_.setRotation(arrow_rotation);
-
-            break;
-        }
-        default:
-        {
-            throw std::runtime_error("[UserInterface] Wrong state!");
-            break;
-        }
-    }
+    handleInterfaceStates(graphics_window, mouse_pos, current_velocity);
 }
 
 void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -213,6 +109,121 @@ void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) cons
     Graphics::getInstance().setDynamicView();
     target.draw(cursor_planet_, states);
     Graphics::getInstance().setStaticView();
+}
+
+inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf::View &view,
+                                           const sf::Vector2i &mouse_pos, float zoom_delta) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+    {
+        setCursorRadius(cursor_r_ + cursor_r_ * zoom_delta / 4.0f);
+    }
+    else
+    {
+        auto signum = zoom_delta < 0 ? -1.0f : 1.0f;
+        static constexpr float FACTOR = 0.1f;
+
+        auto zoom = 1.0f - zoom_delta * FACTOR;
+        if (current_zoom_ * zoom <= Config::MAX_WINDOW_ZOOMOUT_ &&
+            current_zoom_ * zoom >= Config::MIN_WINDOW_ZOOMOUT_)
+        {
+            auto mouse_pos_from_center =
+                static_cast<sf::Vector2f>(mouse_pos) -
+                static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
+            view.setCenter(view.getCenter() + signum * mouse_pos_from_center * current_zoom_ * FACTOR);
+            current_zoom_ = current_zoom_ * zoom;
+            view.zoom(zoom);
+
+            graphics_window.setView(view);
+        }
+    }
+}
+
+inline void UserInterface::handleKeyPressed(sf::RenderWindow &graphics_window, sf::View &view,
+                                            const sf::Keyboard::Key &key_code) {
+    auto delta = sf::Vector2f(0.0f, 0.0f);
+    auto scrolling_speed = 30.0f * current_zoom_;
+
+    switch (key_code)
+    {
+        case sf::Keyboard::Left:
+        {
+            delta.x -= scrolling_speed;
+            break;
+        }
+        case sf::Keyboard::Right:
+        {
+            delta.x += scrolling_speed;
+            break;
+        }
+        case sf::Keyboard::Up:
+        {
+            delta.y -= scrolling_speed;
+            break;
+        }
+        case sf::Keyboard::Down:
+        {
+            delta.y += scrolling_speed;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    view.move(delta);
+    graphics_window.setView(view);
+}
+
+inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_window, const sf::Vector2i &mouse_pos,
+                                                 const sf::Vector2f &current_velocity) {
+    switch (state_)
+    {
+        case State::NOT_PRESSED:
+        {
+            cursor_planet_.setPosition(graphics_window.mapPixelToCoords(mouse_pos));
+            previous_mouse_pos_ = mouse_pos;
+            break;
+        }
+        case State::PRESSED:
+        {
+            static constexpr float ARROW_LENGTH = Config::ARROW_WIDTH_ * 3.0f;
+            cursor_planet_.setPosition(graphics_window.mapPixelToCoords(previous_mouse_pos_));
+            shaft_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
+            arrow_l_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
+            arrow_r_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
+
+            auto shaft_length = std::hypot(current_velocity.x, current_velocity.y) - ARROW_LENGTH;
+            auto arrow_rotation = 
+                static_cast<float>(std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f);
+
+            shaft_length = utils::isNearlyEqual(shaft_length, 
+                - ARROW_LENGTH, ARROW_LENGTH * 2.0f) ? 0.0f : shaft_length;
+
+            shaft_.setPoint(0, {0, 0});
+            shaft_.setPoint(1, {shaft_length, - Config::ARROW_WIDTH_ / 2.0f});
+            shaft_.setPoint(2, {shaft_length, Config::ARROW_WIDTH_ / 2.0f});
+            
+            arrow_l_.setPoint(0, {shaft_length, 0});
+            arrow_l_.setPoint(1, {shaft_length + ARROW_LENGTH, 0});
+            arrow_l_.setPoint(2, {shaft_length - ARROW_LENGTH, - ARROW_LENGTH});
+
+            arrow_r_.setPoint(0, {shaft_length, 0});
+            arrow_r_.setPoint(1, {shaft_length + ARROW_LENGTH, 0});
+            arrow_r_.setPoint(2, {shaft_length - ARROW_LENGTH, ARROW_LENGTH});
+
+            shaft_.setRotation(arrow_rotation);
+            arrow_l_.setRotation(arrow_rotation);
+            arrow_r_.setRotation(arrow_rotation);
+
+            break;
+        }
+        default:
+        {
+            throw std::runtime_error("[UserInterface] Wrong state!");
+            break;
+        }
+    }
 }
 
 inline void UserInterface::setCursorRadius(float new_r) {
