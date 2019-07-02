@@ -75,20 +75,23 @@ void UserInterface::handleEvents() {
                 }
                 else
                 {
-                    auto mouse_pos_from_center =
-                        static_cast<sf::Vector2f>(sf::Mouse::getPosition(graphics_window)) -
-                        static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
-
                     auto signum = event.mouseWheelScroll.delta < 0 ? -1.0f : 1.0f;
                     static constexpr float FACTOR = 0.1f;
 
                     auto zoom = 1.0f - event.mouseWheelScroll.delta * FACTOR;
+                    
+                    if (current_zoom_ * zoom <= Config::MAX_WINDOW_ZOOMOUT_ &&
+                        current_zoom_ * zoom >= Config::MIN_WINDOW_ZOOMOUT_)
+                    {
+                        auto mouse_pos_from_center =
+                            static_cast<sf::Vector2f>(sf::Mouse::getPosition(graphics_window)) -
+                            static_cast<sf::Vector2f>(graphics_window.getSize()) / 2.0f;
+                        view.setCenter(view.getCenter() + signum * mouse_pos_from_center * current_zoom_ * FACTOR);
+                        current_zoom_ = current_zoom_ * zoom;
+                        view.zoom(zoom);
 
-                    view.setCenter(view.getCenter() + signum * mouse_pos_from_center * current_zoom_ * FACTOR);
-                    current_zoom_ = current_zoom_ * zoom;
-                    view.zoom(zoom);
-
-                    graphics_window.setView(view);
+                        graphics_window.setView(view);
+                    }
                 }
 
                 break;
