@@ -23,13 +23,13 @@ public:
     static constexpr int ARROW_COLOR_R_ = 255;
     static constexpr int ARROW_COLOR_G_ = 255;
     static constexpr int ARROW_COLOR_B_ = 255;
-    static constexpr int ARROW_COLOR_A_ = 255;
+    static constexpr int ARROW_COLOR_A_ = 200;
     static constexpr float ARROW_WIDTH_ = 5.0f;
 
     static constexpr float MAX_PLANET_RADIUS_ = 100.0f;
     
-    static constexpr float MIN_WINDOW_ZOOMOUT_ = 1.0f;
-    static constexpr float MAX_WINDOW_ZOOMOUT_ = 5.0f;
+    static constexpr float MIN_WINDOW_ZOOMOUT_ = 0.5f;
+    static constexpr float MAX_WINDOW_ZOOMOUT_ = 15.0f;
 
     // Physics
     static constexpr float DENSITY_KG_M_ = 5000.0f;

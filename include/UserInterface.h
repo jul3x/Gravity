@@ -37,7 +37,9 @@ private:
     float cursor_r_;
     float current_zoom_;
 
-    sf::RectangleShape arrow_;
+    // velocity graphics representation
+    sf::ConvexShape shaft_;
+    sf::ConvexShape arrow_l_, arrow_r_;
 };
 
 

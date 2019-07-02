@@ -16,12 +16,22 @@ UserInterface::UserInterface() {
     cursor_planet_.setTexture(&ResourceManager::getInstance().getTexture("planet"));
     cursor_planet_.setFillColor(sf::Color(Config::CURSOR_PLANET_COLOR_R_, Config::CURSOR_PLANET_COLOR_G_,
                                           Config::CURSOR_PLANET_COLOR_B_, Config::CURSOR_PLANET_COLOR_A_));
-    setCursorRadius(5.0f);
+    setCursorRadius(10.0f);
 
-    arrow_.setFillColor(sf::Color(Config::ARROW_COLOR_R_, Config::ARROW_COLOR_G_,
-                                  Config::ARROW_COLOR_B_, Config::ARROW_COLOR_A_));
+    shaft_.setPointCount(3);
+    arrow_l_.setPointCount(3);
+    arrow_r_.setPointCount(3);
 
-    arrow_.setOrigin(0.0f, Config::ARROW_WIDTH_ / 2.0f);
+    sf::Color arrow_color(Config::ARROW_COLOR_R_, Config::ARROW_COLOR_G_,
+                          Config::ARROW_COLOR_B_, Config::ARROW_COLOR_A_);
+    shaft_.setFillColor(arrow_color);
+    arrow_l_.setFillColor(arrow_color);
+    arrow_r_.setFillColor(arrow_color);
+
+    shaft_.setOrigin(0.0f, 0.0f);
+    arrow_l_.setOrigin(0.0f, 0.0f);
+    arrow_r_.setOrigin(0.0f, 0.0f);
+
     current_zoom_ = 1.0f;
 }
 
@@ -69,6 +79,7 @@ void UserInterface::handleEvents() {
             }
             case sf::Event::MouseWheelScrolled:
             {
+                // TODO move to another method
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
                 {
                     setCursorRadius(cursor_r_ + cursor_r_ * event.mouseWheelScroll.delta / 4.0f);
@@ -98,6 +109,7 @@ void UserInterface::handleEvents() {
             }
             case sf::Event::KeyPressed:
             {
+                // TODO move to another method
                 auto delta = sf::Vector2f(0.0f, 0.0f);
                 auto scrolling_speed = 30.0f * current_zoom_;
 
@@ -150,10 +162,37 @@ void UserInterface::handleEvents() {
         }
         case State::PRESSED:
         {
+            // TODO Move to another method
             cursor_planet_.setPosition(graphics_window.mapPixelToCoords(previous_mouse_pos_));
-            arrow_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
-            arrow_.setSize({std::hypot(current_velocity.x, current_velocity.y), Config::ARROW_WIDTH_});
-            arrow_.setRotation(static_cast<float>(
+            shaft_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
+            arrow_l_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
+            arrow_r_.setPosition(static_cast<sf::Vector2f>(previous_mouse_pos_));
+
+            shaft_.setPoint(0, sf::Vector2f(0, 0));
+            shaft_.setPoint(1, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
+                               -Config::ARROW_WIDTH_ / 2.0f));
+            shaft_.setPoint(2, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
+                               Config::ARROW_WIDTH_ / 2.0f));
+            
+            arrow_l_.setPoint(0, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
+                                 0));
+            arrow_l_.setPoint(1, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y),
+                                 0));
+            arrow_l_.setPoint(2, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 6.0f,
+                                 -Config::ARROW_WIDTH_ * 3.0f));
+
+            arrow_r_.setPoint(0, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 3.0f,
+                                 0));
+            arrow_r_.setPoint(1, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y),
+                                 0));
+            arrow_r_.setPoint(2, sf::Vector2f(std::hypot(current_velocity.x, current_velocity.y) - Config::ARROW_WIDTH_ * 6.0f,
+                                 Config::ARROW_WIDTH_ * 3.0f));
+
+            shaft_.setRotation(static_cast<float>(
+                std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
+            arrow_l_.setRotation(static_cast<float>(
+                std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
+            arrow_r_.setRotation(static_cast<float>(
                 std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f));
 
             break;
@@ -169,8 +208,11 @@ void UserInterface::handleEvents() {
 void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     if (state_ == State::PRESSED)
     {
-        target.draw(arrow_, states);
+        target.draw(shaft_, states);
+        target.draw(arrow_l_, states);
+        target.draw(arrow_r_, states);
     }
+
     Graphics::getInstance().setDynamicView();
     target.draw(cursor_planet_, states);
     Graphics::getInstance().setStaticView();
