@@ -1,7 +1,10 @@
+![VERSION][version]
+
 # Gravity
+
 Simulation of gravitational forces between planets with user interaction. Provides interface for easy creation of your own scenarios of **cosmic movement**.
 
-![VERSION][version]
+![Simple simulation of cosmic movement][logo]
 
 -----
 
@@ -38,7 +41,7 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 ## Changelog
 
 * 03-07-2019 - Gravity 0.4.0
-    - Upgraded and fixed UI
+    - Upgraded and fixed UI.
 
 * 27-06-2019 - Gravity 0.3.0
     - Added textures for planets.
@@ -55,3 +58,4 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 ~jprolejko
 
 [VERSION]: https://img.shields.io/badge/version-0.4.0-blue.svg
+[logo]: data/logo.png
