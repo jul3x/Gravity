@@ -1,12 +1,15 @@
+![VERSION][version]
+
 # Gravity
+
 Simulation of gravitational forces between planets with user interaction. Provides interface for easy creation of your own scenarios of **cosmic movement**.
 
-![VERSION][version]
+![Simple simulation of cosmic movement][logo]
 
 -----
 
 ## Control
-Application handles mouse and keyboard events. Click ``left mouse button`` to place a planet (don't release!) and then move mouse somewhere else to adjust starting velocity of the planet. To change size (and mass) of the desired object use combination of ``Ctrl`` + ``mouse scroll``. Be careful - size of each planet is limited!
+Application handles mouse and keyboard events. Click ``left mouse button`` to place a planet (don't release!) and then move mouse somewhere else to adjust starting velocity of the planet. To change size (and mass) of the desired object use combination of ``Left Ctrl`` + ``mouse scroll``. Be careful - size of each planet is limited!
 
 To move the view of your own planetary system use ``keyboard arrows``. If you want to zoom in or zoom out - use ``mouse scroll``.
 
@@ -37,6 +40,9 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ## Changelog
 
+* 03-07-2019 - Gravity 0.4.0
+    - Upgraded and fixed UI.
+
 * 27-06-2019 - Gravity 0.3.0
     - Added textures for planets.
     - Minor fixes.
@@ -51,4 +57,5 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ~jprolejko
 
-[VERSION]: https://img.shields.io/badge/version-0.3.0-blue.svg
+[VERSION]: https://img.shields.io/badge/version-0.4.0-blue.svg
+[logo]: data/logo.png
