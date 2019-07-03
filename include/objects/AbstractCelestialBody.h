@@ -47,7 +47,7 @@ private:
         static sf::CircleShape body_shape;
         body_shape.setPosition(this->getPosition() * Config::PIXELS_PER_KM_);
 
-        auto pixel_radius = this->getRadius() * Config::PIXELS_PER_KM_ * Config::OBJECT_ZOOM_;
+        auto pixel_radius = this->getRadius() * Config::PIXELS_PER_KM_;
         body_shape.setRadius(pixel_radius);
         body_shape.setOrigin(pixel_radius, pixel_radius);
 
