@@ -7,6 +7,7 @@
 #include <Engine.h>
 #include <ResourceManager.h>
 #include <utils/Geometry.h>
+#include <utils/Numeric.h>
 #include <graphics/Graphics.h>
 
 #include <UserInterface.h>
@@ -232,7 +233,7 @@ inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_wind
 }
 
 inline void UserInterface::setCursorRadius(float new_r) {
-    if (new_r <= 0.0 || new_r >= Config::MAX_PLANET_RADIUS_)
+    if (!utils::isBetween(new_r, 2.0, Config::MAX_PLANET_RADIUS_))
     {
         return;
     }
