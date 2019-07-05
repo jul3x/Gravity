@@ -21,6 +21,10 @@ T getRandom(const T &left, const T &right) {
     return static_cast<T>(distribution(mt));
 }
 
+inline bool isBetween(float num, float a, float b) {
+    return a < num && num < b;
+}
+
 inline bool isNearlyEqual(float a, float b, float abs_error) {
     return std::abs(a - b) < abs_error;
 }
