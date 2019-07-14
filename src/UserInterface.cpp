@@ -127,8 +127,7 @@ inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf
         static constexpr float FACTOR = 0.1f;
 
         auto zoom = 1.0f - zoom_delta * FACTOR;
-        if (current_zoom_ * zoom <= Config::MAX_WINDOW_ZOOMOUT_ &&
-            current_zoom_ * zoom >= Config::MIN_WINDOW_ZOOMOUT_)
+        if (utils::isBetween(current_zoom_ * zoom, Config::MIN_WINDOW_ZOOMOUT_, Config::MAX_WINDOW_ZOOMOUT_))
         {
             auto mouse_pos_from_center =
                 static_cast<sf::Vector2f>(mouse_pos) -
@@ -199,12 +198,11 @@ inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_wind
             arrow_l_.setPosition(mouse_coords);
             arrow_r_.setPosition(mouse_coords);
 
-            auto shaft_length = std::hypot(current_velocity.x, current_velocity.y) - ARROW_LENGTH;
-            auto arrow_rotation = 
-                static_cast<float>(std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f);
+            auto shaft_length = static_cast<float>(std::hypot(current_velocity.x, current_velocity.y)) - ARROW_LENGTH;
+            auto arrow_rotation = static_cast<float>(std::atan2(current_velocity.y, current_velocity.x) / M_PI * 180.0f);
 
-            shaft_length = utils::isNearlyEqual(shaft_length, 
-                - ARROW_LENGTH, ARROW_LENGTH * 2.0f) ? 0.0f : shaft_length;
+            // do not show arrow when velocity is really small
+            shaft_length = utils::isNearlyEqual(shaft_length, - ARROW_LENGTH, ARROW_LENGTH * 2.0f) ? 0.0f : shaft_length;
 
             shaft_.setPoint(0, {0, 0});
             shaft_.setPoint(1, {shaft_length, - Config::ARROW_WIDTH_ / 2.0f});
