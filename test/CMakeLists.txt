@@ -41,14 +41,14 @@ endif()
 include_directories(../include)
 
 set(EXECUTABLE_NAME "GravityTest")
-set(TEST_SOURCES "gtest.cpp")
+set(TEST_MAIN "gtest.cpp")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/build_test")
 
+file(GLOB_RECURSE TEST_SRC "src/*Test.cpp")
 file(GLOB_RECURSE GRAVITY_MAIN_SRC "../src/*.cpp")
-message(${GRAVITY_MAIN_SRC})
 list(FILTER GRAVITY_MAIN_SRC EXCLUDE REGEX "main")
 
-add_executable(${EXECUTABLE_NAME} ${TEST_SOURCES} ${GRAVITY_MAIN_SRC})
+add_executable(${EXECUTABLE_NAME} ${TEST_MAIN} ${TEST_SRC} ${GRAVITY_MAIN_SRC})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2 REQUIRED COMPONENTS network audio graphics window system)
