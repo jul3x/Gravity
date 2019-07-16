@@ -24,6 +24,7 @@ Build is as **simple** as it is possible [CMake]. Use provided in package ``buil
 * C++14 compiler 
 * CMake >=2.6
 * SFML 2 library
+* GTest - latest master
 
 -----
   
