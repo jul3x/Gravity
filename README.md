@@ -22,7 +22,7 @@ Build is as **simple** as it is possible [CMake]. Use provided in package ``buil
 ## Dependencies
 
 * C++14 compiler 
-* CMake >=2.6
+* CMake >=3.6
 * SFML 2 library
 * GTest - latest master
 
