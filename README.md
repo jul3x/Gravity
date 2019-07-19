@@ -1,4 +1,4 @@
-![VERSION][version]
+![VERSION][version] [![Build Status](https://travis-ci.com/jprolejko/Gravity.svg?branch=develop)](https://travis-ci.com/jprolejko/Gravity)
 
 # Gravity
 
@@ -57,5 +57,5 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ~jprolejko
 
-[VERSION]: https://img.shields.io/badge/version-0.4.0-blue.svg
+[VERSION]: https://img.shields.io/badge/version-0.5.0-blue.svg
 [logo]: data/logo.png
