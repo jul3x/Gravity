@@ -6,11 +6,11 @@
 
 
 Graphics::Graphics() : settings_(0, 0, 8),
-                       window_(sf::VideoMode(Config::WINDOW_WIDTH_PIXELS_, Config::WINDOW_HEIGHT_PIXELS_),
+                       window_(sf::VideoMode(Config::getInstance().WINDOW_WIDTH_PIXELS_, Config::getInstance().WINDOW_HEIGHT_PIXELS_),
                                              "Gravity", sf::Style::Default, settings_) {
     current_view_ = window_.getView();
-    current_view_.setSize(Config::WINDOW_WIDTH_PIXELS_, Config::WINDOW_HEIGHT_PIXELS_);
-    current_view_.setCenter(Config::WINDOW_WIDTH_PIXELS_ / 2.0f, Config::WINDOW_HEIGHT_PIXELS_ / 2.0f);
+    current_view_.setSize(Config::getInstance().WINDOW_WIDTH_PIXELS_, Config::getInstance().WINDOW_HEIGHT_PIXELS_);
+    current_view_.setCenter(Config::getInstance().WINDOW_WIDTH_PIXELS_ / 2.0f, Config::getInstance().WINDOW_HEIGHT_PIXELS_ / 2.0f);
     window_.setView(current_view_);
     standard_view_ = current_view_;
 

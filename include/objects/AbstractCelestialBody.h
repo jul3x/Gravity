@@ -37,7 +37,7 @@ public:
     }
 
     float getMass() const {
-        return Config::DENSITY_KG_M_ * 4.0f / 3.0f * static_cast<float>(M_PI) * std::pow(this->getRadius(), 3.0f);
+        return Config::getInstance().DENSITY_KG_M_ * 4.0f / 3.0f * static_cast<float>(M_PI) * std::pow(this->getRadius(), 3.0f);
     }
 
     void update(float time_elapsed) = 0;
@@ -45,9 +45,9 @@ public:
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
         static sf::CircleShape body_shape;
-        body_shape.setPosition(this->getPosition() * Config::PIXELS_PER_KM_);
+        body_shape.setPosition(this->getPosition() * Config::getInstance().PIXELS_PER_KM_);
 
-        auto pixel_radius = this->getRadius() * Config::PIXELS_PER_KM_;
+        auto pixel_radius = this->getRadius() * Config::getInstance().PIXELS_PER_KM_;
         body_shape.setRadius(pixel_radius);
         body_shape.setOrigin(pixel_radius, pixel_radius);
 

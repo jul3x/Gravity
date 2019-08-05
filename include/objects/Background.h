@@ -20,8 +20,6 @@ public:
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    static constexpr int NUMBER_OF_STARS_ = 200;
-
     std::list<Star> stars_;
 };
 

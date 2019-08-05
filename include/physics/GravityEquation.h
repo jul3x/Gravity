@@ -42,9 +42,9 @@ public:
                 std::tie(distance, theta_rad) =
                     utils::cartesianToPolar(planet.getPosition() - sf::Vector2f{values.at(0), values.at(1)});
 
-                out_values.at(2) += Config::GRAVITY_CONST * planet.getMass() /
+                out_values.at(2) += Config::getInstance().GRAVITY_CONST_ * planet.getMass() /
                                     std::pow(distance, 2.0f) * std::cos(theta_rad);
-                out_values.at(3) += Config::GRAVITY_CONST * planet.getMass() /
+                out_values.at(3) += Config::getInstance().GRAVITY_CONST_ * planet.getMass() /
                                     std::pow(distance, 2.0f) * std::sin(theta_rad);
             }
         }

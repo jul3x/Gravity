@@ -19,12 +19,12 @@ void Star::update(float time_elapsed) {
     this->setPosition(this->getPosition() + time_elapsed * velocity_);
 
     // infinite loop of movement
-    if ((this->getPosition().x - this->getRadius()) * Config::PIXELS_PER_KM_ > Config::WINDOW_WIDTH_PIXELS_)
+    if ((this->getPosition().x - this->getRadius()) * Config::getInstance().PIXELS_PER_KM_ > Config::getInstance().WINDOW_WIDTH_PIXELS_)
     {
         this->setPosition(- this->getRadius(), this->getPosition().y);
     }
 
-    if ((this->getPosition().y - this->getRadius()) * Config::PIXELS_PER_KM_ > Config::WINDOW_HEIGHT_PIXELS_)
+    if ((this->getPosition().y - this->getRadius()) * Config::getInstance().PIXELS_PER_KM_ > Config::getInstance().WINDOW_HEIGHT_PIXELS_)
     {
         this->setPosition(this->getPosition().x, - this->getRadius());
     }
