@@ -51,29 +51,29 @@ public:
     RungeKuttaSolver(const RungeKuttaSolver&) = delete;
     RungeKuttaSolver& operator=(const RungeKuttaSolver&) = delete;
 
-    RungeKuttaSolver(IEquation<T, K> &equation) : equation_(equation) {       
+    RungeKuttaSolver(IEquation<T, K> &equation) {       
         changeEquation(equation);
     }
 
     inline void changeEquation(IEquation<T, K> &equation) {
-        equation_ = equation;
-        k1_.resize(equation_.getSize());
-        k2_.resize(equation_.getSize());
-        k3_.resize(equation_.getSize());
-        k4_.resize(equation_.getSize());
-        helper_.resize(equation_.getSize());
+        equation_ = &equation;
+        k1_.resize(equation_->getSize());
+        k2_.resize(equation_->getSize());
+        k3_.resize(equation_->getSize());
+        k4_.resize(equation_->getSize());
+        helper_.resize(equation_->getSize());
     }
 
     inline void apply(std::vector<T> &values,
                       const float step,
                       const EquationParameters<K> &parameters) {
-        if (values.size() != equation_.getSize())
+        if (values.size() != equation_->getSize())
         {
             throw std::invalid_argument("[RungeKuttaSolver] Vector with initial values for ODE"
                                         " solving has size incompatible with given equation.");
         }
 
-        k1_ = equation_(values, parameters);
+        k1_ = (*equation_)(values, parameters);
 
         for (size_t i = 0; i < k1_.size(); ++i)
         {
@@ -81,7 +81,7 @@ public:
             helper_.at(i) = values.at(i) + k1_.at(i) / 2.0f;
         }
 
-        k2_ = equation_(values, parameters);
+        k2_ = (*equation_)(values, parameters);
 
         for (size_t i = 0; i < k2_.size(); ++i)
         {
@@ -89,7 +89,7 @@ public:
             helper_.at(i) = values.at(i) + k2_.at(i) / 2.0f;
         }
 
-        k3_ = equation_(values, parameters);
+        k3_ = (*equation_)(values, parameters);
 
         for (size_t i = 0; i < k3_.size(); ++i)
         {
@@ -97,7 +97,7 @@ public:
             helper_.at(i) = values.at(i) + k3_.at(i);
         }
 
-        k4_ = equation_(values, parameters);
+        k4_ = (*equation_)(values, parameters);
 
         for (auto &k : k4_)
         {
@@ -112,7 +112,7 @@ public:
     }
 
 private:
-    IEquation<T, K> &equation_;
+    IEquation<T, K> * equation_;
 
     std::vector<T> k1_;
     std::vector<T> k2_;
