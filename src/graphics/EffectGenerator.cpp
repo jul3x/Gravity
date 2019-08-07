@@ -11,8 +11,8 @@
 
 
 void EffectGenerator::initialize() {
-    if (!texture_.create(Config::getInstance().WINDOW_WIDTH_PIXELS_, Config::getInstance().WINDOW_HEIGHT_PIXELS_) ||
-        !texture_2_.create(Config::getInstance().WINDOW_WIDTH_PIXELS_, Config::getInstance().WINDOW_HEIGHT_PIXELS_))
+    if (!texture_.create(CFG.getInt("window_width_px"), CFG.getInt("window_height_px")) ||
+        !texture_2_.create(CFG.getInt("window_width_px"), CFG.getInt("window_height_px")))
     {
         throw std::runtime_error("[EffectGenerator] Cannot create rendering texture!");
     }
@@ -37,7 +37,7 @@ void EffectGenerator::renderCurrentGaussianBlur(sf::RenderTarget &target) {
     ResourceManager::getInstance().getShader("blur").setUniform(
         "texture", sf::Shader::CurrentTexture);
     ResourceManager::getInstance().getShader("blur").setUniform(
-        "blur_radius", sf::Vector2f(0.4f / Config::getInstance().WINDOW_WIDTH_PIXELS_, 0.0f));
+        "blur_radius", sf::Vector2f(0.4f / CFG.getInt("window_width_px"), 0.0f));
     
     static sf::Sprite sprite(texture_.getTexture());
 
@@ -49,6 +49,6 @@ void EffectGenerator::renderCurrentGaussianBlur(sf::RenderTarget &target) {
     ResourceManager::getInstance().getShader("blur").setUniform(
         "texture", sf::Shader::CurrentTexture);
     ResourceManager::getInstance().getShader("blur").setUniform(
-        "blur_radius", sf::Vector2f(0.0f, 0.4f / Config::getInstance().WINDOW_HEIGHT_PIXELS_));
+        "blur_radius", sf::Vector2f(0.0f, 0.4f / CFG.getInt("window_height_px")));
     target.draw(sprite_2, &ResourceManager::getInstance().getShader("blur"));
 }
