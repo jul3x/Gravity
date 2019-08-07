@@ -5,6 +5,31 @@
 #ifndef GRAVITY_CONFIG_H
 #define GRAVITY_CONFIG_H
 
+#include <memory>
+#include <map>
+
+class AbstractParamValue {
+
+public:
+    AbstractParamValue() = default;
+    ~AbstractParamValue() = default;
+
+};
+
+template <typename T>
+class ParamValue : public AbstractParamValue {
+
+public:
+    ParamValue(const T &value) : value_(value) {}
+    T get() const {
+        return value_;
+    }
+
+private:
+    T value_;
+
+};
+
 class Config {
 
 public:
@@ -18,6 +43,21 @@ public:
     
     void initialize() {
         // TODO - loading from file
+        params_["pixels_per_km"] = std::make_unique<ParamValue<float>>(1.0f);
+        params_["window_width_px"] = std::make_unique<ParamValue<int>>(1500);
+        params_["window_height_px"] = std::make_unique<ParamValue<int>>(900);
+
+        params_["number_of_stars"] = std::make_unique<ParamValue<int>>(200);
+        params_["min_star_velocity"] = std::make_unique<ParamValue<float>>(1.0f);
+        params_["max_star_velocity"] = std::make_unique<ParamValue<float>>(5.0f);
+        params_["min_star_r"] = std::make_unique<ParamValue<float>>(1.0f);
+        params_["max_star_r"] = std::make_unique<ParamValue<float>>(5.0f);
+        params_["background_color"] = std::make_unique<ParamValue<int>>(0x141414FF);
+
+        params_["background_color"] = std::make_unique<ParamValue<int>>(0xFFFFFFA0);
+        params_["background_color"] = std::make_unique<ParamValue<int>>(0x141414FF);
+
+        
 
         // Graphics
         PIXELS_PER_KM_ = 1.0f;
@@ -86,6 +126,8 @@ public:
 
 private:
     Config() = default;
+
+    std::map<std::string, std::unique_ptr<AbstractParamValue>> params_;
 
 };
 
