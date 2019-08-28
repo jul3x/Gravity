@@ -7,6 +7,8 @@
 
 #include <map>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 
 
 class Config {
@@ -21,39 +23,69 @@ public:
     }
     
     void initialize() {
-        // TODO - loading from file
+        std::ifstream config_file("data/config.j3x");
 
-        // Graphics
-        float_params_["pixels_per_km"] = 1.0f;
-        int_params_["window_width_px"] = 1500;
-        int_params_["window_height_px"] = 900;
+        if (config_file)
+        {
+            std::stringstream s_file;
+            s_file << config_file.rdbuf();
 
-        int_params_["number_of_stars"] = 100;
-        float_params_["min_star_velocity"] = 1.0f;
-        float_params_["max_star_velocity"] = 5.0f;
-        float_params_["min_star_r"] = 1.0f;
-        float_params_["max_star_r"] = 5.0f;
-        int_params_["background_color"] = 0x141414FF;
+            std::string line;
+            int line_count = 0;
+            while (std::getline(s_file, line))
+            {
+                ++line_count;
+                std::istringstream s_line(line);
+                std::string type, key;
+                if (std::getline(s_line, type, ' '))
+                {
+                    if (std::getline(s_line, key, '='))
+                    {
+                        std::string value;
+                        if (std::getline(s_line, value))
+                        {
+                            try 
+                            {
+                                if (type == "int")
+                                {
+                                    int_params_[key] = std::stoi(value);
+                                }
+                                else if (type == "int32")
+                                {
+                                    int_params_[key] = std::stoll(value, 0, 16);
+                                }
+                                else if (type == "float")
+                                {
+                                    float_params_[key] = std::stof(value);
+                                }
+                                else
+                                {
+                                    throw std::logic_error("Not handled type " + type +
+                                            " on line " + std::to_string(line_count));
+                                }
+                            }
+                            catch (std::invalid_argument &e)
+                            {
+                                throw std::invalid_argument("Parse error: Wrong type " + type +
+                                            " of parameter on line " +
+                                            std::to_string(line_count));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw std::invalid_argument("Parse error on line " +
+                                std::to_string(line_count));
+                    }
+                }
+            }
 
-        // UI
-        int_params_["cursor_planet_color"] = 0xFFFFFFA0;
-        
-        int_params_["arrow_color"] = 0xFFFFFFFF;
-        float_params_["arrow_width"] = 5.0f;
-        
-        float_params_["min_planet_r"] = 2.0f;
-        float_params_["max_planet_r"] = 100.0f;
-
-        float_params_["min_window_zoomout"] = 0.5f;
-        float_params_["max_window_zoomout"] = 15.0f;
-
-        float_params_["view_moving_speed"] = 30.0f;
-        float_params_["view_scrolling_speed"] = 0.1f;
-
-        // Physics
-        float_params_["density_kg_m"] = 3000.0f;
-        float_params_["max_set_velocity"] = 500.0f;
-        float_params_["gravity_const"] = 0.067f;
+            config_file.close();
+        }
+        else
+        {
+            throw std::logic_error("Config file not found!");
+        }
     }
 
     int getInt(const std::string &key) const {
@@ -70,7 +102,7 @@ public:
         if (float_params_.find(key) == float_params_.end())
         {
             std::cerr << "[Config] Param " << key << " not found!" << std::endl;
-            return 0;
+            return 0.0f;
         }
 
         return float_params_.at(key);
