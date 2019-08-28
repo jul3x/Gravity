@@ -44,3 +44,7 @@ cmake_install.cmake
 # Make
 Makefile
 build/*
+test/build_test/*
+
+# gtest
+*googletest*

@@ -20,6 +20,8 @@ public:
     virtual std::vector<float> operator()(const std::vector<float> &values, 
                                           const EquationParameters<Planet*> &parameters) {
         static std::vector<float> out_values(this->getSize());
+        static float distance = 0.0f;
+        static float theta_rad = 0.0f;
         
         if (parameters.get().size() != 1) 
         {
@@ -37,14 +39,13 @@ public:
         {
             if (&planet != planet_addr)
             {
-                float distance = utils::getDistance(planet.getPosition(), {values.at(0), values.at(1)});
-                float alfa = std::atan2(planet.getPosition().y - values.at(1),
-                                        planet.getPosition().x - values.at(0));
+                std::tie(distance, theta_rad) =
+                    utils::cartesianToPolar(planet.getPosition() - sf::Vector2f{values.at(0), values.at(1)});
 
-                out_values.at(2) += Config::GRAVITY_CONST * planet.getMass() /
-                                    std::pow(distance, 2.0f) * std::cos(alfa);
-                out_values.at(3) += Config::GRAVITY_CONST * planet.getMass() /
-                                    std::pow(distance, 2.0f) * std::sin(alfa);
+                out_values.at(2) += CFG.getFloat("gravity_const") * planet.getMass() /
+                                    std::pow(distance, 2.0f) * std::cos(theta_rad);
+                out_values.at(3) += CFG.getFloat("gravity_const") * planet.getMass() /
+                                    std::pow(distance, 2.0f) * std::sin(theta_rad);
             }
         }
         

@@ -13,7 +13,32 @@
 
 namespace utils {
 
+inline float getDistance(const sf::Vector2f &a, const sf::Vector2f &b) {
+    return std::hypot(b.x - a.x, b.y - a.y);
+}
+
+inline sf::Vector2f polarToCartesian(float r, float theta_rad) {
+    if (r < 0.0f)
+    {
+        throw std::invalid_argument("[Utils::polarToCartesian] Radius cannot be negative!");
+    }
+
+    return {r * std::cos(theta_rad), r * std::sin(theta_rad)}; 
+}
+
+inline std::tuple<float, float> cartesianToPolar(const sf::Vector2f &vector) {
+    float r = std::hypot(vector.x, vector.y);
+    float theta_rad = std::atan2(vector.y, vector.x);
+
+    return std::make_tuple(r, theta_rad);
+}
+
 inline sf::Vector2f vectorLengthLimit(const sf::Vector2f &vector_in, float max_length) {
+    if (max_length < 0.0f)
+    {
+        throw std::invalid_argument("[utils::vectorLengthLimit] max_length cannot be negative!");
+    }
+
     float length = std::hypot(vector_in.x, vector_in.y);
 
     sf::Vector2f out = vector_in;
@@ -26,15 +51,11 @@ inline sf::Vector2f vectorLengthLimit(const sf::Vector2f &vector_in, float max_l
     return out;
 }
 
-inline double getDistance(const sf::Vector2f &a, const sf::Vector2f &b) {
-    return std::hypot(b.x - a.x, b.y - a.y);
-}
-
 inline bool isCollidable(const Planet &first, const Planet &second) {
     // circle - circle collision
     {
-        double distance = utils::getDistance(first.getPosition(), second.getPosition());
-        double max_distance = first.getRadius() + second.getRadius();
+        float distance = utils::getDistance(first.getPosition(), second.getPosition());
+        float max_distance = first.getRadius() + second.getRadius();
             
         if (distance < max_distance)
         {

@@ -6,7 +6,7 @@
 
 
 Engine::Engine() : physics_(planets_) { 
-    addPlanet({Config::WINDOW_WIDTH_PIXELS_ / 2.0f, Config::WINDOW_HEIGHT_PIXELS_ / 2.0f}, {}, 50.0f); 
+    addPlanet({CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f}, {}, 50.0f); 
 }
 
 void Engine::update(int frame_rate) {
