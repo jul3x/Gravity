@@ -21,7 +21,7 @@ public:
 
     AbstractDrawableObject(const sf::Vector2f &position) : 
         position_(position),
-        color_(utils::getRandom<int>(0, 255), utils::getRandom<int>(0, 255), utils::getRandom<int>(0, 255)) {}
+        color_(utils::getRandom<int>(50, 255), utils::getRandom<int>(50, 255), utils::getRandom<int>(50, 255)) {}
 
     const sf::Vector2f& getPosition() const {
         return position_;

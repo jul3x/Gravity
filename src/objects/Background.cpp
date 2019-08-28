@@ -9,16 +9,17 @@
 
 
 Background::Background() {
-    this->setColor(sf::Color(20, 20, 20));
+    this->setColor(sf::Color(CFG.getInt("background_color")));
 
-    for (int i = 0 ; i < NUMBER_OF_STARS_; ++i)
+    for (int i = 0 ; i < CFG.getInt("number_of_stars"); ++i)
     {
-        sf::Vector2f position = {utils::getRandom<float>(0.0f, Config::WINDOW_WIDTH_PIXELS_),
-                                 utils::getRandom<float>(0.0f, Config::WINDOW_HEIGHT_PIXELS_)};
-        sf::Vector2f velocity = {utils::getRandom<float>(1.0f, 5.0f),
-                                 utils::getRandom<float>(1.0f, 5.0f)};
-        float radius = utils::getRandom<float>(1.0f, 5.0f);
-        float alpha = utils::getRandom<float>(0.0f, 255.0f);
+        sf::Vector2f position = {utils::getRandom<float>(0.0f, CFG.getInt("window_width_px")),
+                                 utils::getRandom<float>(0.0f, CFG.getInt("window_height_px"))};
+        sf::Vector2f velocity = {utils::getRandom<float>(CFG.getFloat("min_star_velocity"), CFG.getFloat("max_star_velocity")),
+                                 utils::getRandom<float>(CFG.getFloat("min_star_velocity"), CFG.getFloat("max_star_velocity"))};
+
+        auto radius = utils::getRandom<float>(CFG.getFloat("min_star_r"), CFG.getFloat("max_star_r"));
+        auto alpha = utils::getRandom<int>(0.0f, 255.0f);
         stars_.push_back({position, velocity, radius, sf::Color(255, 255, 255, alpha)});
     }
 }
