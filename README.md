@@ -41,6 +41,11 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ## Changelog
 
+* 28-08-2019 - Gravity 0.5.0
+    - GTest integration with unit testing
+    - Travis CI integration
+    - Configuration file extracted from code
+
 * 03-07-2019 - Gravity 0.4.0
     - Upgraded and fixed UI.
 
@@ -56,7 +61,7 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ---
 
-~jprolejko
+~jul3x
 
 [VERSION]: https://img.shields.io/badge/version-0.5.0-blue.svg
 [logo]: data/logo.png
