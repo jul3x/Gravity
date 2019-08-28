@@ -22,8 +22,8 @@ public:
         return instance;
     }
     
-    void initialize() {
-        std::ifstream config_file("data/config.j3x");
+    void initialize(const std::string &filename) {
+        std::ifstream config_file(filename);
 
         if (config_file)
         {

@@ -9,7 +9,7 @@ int main()
 {
     constexpr int FRAME_RATE = 60;
 
-    Config::getInstance().getInstance().initialize();
+    Config::getInstance().getInstance().initialize("data/config.j3x");
 
     Engine::getInstance().update(FRAME_RATE);
 
