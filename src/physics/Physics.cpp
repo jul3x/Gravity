@@ -11,6 +11,11 @@
 Physics::Physics(std::list<Planet> &planets) : planets_(planets), equation_(planets_), solver_(equation_) {}
 
 void Physics::update(float time_elapsed) {
+    for (auto &planet : planets_)
+    {
+        planet.update(time_elapsed);
+    }
+    
     applyCollisions(time_elapsed);
     applyGravitationalMovement(time_elapsed);
 }
