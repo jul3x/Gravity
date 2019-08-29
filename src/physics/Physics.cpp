@@ -13,7 +13,7 @@ Physics::Physics(std::list<Planet> &planets) : planets_(planets), equation_(plan
 void Physics::update(float time_elapsed) {
     for (auto &planet : planets_)
     {
-        planet.update();
+        planet.update(time_elapsed);
     }
     
     applyCollisions(time_elapsed);

@@ -26,10 +26,9 @@ public:
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
-    static constexpr size_t TRAIL_COUNT_ = 60;
+    static constexpr size_t TRAIL_COUNT_ = 20;
 
     std::deque<sf::Vector2f> trail_;
-
 };
 
 
