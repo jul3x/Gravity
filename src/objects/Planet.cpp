@@ -28,7 +28,8 @@ void Planet::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
         if (trail_.size() >= 2)
         {
-            trail_vert.emplace_back(trail_.front(), sf::Color{255, 255, 255, 100}, sf::Vector2f{});
+            trail_vert.emplace_back(trail_.front(), sf::Color(CFG.getInt("planet_trail_color")),
+                    sf::Vector2f{});
         }
 
         for (size_t i = 1; i < trail_.size(); ++i)
@@ -40,9 +41,9 @@ void Planet::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
             sf::Vector2f norm = {std::cos(dir), std::sin(dir)};
             trail_vert.emplace_back(trail_.at(i) - temp_r * norm,
-                    sf::Color{255, 255, 255, 100}, sf::Vector2f{});
+                    sf::Color(CFG.getInt("planet_trail_color")), sf::Vector2f{});
             trail_vert.emplace_back(trail_.at(i) + temp_r * norm,
-                    sf::Color{255, 255, 255, 100}, sf::Vector2f{});
+                    sf::Color(CFG.getInt("planet_trail_color")), sf::Vector2f{});
         }
 
         target.draw(&trail_vert[0], trail_vert.size(), sf::TriangleStrip, states);

@@ -3,7 +3,7 @@
 //
 
 #include <Engine.h>
-
+#include <objects/Explosion.h>
 
 Engine::Engine() : physics_(planets_) { 
     addPlanet({CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f}, {}, 50.0f); 
@@ -11,7 +11,7 @@ Engine::Engine() : physics_(planets_) {
 
 void Engine::update(int frame_rate) {
     restartClock();
-
+    Explosion explo{{}, {}, 5.0f};
     while (Graphics::getInstance().isWindowOpen())
     {
         float time_elapsed = 1.0f / static_cast<float>(frame_rate);
@@ -20,6 +20,7 @@ void Engine::update(int frame_rate) {
 
         background_.update(time_elapsed);
         physics_.update(time_elapsed);
+        explo.update(time_elapsed);
         
         // drawing
         {
@@ -32,6 +33,7 @@ void Engine::update(int frame_rate) {
                 Graphics::getInstance().draw(planet);
             }
             Graphics::getInstance().draw(user_interface_);
+            Graphics::getInstance().draw(explo);
             Graphics::getInstance().display();
         }
 
