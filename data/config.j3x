@@ -1,5 +1,4 @@
 float pixels_per_km=1.0f
-float pixels_per_km=1.0f
 int window_width_px=1500
 int window_height_px=900
 int number_of_stars=100

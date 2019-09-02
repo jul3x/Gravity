@@ -2,8 +2,8 @@
 // Created by jprolejko on 30.06.19.
 //
 
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <utils/Utils.h>
+#include <Config.h>
 
 #include <objects/Explosion.h>
 
@@ -12,10 +12,36 @@ Explosion::Explosion(const sf::Vector2f &position, const sf::Vector2f &direction
         AbstractDrawableObject(position),
         direction_(direction),
         radius_(radius),
-        current_frame_(0) {}
+        current_frame_(0),
+        animation_source_(0, 0, Explosion::WIDTH_, Explosion::HEIGHT_),
+        animation_sprite_() {
+    static short int EXPLOSION_TYPE = 0;
+    int number = EXPLOSION_TYPE % 3 + 1;
+    ++EXPLOSION_TYPE;
+    animation_sprite_.setTexture(
+            ResourceManager::getInstance().getTexture("explosion" + std::to_string(number)));
+
+    animation_sprite_.setPosition(this->getPosition());
+
+    float scale_factor = 20.0f;
+    std::tuple<float, float> polar_direction = utils::cartesianToPolar(direction_);
+    float scale = scale_factor * radius_ * CFG.getFloat("pixels_per_km") * std::get<0>(polar_direction);
+    animation_sprite_.setScale(scale_factor * radius_ * CFG.getFloat("pixels_per_km") / Explosion::WIDTH_,
+                              scale_factor * radius_ * CFG.getFloat("pixels_per_km") / Explosion::HEIGHT_);
+    animation_sprite_.setRotation(180.0f + std::get<1>(polar_direction) * 180.0f / M_PI);
+    
+    animation_sprite_.setOrigin(Explosion::WIDTH_ / 2, Explosion::HEIGHT_ / 2);
+}
 
 bool Explosion::update(float time_elapsed) {
     ++current_frame_;
+
+    animation_source_.left = Explosion::WIDTH_ *
+            (current_frame_ % static_cast<int>(std::sqrt(Explosion::MAX_FRAMES_COUNT_)));
+    animation_source_.top = Explosion::HEIGHT_ *
+            (current_frame_ / static_cast<int>(std::sqrt(Explosion::MAX_FRAMES_COUNT_)));
+    
+    animation_sprite_.setTextureRect(animation_source_);
 
     if (current_frame_ > Explosion::MAX_FRAMES_COUNT_)
     {
@@ -26,17 +52,5 @@ bool Explosion::update(float time_elapsed) {
 }
 
 void Explosion::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    static sf::IntRect animation_source(0, 0, 512, 512);
-    static sf::Sprite animation_sprite(ResourceManager::getInstance().getTexture("explosion"));
-
-    animation_source.left = 512 *
-            (current_frame_ % static_cast<int>(std::sqrt(Explosion::MAX_FRAMES_COUNT_)));
-    animation_source.top = 512 *
-            (current_frame_ / static_cast<int>(std::sqrt(Explosion::MAX_FRAMES_COUNT_)));
-
-    animation_sprite.setTextureRect(animation_source);
-    animation_sprite.setPosition(this->getPosition());
-    animation_sprite.setOrigin(256, 256);
-
-    target.draw(animation_sprite, states);
+    target.draw(animation_sprite_, states);
 }

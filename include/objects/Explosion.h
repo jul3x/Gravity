@@ -5,6 +5,9 @@
 #ifndef GRAVITY_OBJECTS_EXPLOSION_H
 #define GRAVITY_OBJECTS_EXPLOSION_H
 
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+
 #include <objects/AbstractDrawableObject.h>
 
 #include <ResourceManager.h>
@@ -25,7 +28,12 @@ private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
     static constexpr short int MAX_FRAMES_COUNT_ = 64;
+    static constexpr short int WIDTH_ = 512;
+    static constexpr short int HEIGHT_ = 512;
 
+    sf::IntRect animation_source_;
+    sf::Sprite animation_sprite_;
+    
     sf::Vector2f direction_;
     float radius_;
     short int current_frame_;

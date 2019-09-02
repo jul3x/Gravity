@@ -12,7 +12,9 @@ int main()
     CFG.initialize("data/config.j3x");
 
     ResourceManager::getInstance().lazyLoadTexture("planet");
-    ResourceManager::getInstance().lazyLoadTexture("explosion");
+    ResourceManager::getInstance().lazyLoadTexture("explosion1");
+    ResourceManager::getInstance().lazyLoadTexture("explosion2");
+    ResourceManager::getInstance().lazyLoadTexture("explosion3");
     Engine::getInstance().update(FRAME_RATE);
 
     return 0;
