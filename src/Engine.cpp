@@ -20,6 +20,16 @@ void Engine::update(int frame_rate) {
 
         background_.update(time_elapsed);
         physics_.update(time_elapsed);
+
+        for (auto it = explosions_.begin(); it != explosions_.end(); ++it)
+        {
+            if (it->update(time_elapsed))
+            {
+                auto next_it = std::next(it);
+                explosions_.erase(it);
+                it = next_it;
+            }
+        }
         
         // drawing
         {
@@ -27,11 +37,19 @@ void Engine::update(int frame_rate) {
             Graphics::getInstance().setStaticView();
             Graphics::getInstance().draw(background_);
             Graphics::getInstance().setDynamicView();
+            
             for (const auto &planet : planets_)
             {
                 Graphics::getInstance().draw(planet);
             }
+
             Graphics::getInstance().draw(user_interface_);
+
+            for (const auto &explo : explosions_)
+            {
+                Graphics::getInstance().draw(explo);
+            }
+
             Graphics::getInstance().display();
         }
 
@@ -45,7 +63,7 @@ void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r
 
 void Engine::destroyPlanet(const std::list<Planet>::iterator &planet) {
     planets_.erase(planet);
-    // explosion will be created and triggered here
+    explosions_.emplace_back(planet->getPosition(), planet->getVelocity(), planet->getRadius());
 }
 
 void Engine::ensureConstantFrameRate(const int frame_rate) {

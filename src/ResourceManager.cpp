@@ -46,6 +46,10 @@ sf::Shader& ResourceManager::getShader(const std::string &key) {
     return shaders_.at(key);
 }
 
+void ResourceManager::lazyLoadTexture(const std::string &key) {
+    loadTexture(key);
+}
+
 void ResourceManager::loadTexture(const std::string &key) {
     if (!textures_[key].loadFromFile("data/" + key + ".png"))
     {

@@ -21,6 +21,7 @@ public:
 
     sf::Texture& getTexture(const std::string &key);
     sf::Shader& getShader(const std::string &key);
+    void lazyLoadTexture(const std::string &key);
 
 private:
     ResourceManager() = default;
