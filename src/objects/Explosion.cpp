@@ -14,13 +14,15 @@ Explosion::Explosion(const sf::Vector2f &position, const sf::Vector2f &direction
         radius_(radius),
         current_frame_(0) {}
 
-void Explosion::update(float time_elapsed) {
+bool Explosion::update(float time_elapsed) {
     ++current_frame_;
 
     if (current_frame_ > Explosion::MAX_FRAMES_COUNT_)
     {
-        current_frame_ = 0;
+        return true;
     }
+
+    return false;
 }
 
 void Explosion::draw(sf::RenderTarget &target, sf::RenderStates states) const {

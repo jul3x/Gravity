@@ -7,6 +7,7 @@
 
 
 #include <objects/Planet.h>
+#include <objects/Explosion.h>
 #include <graphics/Graphics.h>
 #include <UserInterface.h>
 #include <physics/Physics.h>
@@ -43,6 +44,7 @@ private:
     sf::Time time_;
 
     std::list<Planet> planets_;
+    std::list<Explosion> explosions_;
     Background background_;
 };
 

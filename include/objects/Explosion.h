@@ -19,7 +19,7 @@ public:
               const sf::Vector2f &velocity,
               float radius);
 
-    void update(float time_elapsed);
+    bool update(float time_elapsed);
 
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
