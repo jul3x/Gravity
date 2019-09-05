@@ -41,6 +41,10 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ## Changelog
 
+* 05-09-2019 - Gravity 0.6.0
+    - Added trails of planets
+    - Added destruction animation
+
 * 28-08-2019 - Gravity 0.5.0
     - GTest integration with unit testing
     - Travis CI integration
@@ -63,5 +67,5 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ~jul3x
 
-[VERSION]: https://img.shields.io/badge/version-0.5.0-blue.svg
+[VERSION]: https://img.shields.io/badge/version-0.6.0-blue.svg
 [logo]: data/logo.png
