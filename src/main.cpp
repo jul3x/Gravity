@@ -9,8 +9,12 @@ int main()
 {
     constexpr int FRAME_RATE = 60;
 
-    Config::getInstance().getInstance().initialize("data/config.j3x");
+    CFG.initialize("data/config.j3x");
 
+    ResourceManager::getInstance().lazyLoadTexture("planet");
+    ResourceManager::getInstance().lazyLoadTexture("explosion1");
+    ResourceManager::getInstance().lazyLoadTexture("explosion2");
+    ResourceManager::getInstance().lazyLoadTexture("explosion3");
     Engine::getInstance().update(FRAME_RATE);
 
     return 0;
