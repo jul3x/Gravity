@@ -1,4 +1,4 @@
-![VERSION][version] [![Build Status](https://travis-ci.com/jprolejko/Gravity.svg?branch=develop)](https://travis-ci.com/jprolejko/Gravity)
+![VERSION][version] [![Build Status](https://travis-ci.com/jul3x/Gravity.svg?branch=develop)](https://travis-ci.com/jprolejko/Gravity)
 
 # Gravity
 
