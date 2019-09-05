@@ -19,7 +19,7 @@ public:
 
 private:
     static constexpr short int MAX_FRAMES_COUNT_ = 64;
-    static constexpr short int DURATION_S_ = 1.0f;
+    static constexpr float DURATION_S_ = 1.0f;
     static constexpr short int WIDTH_PX_ = 512;
     static constexpr short int HEIGHT_PX_ = 512;
 };

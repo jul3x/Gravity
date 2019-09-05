@@ -9,7 +9,7 @@
 
 
 Explosion::Explosion(const sf::Vector2f &position, const sf::Vector2f &direction, float radius) :
-        Animation("explosion" + std::to_string(std::lround(utils::getRandom<float>(1, 3))),
+        Animation("explosion" + std::to_string(utils::getRandom<int>(1, 3)),
                   {Explosion::WIDTH_PX_, Explosion::HEIGHT_PX_}, position,
                   Explosion::DURATION_S_, Explosion::MAX_FRAMES_COUNT_,
                   AnimationType::QUADRATIC) {

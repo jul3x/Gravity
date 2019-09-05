@@ -5,8 +5,10 @@
 #ifndef GRAVITY_ENGINE_H
 #define GRAVITY_ENGINE_H
 
+#include <memory>
 
 #include <objects/Planet.h>
+#include <graphics/SpawnAnimation.h>
 #include <graphics/Explosion.h>
 #include <graphics/Graphics.h>
 #include <UserInterface.h>
@@ -44,7 +46,7 @@ private:
     sf::Time time_;
 
     std::list<Planet> planets_;
-    std::list<Explosion> explosions_;
+    std::list<std::unique_ptr<Animation>> animations_;
     Background background_;
 };
 
