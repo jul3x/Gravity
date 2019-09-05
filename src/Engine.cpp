@@ -7,8 +7,8 @@
 #include <Engine.h>
 
 
-Engine::Engine() : physics_(planets_) { 
-    addPlanet({CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f}, {}, 50.0f); 
+Engine::Engine() : physics_(planets_) {
+    addPlanet({CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f}, {}, 50.0f);
 }
 
 void Engine::update(int frame_rate) {
@@ -26,12 +26,12 @@ void Engine::update(int frame_rate) {
         background_.update(time_elapsed);
         physics_.update(time_elapsed);
 
-        for (auto it = explosions_.begin(); it != explosions_.end(); ++it)
+        for (auto it = animations_.begin(); it != animations_.end(); ++it)
         {
-            if (it->update(time_elapsed))
+            if ((*it)->update(time_elapsed))
             {
                 auto next_it = std::next(it);
-                explosions_.erase(it);
+                animations_.erase(it);
                 it = next_it;
             }
         }
@@ -48,12 +48,12 @@ void Engine::update(int frame_rate) {
                 Graphics::getInstance().draw(planet);
             }
 
-            Graphics::getInstance().draw(user_interface_);
-
-            for (const auto &explo : explosions_)
+            for (const auto &animation : animations_)
             {
-                Graphics::getInstance().draw(explo);
+                Graphics::getInstance().draw(*animation);
             }
+
+            Graphics::getInstance().draw(user_interface_);
 
             Graphics::getInstance().display();
         }
@@ -64,11 +64,12 @@ void Engine::update(int frame_rate) {
 
 void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r) {
     planets_.emplace_back(pos, vel, r);
+    animations_.emplace_back(std::make_unique<SpawnAnimation>(pos, r));
 }
 
 void Engine::destroyPlanet(const std::list<Planet>::iterator &planet) {
     planets_.erase(planet);
-    explosions_.emplace_back(planet->getPosition(), planet->getVelocity(), planet->getRadius());
+    animations_.emplace_back(std::make_unique<Explosion>(planet->getPosition(), planet->getVelocity(), planet->getRadius()));
 }
 
 void Engine::ensureConstantFrameRate(const int frame_rate) {
