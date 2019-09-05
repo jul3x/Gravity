@@ -2,6 +2,8 @@
 // Created by jprolejko on 27.02.19.
 //
 
+#include <chrono>
+
 #include <Engine.h>
 
 
@@ -11,10 +13,13 @@ Engine::Engine() : physics_(planets_) {
 
 void Engine::update(int frame_rate) {
     restartClock();
+    auto time_start = std::chrono::system_clock::now();
 
     while (Graphics::getInstance().isWindowOpen())
     {
-        float time_elapsed = 1.0f / static_cast<float>(frame_rate);
+        float time_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::system_clock::now() - time_start).count() / 1000000.0f;
+        time_start = std::chrono::system_clock::now();
 
         user_interface_.handleEvents();
 
@@ -30,14 +35,14 @@ void Engine::update(int frame_rate) {
                 it = next_it;
             }
         }
-        
+
         // drawing
         {
             Graphics::getInstance().clear();
             Graphics::getInstance().setStaticView();
             Graphics::getInstance().draw(background_);
             Graphics::getInstance().setDynamicView();
-            
+
             for (const auto &planet : planets_)
             {
                 Graphics::getInstance().draw(planet);
