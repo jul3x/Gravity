@@ -1,4 +1,4 @@
-![VERSION][version] [![Build Status](https://travis-ci.com/jul3x/Gravity.svg?branch=develop)](https://travis-ci.com/jprolejko/Gravity)
+![VERSION][version] [![Build Status](https://travis-ci.com/jul3x/Gravity.svg?branch=master)](https://travis-ci.com/jul3x/Gravity)
 
 # Gravity
 
@@ -41,6 +41,9 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ## Changelog
 
+* 06-09-2019 - Gravity 0.6.1
+    - Fixed building issues
+
 * 05-09-2019 - Gravity 0.6.0
     - Added trails of planets
     - Added destruction animation
@@ -67,5 +70,5 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ~jul3x
 
-[VERSION]: https://img.shields.io/badge/version-0.6.0-blue.svg
+[VERSION]: https://img.shields.io/badge/version-0.6.1-blue.svg
 [logo]: data/logo.png

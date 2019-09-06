@@ -2,7 +2,7 @@
 # Created by jprolejko on 26.02.19.
 #
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.6)
 project(Gravity)
 
 include_directories(.)
