@@ -28,6 +28,11 @@ bool Animation::update(float time_elapsed) {
 
     auto current_frame = static_cast<short int>(time_elapsed_ * max_frames_count_ / duration_s_);
 
+    if (current_frame >= max_frames_count_)
+    {
+        return true;
+    }
+
     switch (type_)
     {
         case AnimationType::LINEAR:
@@ -51,11 +56,6 @@ bool Animation::update(float time_elapsed) {
     }
 
     animation_sprite_.setTextureRect(animation_source_);
-
-    if (current_frame > max_frames_count_)
-    {
-        return true;
-    }
 
     return false;
 }
