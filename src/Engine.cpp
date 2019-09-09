@@ -68,8 +68,8 @@ void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r
 }
 
 void Engine::destroyPlanet(const std::list<Planet>::iterator &planet) {
-    planets_.erase(planet);
     animations_.emplace_back(std::make_unique<Explosion>(planet->getPosition(), planet->getVelocity(), planet->getRadius()));
+    planets_.erase(planet);
 }
 
 void Engine::ensureConstantFrameRate(const int frame_rate) {
