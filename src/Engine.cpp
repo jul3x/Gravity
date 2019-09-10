@@ -72,6 +72,15 @@ void Engine::destroyPlanet(const std::list<Planet>::iterator &planet) {
     planets_.erase(planet);
 }
 
+sf::Vector2i Engine::detectResolution() {
+    int res_x = static_cast<int>(sf::VideoMode::getDesktopMode().width);
+    int res_y = static_cast<int>(sf::VideoMode::getDesktopMode().height);
+
+    std::cout << "[Engine] Screen resolution is: " << res_x << "px, " << res_y << "px." << std::endl;
+
+    return {res_x, res_y};
+}
+
 void Engine::ensureConstantFrameRate(const int frame_rate) {
     time_ = clock_.restart();
     sf::Time time_for_sleep =

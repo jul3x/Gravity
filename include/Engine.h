@@ -32,6 +32,8 @@ public:
                    float r);
     void destroyPlanet(const std::list<Planet>::iterator &current_planet);
 
+    static sf::Vector2i detectResolution();
+
 private:
     Engine();
 
