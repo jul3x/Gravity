@@ -53,6 +53,7 @@ void Engine::update(int frame_rate) {
                 Graphics::getInstance().draw(*animation);
             }
 
+            user_interface_.drawGui();
             Graphics::getInstance().draw(user_interface_);
 
             Graphics::getInstance().display();

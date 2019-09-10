@@ -5,12 +5,14 @@
 #ifndef GRAVITY_GRAPHICS_USERINTERFACE_H
 #define GRAVITY_GRAPHICS_USERINTERFACE_H
 
+#include <TGUI/TGUI.hpp>
 
 #include <objects/AbstractDrawableObject.h>
 #include <Config.h>
 
+
 class UserInterface : public AbstractDrawableObject {
-    
+
 public:
     explicit UserInterface();
 
@@ -18,6 +20,7 @@ public:
     UserInterface& operator=(const UserInterface&) = delete;
 
     void handleEvents();
+    void drawGui();
 
 private:
     enum class State {
@@ -27,6 +30,8 @@ private:
 
     virtual void draw(sf::RenderTarget &target,
                       sf::RenderStates states) const;
+
+    inline void addWidgets();
 
     inline void handleScrolling(sf::RenderWindow &graphics_window,
                                 sf::View &view,
@@ -51,6 +56,9 @@ private:
     // velocity graphics representation
     sf::ConvexShape shaft_;
     sf::ConvexShape arrow_l_, arrow_r_;
+
+    tgui::Gui gui_;
+
 };
 
 

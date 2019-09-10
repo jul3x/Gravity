@@ -53,6 +53,14 @@ install:
     - sudo mv lib/* /usr/lib/
     - cd ..
 
+    # Download and install TGUI (due to authentication issue - manual PPA repo adding is forbidden :()
+    - git clone https://github.com/texus/TGUI --branch 0.8
+    - cd TGUI
+    - cmake .
+    - make -j2
+    - sudo make install
+    - cd ..
+
 script:
     ############################################################################
     # Build main and tests

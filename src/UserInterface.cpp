@@ -13,7 +13,7 @@
 #include <UserInterface.h>
 
 
-UserInterface::UserInterface() {
+UserInterface::UserInterface() : gui_(Graphics::getInstance().getWindow()) {
     state_ = State::NOT_PRESSED;
     cursor_planet_.setTexture(&ResourceManager::getInstance().getTexture("planet"));
     cursor_planet_.setFillColor(sf::Color(CFG.getInt("cursor_planet_color")));
@@ -33,6 +33,8 @@ UserInterface::UserInterface() {
     arrow_r_.setOrigin(0.0f, 0.0f);
 
     current_zoom_ = 1.0f;
+
+    this->addWidgets();
 }
 
 void UserInterface::handleEvents() {
@@ -47,6 +49,8 @@ void UserInterface::handleEvents() {
 
     while (graphics_window.pollEvent(event))
     {
+        gui_.handleEvent(event);
+
         switch (event.type)
         {
             case sf::Event::Closed:
@@ -63,7 +67,7 @@ void UserInterface::handleEvents() {
                 dynamic_view.setSize(visible_area);
                 dynamic_view.zoom(current_zoom_);
                 Graphics::getInstance().setDynamicView(dynamic_view);
-                
+
                 break;
             }
             case sf::Event::MouseButtonPressed:
@@ -111,6 +115,19 @@ void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) cons
     }
 
     target.draw(cursor_planet_, states);
+}
+
+void UserInterface::drawGui() {
+    gui_.draw();
+}
+
+inline void UserInterface::addWidgets() {
+    auto exit_button = tgui::Button::create();
+    exit_button->setPosition(75, 70);
+    exit_button->setText("Exit");
+    exit_button->setSize(100, 30);
+    exit_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    gui_.add(exit_button);
 }
 
 inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf::View &view,
