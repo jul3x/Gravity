@@ -1,9 +1,8 @@
 float pixels_per_km=1.0f
-int window_width_px=1500
-int window_height_px=900
+bool auto_resolution=1
 int number_of_stars=100
-float min_star_velocity=1.0f
-float max_star_velocity=5.0f
+float min_star_velocity=4.0f
+float max_star_velocity=10.0f
 float min_star_r=1.0f
 float max_star_r=5.0f
 int32 planet_trail_color=0xFFFFFF55

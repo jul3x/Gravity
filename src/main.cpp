@@ -11,6 +11,13 @@ int main()
 
     CFG.initialize("data/config.j3x");
 
+    if (CFG.getInt("auto_resolution"))
+    {
+        sf::Vector2i res = Engine::detectResolution();
+        CFG.setInt("window_width_px", res.x);
+        CFG.setInt("window_height_px", res.y);
+    }
+
     ResourceManager::getInstance().lazyLoadTexture("planet");
     ResourceManager::getInstance().lazyLoadTexture("spawn");
     ResourceManager::getInstance().lazyLoadTexture("explosion1");

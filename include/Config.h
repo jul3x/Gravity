@@ -21,7 +21,7 @@ public:
         static Config instance;
         return instance;
     }
-    
+
     void initialize(const std::string &filename) {
         std::ifstream config_file(filename);
 
@@ -57,6 +57,10 @@ public:
                                 else if (type == "float")
                                 {
                                     float_params_[key] = std::stof(value);
+                                }
+                                else if (type == "bool")
+                                {
+                                    int_params_[key] = std::stoi(value);
                                 }
                                 else
                                 {
@@ -106,6 +110,14 @@ public:
         }
 
         return float_params_.at(key);
+    }
+
+    void setInt(const std::string &key, int value) {
+        int_params_[key] = value;
+    }
+
+    void setFloat(const std::string &key, float value) {
+        float_params_[key] = value;
     }
 
 private:
