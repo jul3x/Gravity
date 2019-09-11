@@ -56,7 +56,7 @@ inline bool isCollidable(const Planet &first, const Planet &second) {
     {
         float distance = utils::getDistance(first.getPosition(), second.getPosition());
         float max_distance = first.getRadius() + second.getRadius();
-            
+
         if (distance < max_distance)
         {
             return true;
@@ -64,6 +64,15 @@ inline bool isCollidable(const Planet &first, const Planet &second) {
     }
 
     return false;
+}
+
+inline bool isPointInRectangle(const sf::Vector2f &p, const sf::Vector2f &rect_pos, const sf::Vector2f &rect_size) {
+    if (rect_size.x <= 0.0f || rect_size.y <= 0.0f)
+    {
+        throw std::invalid_argument("[isPointInRectangle] Size of rectangle cannot be negative!");
+    }
+
+    return p.x >= rect_pos.x && p.x < rect_pos.x + rect_size.x && p.y >= rect_pos.y && p.y < rect_pos.y + rect_size.y;
 }
 
 } // namespace utils

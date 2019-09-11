@@ -24,9 +24,24 @@ public:
 
 private:
     enum class State {
+        MENU,
+        GALAXY
+    };
+
+    enum class MouseState {
         NOT_PRESSED,
         PRESSED
     };
+
+    static tgui::Button::Ptr generateButton(const sf::Vector2i &pos,
+                                            const sf::Vector2i &size,
+                                            const std::string &text) {
+        auto button = tgui::Button::create();
+        button->setPosition(pos.x, pos.y);
+        button->setText(text);
+        button->setSize(size.x, size.y);
+        return button;
+    }
 
     virtual void draw(sf::RenderTarget &target,
                       sf::RenderStates states) const;
@@ -45,7 +60,10 @@ private:
                                       const sf::Vector2f &current_velocity);
     inline void setCursorRadius(float new_r);
 
+    static constexpr int MENU_WIDTH_PX_ = 250;
+
     State state_;
+    MouseState mouse_state_;
 
     sf::Vector2i previous_mouse_pos_;
 
@@ -57,8 +75,9 @@ private:
     sf::ConvexShape shaft_;
     sf::ConvexShape arrow_l_, arrow_r_;
 
+    // menu
     tgui::Gui gui_;
-
+    sf::RectangleShape menu_background_;
 };
 
 

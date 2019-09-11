@@ -14,7 +14,7 @@
 
 
 UserInterface::UserInterface() : gui_(Graphics::getInstance().getWindow()) {
-    state_ = State::NOT_PRESSED;
+    mouse_state_ = MouseState::NOT_PRESSED;
     cursor_planet_.setTexture(&ResourceManager::getInstance().getTexture("planet"));
     cursor_planet_.setFillColor(sf::Color(CFG.getInt("cursor_planet_color")));
     setCursorRadius(10.0f);
@@ -34,6 +34,11 @@ UserInterface::UserInterface() : gui_(Graphics::getInstance().getWindow()) {
 
     current_zoom_ = 1.0f;
 
+    menu_background_.setSize({UserInterface::MENU_WIDTH_PX_,
+                              static_cast<float>(Graphics::getInstance().getWindow().getSize().y) + 100 /* titlebar */});
+    menu_background_.setPosition(0.0f, 0.0f);
+    menu_background_.setFillColor({255, 255, 255, 20});
+
     this->addWidgets();
 }
 
@@ -46,6 +51,16 @@ void UserInterface::handleEvents() {
         graphics_window.mapPixelToCoords(previous_mouse_pos_);
     auto current_velocity = utils::vectorLengthLimit(mouse_difference,
                                                      CFG.getFloat("max_set_velocity") * CFG.getFloat("pixels_per_km"));
+
+    if (utils::isPointInRectangle(static_cast<sf::Vector2f>(mouse_pos), {0.0f, 0.0f},
+                                  {UserInterface::MENU_WIDTH_PX_, static_cast<float>(graphics_window.getSize().y)}))
+    {
+        state_ = State::MENU;
+    }
+    else
+    {
+        state_ = State::GALAXY;
+    }
 
     while (graphics_window.pollEvent(event))
     {
@@ -72,18 +87,23 @@ void UserInterface::handleEvents() {
             }
             case sf::Event::MouseButtonPressed:
             {
-                previous_mouse_pos_ = mouse_pos;
-
-                state_ = State::PRESSED;
+                if (state_ != State::MENU)
+                {
+                    previous_mouse_pos_ = mouse_pos;
+                    mouse_state_ = MouseState::PRESSED;
+                }
                 break;
             }
             case sf::Event::MouseButtonReleased:
             {
-                Engine::getInstance().addPlanet(graphics_window.mapPixelToCoords(previous_mouse_pos_) /
-                                                    CFG.getFloat("pixels_per_km"),
-                                                current_velocity / CFG.getFloat("pixels_per_km"), cursor_r_);
+                if (mouse_state_ == MouseState::PRESSED)
+                {
+                    Engine::getInstance().addPlanet(graphics_window.mapPixelToCoords(previous_mouse_pos_) /
+                                                        CFG.getFloat("pixels_per_km"),
+                                                    current_velocity / CFG.getFloat("pixels_per_km"), cursor_r_);
+                }
 
-                state_ = State::NOT_PRESSED;
+                mouse_state_ = MouseState::NOT_PRESSED;
                 break;
             }
             case sf::Event::MouseWheelScrolled:
@@ -107,27 +127,39 @@ void UserInterface::handleEvents() {
 }
 
 void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    if (state_ == State::PRESSED && !utils::isNearlyEqual(shaft_.getLocalBounds().width, 0.0f, 0.01f))
+    if (mouse_state_ == MouseState::PRESSED && !utils::isNearlyEqual(shaft_.getLocalBounds().width, 0.0f, 0.01f))
     {
         target.draw(shaft_, states);
         target.draw(arrow_l_, states);
         target.draw(arrow_r_, states);
     }
 
-    target.draw(cursor_planet_, states);
+    if (state_ != State::MENU)
+    {
+        target.draw(cursor_planet_, states);
+    }
 }
 
 void UserInterface::drawGui() {
+    Graphics::getInstance().getWindow().draw(menu_background_);
     gui_.draw();
 }
 
 inline void UserInterface::addWidgets() {
-    auto exit_button = tgui::Button::create();
-    exit_button->setPosition(75, 70);
-    exit_button->setText("Exit");
-    exit_button->setSize(100, 30);
+    static const sf::Vector2i SIZE = {140, 30};
+    static int POS_X = (UserInterface::MENU_WIDTH_PX_ - SIZE.x) / 2;
+
+    auto exit_button = UserInterface::generateButton({POS_X, 70}, SIZE, "Exit");
     exit_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
     gui_.add(exit_button);
+
+    auto save_button = UserInterface::generateButton({POS_X, 170}, SIZE, "Save system");
+    save_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    gui_.add(save_button);
+
+    auto load_button = UserInterface::generateButton({POS_X, 270}, SIZE, "Load system");
+    //load_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    gui_.add(load_button);
 }
 
 inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf::View &view,
@@ -194,15 +226,15 @@ inline void UserInterface::handleKeyPressed(sf::RenderWindow &graphics_window, s
 
 inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_window, const sf::Vector2i &mouse_pos,
                                                  const sf::Vector2f &current_velocity) {
-    switch (state_)
+    switch (mouse_state_)
     {
-        case State::NOT_PRESSED:
+        case MouseState::NOT_PRESSED:
         {
             cursor_planet_.setPosition(graphics_window.mapPixelToCoords(mouse_pos));
             previous_mouse_pos_ = mouse_pos;
             break;
         }
-        case State::PRESSED:
+        case MouseState::PRESSED:
         {
             static float ARROW_LENGTH = CFG.getFloat("arrow_width") * 3.0f;
             auto mouse_coords = graphics_window.mapPixelToCoords(previous_mouse_pos_);

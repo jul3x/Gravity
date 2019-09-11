@@ -42,6 +42,7 @@ void Graphics::setDynamicView(sf::View &view) {
 sf::View& Graphics::getStaticView() {
     return standard_view_;
 }
+
 sf::View& Graphics::getDynamicView() {
     return current_view_;
 }
