@@ -7,7 +7,8 @@
 #include <Engine.h>
 
 
-Engine::Engine() : physics_(planets_) {
+Engine::Engine() : physics_(planets_),
+                   state_(State::PAUSED) {
     addPlanet({CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f}, {}, 50.0f);
 }
 
@@ -23,8 +24,11 @@ void Engine::update(int frame_rate) {
 
         user_interface_.handleEvents();
 
-        background_.update(time_elapsed);
-        physics_.update(time_elapsed);
+        if (state_ == State::OK)
+        {
+            background_.update(time_elapsed);
+            physics_.update(time_elapsed);
+        }
 
         for (auto it = animations_.begin(); it != animations_.end(); ++it)
         {
@@ -64,6 +68,10 @@ void Engine::update(int frame_rate) {
 
         ensureConstantFrameRate(frame_rate);
     }
+}
+
+void Engine::setSimulationState(bool run) {
+    state_ = run ? State::OK : State::PAUSED;
 }
 
 void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r) {

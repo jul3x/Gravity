@@ -181,6 +181,21 @@ inline void UserInterface::addWidgets() {
     auto load_button = UserInterface::generateButton({POS_X, 390}, SIZE, "Load system");
     //load_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
     gui_.add(load_button);
+
+    auto run_button = UserInterface::generateButton({POS_X, 490}, SIZE, "Run simulation");
+    run_button->connect("pressed", [&](){
+        if (run_button->getText() == "Run simulation")
+        {
+            Engine::getInstance().setSimulationState(true);
+            run_button->setText("Pause simulation");
+        }
+        else
+        {
+            Engine::getInstance().setSimulationState(false);
+            run_button->setText("Run simulation");
+        }
+    });
+    gui_.add(run_button);
 }
 
 inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf::View &view,

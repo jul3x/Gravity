@@ -18,6 +18,11 @@
 class Engine {
 
 public:
+    enum class State {
+        OK,
+        PAUSED
+    };
+
     Engine(const Engine&) = delete;
     Engine& operator=(const Engine&) = delete;
 
@@ -27,6 +32,7 @@ public:
     }
 
     void update(int frame_rate);
+    void setSimulationState(bool run);
     void addPlanet(const sf::Vector2f &pos,
                    const sf::Vector2f &vel,
                    float r);
@@ -39,6 +45,8 @@ private:
 
     void ensureConstantFrameRate(int frame_rate);
     void restartClock();
+
+    State state_;
 
     Physics physics_;
 
