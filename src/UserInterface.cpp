@@ -108,7 +108,10 @@ void UserInterface::handleEvents() {
             }
             case sf::Event::MouseWheelScrolled:
             {
-                handleScrolling(graphics_window, view, mouse_pos, event.mouseWheelScroll.delta);
+                if (state_ != State::MENU)
+                {
+                    handleScrolling(graphics_window, view, mouse_pos, event.mouseWheelScroll.delta);
+                }
                 break;
             }
             case sf::Event::KeyPressed:
@@ -134,7 +137,7 @@ void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) cons
         target.draw(arrow_r_, states);
     }
 
-    if (state_ != State::MENU)
+    if (state_ != State::MENU || mouse_state_ == MouseState::PRESSED)
     {
         target.draw(cursor_planet_, states);
     }
@@ -153,11 +156,29 @@ inline void UserInterface::addWidgets() {
     exit_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
     gui_.add(exit_button);
 
-    auto save_button = UserInterface::generateButton({POS_X, 170}, SIZE, "Save system");
+    auto new_map_name = tgui::EditBox::create();
+    new_map_name->setSize(SIZE.x, SIZE.y);
+    new_map_name->setPosition(POS_X, 150);
+    new_map_name->setText("New map name");
+    gui_.add(new_map_name);
+
+    auto save_button = UserInterface::generateButton({POS_X, 180}, SIZE, "Save system");
     save_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
     gui_.add(save_button);
 
-    auto load_button = UserInterface::generateButton({POS_X, 270}, SIZE, "Load system");
+    auto map_list = tgui::ListBox::create();
+    map_list->setSize(SIZE.x, SIZE.y * 4);
+    map_list->setItemHeight(SIZE.y);
+    map_list->setPosition(POS_X, 270);
+    map_list->addItem("map1");
+    map_list->addItem("map2");
+    map_list->addItem("map3");
+    map_list->addItem("map4");
+    map_list->addItem("map5");
+    map_list->addItem("map6");
+    gui_.add(map_list);
+
+    auto load_button = UserInterface::generateButton({POS_X, 390}, SIZE, "Load system");
     //load_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
     gui_.add(load_button);
 }
@@ -253,7 +274,7 @@ inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_wind
             shaft_.setPoint(0, {0, 0});
             shaft_.setPoint(1, {shaft_length, - CFG.getFloat("arrow_width") / 2.0f});
             shaft_.setPoint(2, {shaft_length, CFG.getFloat("arrow_width") / 2.0f});
-            
+
             arrow_l_.setPoint(0, {shaft_length, 0});
             arrow_l_.setPoint(1, {shaft_length + ARROW_LENGTH, 0});
             arrow_l_.setPoint(2, {shaft_length - ARROW_LENGTH, - ARROW_LENGTH});
