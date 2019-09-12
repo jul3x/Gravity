@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include <ResourceManager.h>
+#include <system/ResourceManager.h>
 
 
 ResourceManager& ResourceManager::getInstance() {
@@ -51,7 +51,7 @@ void ResourceManager::lazyLoadTexture(const std::string &key) {
 }
 
 void ResourceManager::loadTexture(const std::string &key) {
-    if (!textures_[key].loadFromFile("data/" + key + ".png"))
+    if (!textures_[key].loadFromFile("data/textures/" + key + ".png"))
     {
         throw std::runtime_error("[ResourceManager] " + key + " texture file not successfully loaded.");
     }
@@ -63,8 +63,8 @@ void ResourceManager::loadShader(const std::string &key) {
         throw std::runtime_error("[ResourceManager] Shaders are not available!");
     }
 
-    if (!shaders_[key].loadFromFile("data/" + key + ".frag", sf::Shader::Fragment))
+    if (!shaders_[key].loadFromFile("data/shaders/" + key + ".frag", sf::Shader::Fragment))
     {
-        throw std::runtime_error("[ResourceManager] " + key + " shader file not found or are corrupted!");
+        throw std::runtime_error("[ResourceManager] " + key + " shader file not found or is corrupted!");
     }
 }

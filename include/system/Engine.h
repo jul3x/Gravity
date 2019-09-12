@@ -2,8 +2,8 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#ifndef GRAVITY_ENGINE_H
-#define GRAVITY_ENGINE_H
+#ifndef GRAVITY_SYSTEM_ENGINE_H
+#define GRAVITY_SYSTEM_ENGINE_H
 
 #include <memory>
 
@@ -11,7 +11,7 @@
 #include <graphics/SpawnAnimation.h>
 #include <graphics/Explosion.h>
 #include <graphics/Graphics.h>
-#include <UserInterface.h>
+#include <system/UserInterface.h>
 #include <physics/Physics.h>
 
 
@@ -61,4 +61,4 @@ private:
 };
 
 
-#endif //GRAVITY_ENGINE_H
+#endif //GRAVITY_SYSTEM_ENGINE_H

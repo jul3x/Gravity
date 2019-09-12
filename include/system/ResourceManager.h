@@ -2,8 +2,8 @@
 // Created by jprolejko on 25.06.19.
 //
 
-#ifndef GRAVITY_RESOURCEMANAGER_H
-#define GRAVITY_RESOURCEMANAGER_H
+#ifndef GRAVITY_SYSTEM_RESOURCEMANAGER_H
+#define GRAVITY_SYSTEM_RESOURCEMANAGER_H
 
 #include <string>
 #include <map>
@@ -34,4 +34,4 @@ private:
 };
 
 
-#endif //GRAVITY_RESOURCEMANAGER_H
+#endif //GRAVITY_SYSTEM_RESOURCEMANAGER_H

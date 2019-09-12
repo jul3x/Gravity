@@ -3,7 +3,7 @@
 //
 
 #include <utils/Utils.h>
-#include <Config.h>
+#include <system/Config.h>
 
 #include <graphics/Explosion.h>
 

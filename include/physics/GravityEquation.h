@@ -8,7 +8,7 @@
 #include <physics/RungeKuttaSolver.h>
 #include <objects/Planet.h>
 #include <utils/Geometry.h>
-#include <Config.h>
+#include <system/Config.h>
 
 class GravityEquation : public IEquation<float, Planet*> {
 

@@ -9,7 +9,7 @@
 
 #include <objects/AbstractCelestialBody.h>
 
-#include <ResourceManager.h>
+#include <system/ResourceManager.h>
 
 
 class Planet : public AbstractCelestialBody {

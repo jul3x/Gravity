@@ -10,7 +10,7 @@
 #include <physics/RungeKuttaSolver.h>
 #include <physics/GravityEquation.h>
 #include <objects/Planet.h>
-#include <Config.h>
+#include <system/Config.h>
 
 class Physics {
 

@@ -3,7 +3,7 @@
 //
 
 #include <utils/Numeric.h>
-#include <Config.h>
+#include <system/Config.h>
 
 #include <objects/Background.h>
 

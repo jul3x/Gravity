@@ -2,13 +2,13 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#ifndef GRAVITY_GRAPHICS_USERINTERFACE_H
-#define GRAVITY_GRAPHICS_USERINTERFACE_H
+#ifndef GRAVITY_SYSTEM_USERINTERFACE_H
+#define GRAVITY_SYSTEM_USERINTERFACE_H
 
 #include <TGUI/TGUI.hpp>
 
 #include <objects/AbstractDrawableObject.h>
-#include <Config.h>
+#include <system/Config.h>
 
 
 class UserInterface : public AbstractDrawableObject {
@@ -85,4 +85,4 @@ private:
 };
 
 
-#endif //GRAVITY_GRAPHICS_USERINTERFACE_H
+#endif //GRAVITY_SYSTEM_USERINTERFACE_H

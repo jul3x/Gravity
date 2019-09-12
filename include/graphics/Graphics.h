@@ -10,8 +10,8 @@
 #include <objects/Planet.h>
 #include <objects/Background.h>
 #include <graphics/EffectGenerator.h>
-#include <UserInterface.h>
-#include <Config.h>
+#include <system/UserInterface.h>
+#include <system/Config.h>
 
 
 class Graphics {

@@ -4,13 +4,13 @@
 
 #include <iostream> 
 
-#include <Engine.h>
-#include <ResourceManager.h>
+#include <system/Engine.h>
+#include <system/ResourceManager.h>
 #include <utils/Geometry.h>
 #include <utils/Numeric.h>
 #include <graphics/Graphics.h>
 
-#include <UserInterface.h>
+#include <system/UserInterface.h>
 
 
 UserInterface::UserInterface() : gui_(Graphics::getInstance().getWindow()) {
