@@ -9,8 +9,6 @@
 
 #include <objects/AbstractCelestialBody.h>
 
-#include <system/ResourceManager.h>
-
 
 class Planet : public AbstractCelestialBody {
 

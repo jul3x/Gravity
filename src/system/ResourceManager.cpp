@@ -15,7 +15,7 @@ ResourceManager& ResourceManager::getInstance() {
 sf::Texture& ResourceManager::getTexture(const std::string &key) {
     if (textures_.find(key) == textures_.end())
     {
-        try 
+        try
         {
             loadTexture(key);
             std::cout << "[ResourceManager] Texture " << key << " is loaded!" << std::endl;
@@ -44,6 +44,35 @@ sf::Shader& ResourceManager::getShader(const std::string &key) {
     }
 
     return shaders_.at(key);
+}
+
+std::list<Planet> ResourceManager::getGravitySystem(const std::string &name) {
+    // TODO - make planet loading
+
+    try
+    {
+        // return gravity_system_loader_.loadGravitySystem(name);
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+
+    return std::list<Planet>();
+}
+
+std::list<std::string> ResourceManager::getGravitySystems(const std::string &path) {
+    // TODO make planet loading
+    try
+    {
+        // return gravity_system_loader_.loadGravitySystems(path);
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+
+    return {};
 }
 
 void ResourceManager::lazyLoadTexture(const std::string &key) {

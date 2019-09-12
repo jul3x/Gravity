@@ -28,15 +28,15 @@ void Engine::update(int frame_rate) {
         {
             background_.update(time_elapsed);
             physics_.update(time_elapsed);
-        }
 
-        for (auto it = animations_.begin(); it != animations_.end(); ++it)
-        {
-            if ((*it)->update(time_elapsed))
+            for (auto it = animations_.begin(); it != animations_.end(); ++it)
             {
-                auto next_it = std::next(it);
-                animations_.erase(it);
-                it = next_it;
+                if ((*it)->update(time_elapsed))
+                {
+                    auto next_it = std::next(it);
+                    animations_.erase(it);
+                    it = next_it;
+                }
             }
         }
 
@@ -72,6 +72,14 @@ void Engine::update(int frame_rate) {
 
 void Engine::setSimulationState(bool run) {
     state_ = run ? State::OK : State::PAUSED;
+}
+
+Engine::State Engine::getSimulationState() {
+    return state_;
+}
+
+void Engine::updatePlanetsList(const std::list<Planet> &planets) {
+    planets_ = planets;
 }
 
 void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r) {

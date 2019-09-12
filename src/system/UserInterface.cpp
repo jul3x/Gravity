@@ -62,6 +62,8 @@ void UserInterface::handleEvents() {
         state_ = State::GALAXY;
     }
 
+    run_button_->setText(Engine::getInstance().getSimulationState() == Engine::State::OK ? "Pause simulation" : "Run simulation");
+
     while (graphics_window.pollEvent(event))
     {
         gui_.handleEvent(event);
@@ -184,17 +186,8 @@ inline void UserInterface::addWidgets() {
 
     run_button_ = UserInterface::generateButton({POS_X, 490}, SIZE, "Run simulation");
     run_button_->connect("pressed", [this](){
-        if (this->run_button_->getText() == "Run simulation")
-        {
-            Engine::getInstance().setSimulationState(true);
-            this->run_button_->setText("Pause simulation");
-        }
-        else
-        {
-            Engine::getInstance().setSimulationState(false);
-            this->run_button_->setText("Run simulation");
-        }
-    });
+            Engine::getInstance().setSimulationState(Engine::getInstance().getSimulationState() == Engine::State::PAUSED);
+        });
     gui_.add(run_button_);
 }
 

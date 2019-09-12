@@ -33,6 +33,10 @@ public:
 
     void update(int frame_rate);
     void setSimulationState(bool run);
+    Engine::State getSimulationState();
+
+    void updatePlanetsList(const std::list<Planet> &planets);
+
     void addPlanet(const sf::Vector2f &pos,
                    const sf::Vector2f &vel,
                    float r);
