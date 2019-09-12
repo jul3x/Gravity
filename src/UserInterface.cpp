@@ -152,50 +152,50 @@ inline void UserInterface::addWidgets() {
     static const sf::Vector2i SIZE = {140, 30};
     static int POS_X = (UserInterface::MENU_WIDTH_PX_ - SIZE.x) / 2;
 
-    auto exit_button = UserInterface::generateButton({POS_X, 70}, SIZE, "Exit");
-    exit_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
-    gui_.add(exit_button);
+    exit_button_ = UserInterface::generateButton({POS_X, 70}, SIZE, "Exit");
+    exit_button_->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    gui_.add(exit_button_);
 
-    auto new_map_name = tgui::EditBox::create();
-    new_map_name->setSize(SIZE.x, SIZE.y);
-    new_map_name->setPosition(POS_X, 150);
-    new_map_name->setText("New map name");
-    gui_.add(new_map_name);
+    new_map_name_ = tgui::EditBox::create();
+    new_map_name_->setSize(SIZE.x, SIZE.y);
+    new_map_name_->setPosition(POS_X, 150);
+    new_map_name_->setText("New map name");
+    gui_.add(new_map_name_);
 
-    auto save_button = UserInterface::generateButton({POS_X, 180}, SIZE, "Save system");
-    save_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
-    gui_.add(save_button);
+    save_button_ = UserInterface::generateButton({POS_X, 180}, SIZE, "Save system");
+    save_button_->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    gui_.add(save_button_);
 
-    auto map_list = tgui::ListBox::create();
-    map_list->setSize(SIZE.x, SIZE.y * 4);
-    map_list->setItemHeight(SIZE.y);
-    map_list->setPosition(POS_X, 270);
-    map_list->addItem("map1");
-    map_list->addItem("map2");
-    map_list->addItem("map3");
-    map_list->addItem("map4");
-    map_list->addItem("map5");
-    map_list->addItem("map6");
-    gui_.add(map_list);
+    map_list_ = tgui::ListBox::create();
+    map_list_->setSize(SIZE.x, SIZE.y * 4);
+    map_list_->setItemHeight(SIZE.y);
+    map_list_->setPosition(POS_X, 270);
+    map_list_->addItem("map1");
+    map_list_->addItem("map2");
+    map_list_->addItem("map3");
+    map_list_->addItem("map4");
+    map_list_->addItem("map5");
+    map_list_->addItem("map6");
+    gui_.add(map_list_);
 
-    auto load_button = UserInterface::generateButton({POS_X, 390}, SIZE, "Load system");
-    //load_button->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
-    gui_.add(load_button);
+    load_button_ = UserInterface::generateButton({POS_X, 390}, SIZE, "Load system");
+    load_button_->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    gui_.add(load_button_);
 
-    auto run_button = UserInterface::generateButton({POS_X, 490}, SIZE, "Run simulation");
-    run_button->connect("pressed", [&](){
-        if (run_button->getText() == "Run simulation")
+    run_button_ = UserInterface::generateButton({POS_X, 490}, SIZE, "Run simulation");
+    run_button_->connect("pressed", [this](){
+        if (this->run_button_->getText() == "Run simulation")
         {
             Engine::getInstance().setSimulationState(true);
-            run_button->setText("Pause simulation");
+            this->run_button_->setText("Pause simulation");
         }
         else
         {
             Engine::getInstance().setSimulationState(false);
-            run_button->setText("Run simulation");
+            this->run_button_->setText("Run simulation");
         }
     });
-    gui_.add(run_button);
+    gui_.add(run_button_);
 }
 
 inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf::View &view,

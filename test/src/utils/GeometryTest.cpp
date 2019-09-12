@@ -309,4 +309,8 @@ TEST(GeometryTest, IsPointInRectangle) {
     EXPECT_FALSE(utils::isPointInRectangle({5, -2}, {-5, -3}, {10, 1}));
     EXPECT_FALSE(utils::isPointInRectangle({-5, -2}, {-5, -3}, {10, 1}));
     EXPECT_TRUE(utils::isPointInRectangle({-5, -2.01}, {-5, -3}, {10, 1}));
+
+    EXPECT_THROW(utils::isPointInRectangle({0, 0}, {0, 0}, {-1, 0}), std::invalid_argument);
+    EXPECT_THROW(utils::isPointInRectangle({0, 0}, {0, 0}, {-1, -1}), std::invalid_argument);
+    EXPECT_THROW(utils::isPointInRectangle({0, 0}, {0, 0}, {1, -1}), std::invalid_argument);
 }
