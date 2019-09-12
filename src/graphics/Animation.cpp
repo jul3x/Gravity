@@ -21,6 +21,7 @@ Animation::Animation(const std::string &texture_name,
 
     animation_sprite_.setPosition(this->getPosition());
     animation_sprite_.setOrigin(frame_size_.x / 2, frame_size_.y / 2);
+    animation_sprite_.setTextureRect(animation_source_);
 }
 
 bool Animation::update(float time_elapsed) {
