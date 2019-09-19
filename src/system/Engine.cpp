@@ -7,10 +7,7 @@
 #include <system/Engine.h>
 
 
-Engine::Engine() : physics_(planets_),
-                   state_(State::PAUSED) {
-    addPlanet({CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f}, {}, 50.0f);
-}
+Engine::Engine() : physics_(planets_), state_(State::PAUSED) {}
 
 void Engine::update(int frame_rate) {
     restartClock();
@@ -59,9 +56,7 @@ void Engine::update(int frame_rate) {
 
             Graphics::getInstance().draw(user_interface_);
 
-            Graphics::getInstance().setStaticView();
             user_interface_.drawGui();
-            Graphics::getInstance().setDynamicView();
 
             Graphics::getInstance().display();
         }
@@ -76,6 +71,10 @@ void Engine::setSimulationState(bool run) {
 
 Engine::State Engine::getSimulationState() {
     return state_;
+}
+
+std::list<Planet> Engine::getPlanets() const {
+    return planets_;
 }
 
 void Engine::updatePlanetsList(const std::list<Planet> &planets) {

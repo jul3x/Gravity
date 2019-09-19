@@ -23,6 +23,8 @@ file(GLOB_RECURSE GRAVITY_MAIN_SRC "src/*.cpp")
 
 add_executable(${EXECUTABLE_NAME} ${GRAVITY_MAIN_SRC})
 
+target_link_libraries(${EXECUTABLE_NAME} stdc++fs)
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${TGUI_LIBRARY})
+
 
 

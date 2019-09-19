@@ -82,6 +82,7 @@ private:
     tgui::Button::Ptr exit_button_, save_button_, load_button_, run_button_;
     tgui::ListBox::Ptr map_list_;
     tgui::EditBox::Ptr new_map_name_;
+    tgui::Label::Ptr information_;
 };
 
 

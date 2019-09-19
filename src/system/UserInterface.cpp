@@ -62,8 +62,6 @@ void UserInterface::handleEvents() {
         state_ = State::GALAXY;
     }
 
-    run_button_->setText(Engine::getInstance().getSimulationState() == Engine::State::OK ? "Pause simulation" : "Run simulation");
-
     while (graphics_window.pollEvent(event))
     {
         gui_.handleEvent(event);
@@ -78,6 +76,10 @@ void UserInterface::handleEvents() {
             case sf::Event::Resized:
             {
                 auto visible_area = sf::Vector2f(event.size.width, event.size.height);
+                gui_.setView(sf::View(sf::FloatRect(0.0f, 0.0f, visible_area.x, visible_area.y)));
+
+                auto bg_size = menu_background_.getSize();
+                menu_background_.setSize({bg_size.x, visible_area.y});
                 view.setSize(visible_area);
 
                 auto dynamic_view = Graphics::getInstance().getDynamicView();
@@ -146,13 +148,24 @@ void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) cons
 }
 
 void UserInterface::drawGui() {
+    auto temp_view = Graphics::getInstance().getWindow().getView();
+    Graphics::getInstance().getWindow().setView(gui_.getView());
     Graphics::getInstance().getWindow().draw(menu_background_);
+    Graphics::getInstance().getWindow().setView(temp_view);
+
     gui_.draw();
 }
 
 inline void UserInterface::addWidgets() {
     static const sf::Vector2i SIZE = {140, 30};
     static int POS_X = (UserInterface::MENU_WIDTH_PX_ - SIZE.x) / 2;
+    static const std::string MAPS_PATH = "data/systems/";
+
+    information_ = tgui::Label::create();
+    information_->setText("");
+    information_->setPosition(UserInterface::MENU_WIDTH_PX_ + 20.0f, 20.0f);
+    information_->setTextSize(16);
+    gui_.add(information_);
 
     exit_button_ = UserInterface::generateButton({POS_X, 70}, SIZE, "Exit");
     exit_button_->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
@@ -161,32 +174,64 @@ inline void UserInterface::addWidgets() {
     new_map_name_ = tgui::EditBox::create();
     new_map_name_->setSize(SIZE.x, SIZE.y);
     new_map_name_->setPosition(POS_X, 150);
-    new_map_name_->setText("New map name");
+    new_map_name_->setDefaultText("New map name");
     gui_.add(new_map_name_);
 
     save_button_ = UserInterface::generateButton({POS_X, 180}, SIZE, "Save system");
-    save_button_->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    save_button_->connect("pressed", [&](){
+            std::list<Planet> planets = Engine::getInstance().getPlanets();
+            if (ResourceManager::getInstance().saveGravitySystem(planets, MAPS_PATH, new_map_name_->getText()))
+            {
+                map_list_->addItem(new_map_name_->getText());
+                information_->setText("System successfully saved!");
+            }
+            else
+            {
+                information_->setText("System saving failed!");
+            }
+        });
     gui_.add(save_button_);
 
     map_list_ = tgui::ListBox::create();
     map_list_->setSize(SIZE.x, SIZE.y * 4);
     map_list_->setItemHeight(SIZE.y);
     map_list_->setPosition(POS_X, 270);
-    map_list_->addItem("map1");
-    map_list_->addItem("map2");
-    map_list_->addItem("map3");
-    map_list_->addItem("map4");
-    map_list_->addItem("map5");
-    map_list_->addItem("map6");
+
+    std::list<std::string> map_names = ResourceManager::getInstance().getGravitySystems(MAPS_PATH);
+
+    for (const auto &name : map_names)
+    {
+        map_list_->addItem(name);
+    }
     gui_.add(map_list_);
 
     load_button_ = UserInterface::generateButton({POS_X, 390}, SIZE, "Load system");
-    load_button_->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    load_button_->connect("pressed", [&](){
+            std::list<Planet> planets = ResourceManager::getInstance().getGravitySystem(
+                MAPS_PATH, static_cast<std::string>(map_list_->getSelectedItem()));
+
+            if (!planets.empty())
+            {
+                Engine::getInstance().updatePlanetsList(planets);
+                information_->setText("System successfully loaded!");
+            }
+            else
+            {
+                information_->setText("System loading failed!");
+            }
+        });
     gui_.add(load_button_);
 
     run_button_ = UserInterface::generateButton({POS_X, 490}, SIZE, "Run simulation");
     run_button_->connect("pressed", [this](){
             Engine::getInstance().setSimulationState(Engine::getInstance().getSimulationState() == Engine::State::PAUSED);
+            run_button_->setText(Engine::getInstance().getSimulationState() == Engine::State::OK ?
+                                        "Pause simulation" : "Run simulation");
+
+            if (Engine::getInstance().getSimulationState() == Engine::State::OK)
+            {
+                information_->setText("");
+            }
         });
     gui_.add(run_button_);
 }

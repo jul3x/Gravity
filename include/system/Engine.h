@@ -35,6 +35,7 @@ public:
     void setSimulationState(bool run);
     Engine::State getSimulationState();
 
+    std::list<Planet> getPlanets() const;
     void updatePlanetsList(const std::list<Planet> &planets);
 
     void addPlanet(const sf::Vector2f &pos,

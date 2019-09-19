@@ -46,30 +46,43 @@ sf::Shader& ResourceManager::getShader(const std::string &key) {
     return shaders_.at(key);
 }
 
-std::list<Planet> ResourceManager::getGravitySystem(const std::string &name) {
-    // TODO - make planet loading
-
+bool ResourceManager::saveGravitySystem(const std::list<Planet> &planets,
+                                        const std::string &path,
+                                        const std::string &name) const {
     try
     {
-        // return gravity_system_loader_.loadGravitySystem(name);
+        GravitySystemLoader::saveGravitySystem(planets, path, name);
     }
     catch (const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "[ResourceManager] " << e.what() << '\n';
+        return false;
     }
 
-    return std::list<Planet>();
+    return true;
 }
 
-std::list<std::string> ResourceManager::getGravitySystems(const std::string &path) {
-    // TODO make planet loading
+std::list<Planet> ResourceManager::getGravitySystem(const std::string &path, const std::string &name) const {
     try
     {
-        // return gravity_system_loader_.loadGravitySystems(path);
+        return GravitySystemLoader::loadGravitySystem(path, name);
     }
     catch (const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "[ResourceManager] " << e.what() << '\n';
+    }
+
+    return {};
+}
+
+std::list<std::string> ResourceManager::getGravitySystems(const std::string &path) const {
+    try
+    {
+        return GravitySystemLoader::loadGravitySystems(path);
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "[ResourceManager] " << e.what() << '\n';
     }
 
     return {};

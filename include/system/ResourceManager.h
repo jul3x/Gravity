@@ -12,6 +12,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
+#include <system/GravitySystemLoader.h>
 #include <objects/Planet.h>
 
 
@@ -26,8 +27,9 @@ public:
     sf::Texture& getTexture(const std::string &key);
     sf::Shader& getShader(const std::string &key);
 
-    std::list<Planet> getGravitySystem(const std::string &name);
-    std::list<std::string> getGravitySystems(const std::string &path);
+    bool saveGravitySystem(const std::list<Planet> &planets, const std::string &path, const std::string &name) const;
+    std::list<Planet> getGravitySystem(const std::string &path, const std::string &name) const;
+    std::list<std::string> getGravitySystems(const std::string &path) const;
 
     void lazyLoadTexture(const std::string &key);
 
