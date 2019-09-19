@@ -54,7 +54,7 @@ std::list<Planet> GravitySystemLoader::loadGravitySystem(const std::string &path
     return planets;
 }
 
-std::list<std::string> GravitySystemLoader::loadGravitySystems(const std::string &path) {
+ std::list<std::string> GravitySystemLoader::loadGravitySystems(const std::string &path) {
     std::list<std::string> systems;
 
     for (const auto &system : std::experimental::filesystem::directory_iterator(path))

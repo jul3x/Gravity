@@ -46,6 +46,23 @@ sf::Shader& ResourceManager::getShader(const std::string &key) {
     return shaders_.at(key);
 }
 
+tgui::Theme& ResourceManager::getTheme(const std::string &key) {
+    if (themes_.find(key) == themes_.end())
+    {
+        try
+        {
+            themes_[key] = tgui::Theme("data/" + key + ".txt");
+            std::cout << "[ResourceManager] Theme " << key << " is loaded!" << std::endl;
+        }
+        catch (std::runtime_error &e)
+        {
+            std::cerr << e.what() << std::endl;
+        }
+    }
+
+    return themes_.at(key);
+}
+
 bool ResourceManager::saveGravitySystem(const std::list<Planet> &planets,
                                         const std::string &path,
                                         const std::string &name) const {

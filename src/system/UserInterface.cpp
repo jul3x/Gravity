@@ -2,7 +2,7 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#include <iostream> 
+#include <iostream>
 
 #include <system/Engine.h>
 #include <system/ResourceManager.h>
@@ -12,6 +12,8 @@
 
 #include <system/UserInterface.h>
 
+const std::string UserInterface::GUI_THEME_NAME_ = "gui_theme";
+const std::string UserInterface::MAPS_PATH_ = "data/systems/";
 
 UserInterface::UserInterface() : gui_(Graphics::getInstance().getWindow()) {
     mouse_state_ = MouseState::NOT_PRESSED;
@@ -133,6 +135,17 @@ void UserInterface::handleEvents() {
     handleInterfaceStates(graphics_window, mouse_pos, current_velocity);
 }
 
+tgui::Button::Ptr UserInterface::generateButton(const sf::Vector2i &pos,
+                                                const sf::Vector2i &size,
+                                                const std::string &text) {
+    auto button = tgui::Button::create();
+    button->setRenderer(ResourceManager::getInstance().getTheme(UserInterface::GUI_THEME_NAME_).getRenderer("Button"));
+    button->setPosition(pos.x, pos.y);
+    button->setText(text);
+    button->setSize(size.x, size.y);
+    return button;
+}
+
 void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     if (mouse_state_ == MouseState::PRESSED && !utils::isNearlyEqual(shaft_.getLocalBounds().width, 0.0f, 0.01f))
     {
@@ -159,9 +172,11 @@ void UserInterface::drawGui() {
 inline void UserInterface::addWidgets() {
     static const sf::Vector2i SIZE = {140, 30};
     static int POS_X = (UserInterface::MENU_WIDTH_PX_ - SIZE.x) / 2;
-    static const std::string MAPS_PATH = "data/systems/";
+
+    tgui::Theme &theme = ResourceManager::getInstance().getTheme(UserInterface::GUI_THEME_NAME_);
 
     information_ = tgui::Label::create();
+    information_->setRenderer(theme.getRenderer("Label"));
     information_->setText("");
     information_->setPosition(UserInterface::MENU_WIDTH_PX_ + 20.0f, 20.0f);
     information_->setTextSize(16);
@@ -172,6 +187,7 @@ inline void UserInterface::addWidgets() {
     gui_.add(exit_button_);
 
     new_map_name_ = tgui::EditBox::create();
+    new_map_name_->setRenderer(theme.getRenderer("EditBox"));
     new_map_name_->setSize(SIZE.x, SIZE.y);
     new_map_name_->setPosition(POS_X, 150);
     new_map_name_->setDefaultText("New map name");
@@ -180,7 +196,7 @@ inline void UserInterface::addWidgets() {
     save_button_ = UserInterface::generateButton({POS_X, 180}, SIZE, "Save system");
     save_button_->connect("pressed", [&](){
             std::list<Planet> planets = Engine::getInstance().getPlanets();
-            if (ResourceManager::getInstance().saveGravitySystem(planets, MAPS_PATH, new_map_name_->getText()))
+            if (ResourceManager::getInstance().saveGravitySystem(planets, UserInterface::MAPS_PATH_, new_map_name_->getText()))
             {
                 map_list_->addItem(new_map_name_->getText());
                 information_->setText("System successfully saved!");
@@ -193,11 +209,12 @@ inline void UserInterface::addWidgets() {
     gui_.add(save_button_);
 
     map_list_ = tgui::ListBox::create();
+    map_list_->setRenderer(theme.getRenderer("ListBox"));
     map_list_->setSize(SIZE.x, SIZE.y * 4);
     map_list_->setItemHeight(SIZE.y);
     map_list_->setPosition(POS_X, 270);
 
-    std::list<std::string> map_names = ResourceManager::getInstance().getGravitySystems(MAPS_PATH);
+    std::list<std::string> map_names = ResourceManager::getInstance().getGravitySystems(UserInterface::MAPS_PATH_);
 
     for (const auto &name : map_names)
     {
@@ -208,7 +225,7 @@ inline void UserInterface::addWidgets() {
     load_button_ = UserInterface::generateButton({POS_X, 390}, SIZE, "Load system");
     load_button_->connect("pressed", [&](){
             std::list<Planet> planets = ResourceManager::getInstance().getGravitySystem(
-                MAPS_PATH, static_cast<std::string>(map_list_->getSelectedItem()));
+                UserInterface::MAPS_PATH_, static_cast<std::string>(map_list_->getSelectedItem()));
 
             if (!planets.empty())
             {

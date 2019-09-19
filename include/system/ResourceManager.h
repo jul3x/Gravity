@@ -12,6 +12,8 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Shader.hpp>
 
+#include <TGUI/TGUI.hpp>
+
 #include <system/GravitySystemLoader.h>
 #include <objects/Planet.h>
 
@@ -27,6 +29,8 @@ public:
     sf::Texture& getTexture(const std::string &key);
     sf::Shader& getShader(const std::string &key);
 
+    tgui::Theme& getTheme(const std::string &key);
+
     bool saveGravitySystem(const std::list<Planet> &planets, const std::string &path, const std::string &name) const;
     std::list<Planet> getGravitySystem(const std::string &path, const std::string &name) const;
     std::list<std::string> getGravitySystems(const std::string &path) const;
@@ -41,6 +45,7 @@ private:
 
     std::map<std::string, sf::Texture> textures_;
     std::map<std::string, sf::Shader> shaders_;
+    std::map<std::string, tgui::Theme> themes_;
 };
 
 

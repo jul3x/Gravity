@@ -35,13 +35,7 @@ private:
 
     static tgui::Button::Ptr generateButton(const sf::Vector2i &pos,
                                             const sf::Vector2i &size,
-                                            const std::string &text) {
-        auto button = tgui::Button::create();
-        button->setPosition(pos.x, pos.y);
-        button->setText(text);
-        button->setSize(size.x, size.y);
-        return button;
-    }
+                                            const std::string &text);
 
     virtual void draw(sf::RenderTarget &target,
                       sf::RenderStates states) const;
@@ -60,6 +54,8 @@ private:
                                       const sf::Vector2f &current_velocity);
     inline void setCursorRadius(float new_r);
 
+    static const std::string GUI_THEME_NAME_;
+    static const std::string MAPS_PATH_;
     static constexpr int MENU_WIDTH_PX_ = 250;
 
     State state_;
