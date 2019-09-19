@@ -10,7 +10,7 @@
 
 #include <objects/AbstractPhysicalObject.h>
 
-#include <Config.h>
+#include <system/Config.h>
 
 
 class AbstractCelestialBody : public AbstractPhysicalObject {

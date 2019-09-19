@@ -3,7 +3,7 @@
 //
 
 
-#include <Config.h>
+#include <system/Config.h>
 
 #include <objects/Star.h>
 

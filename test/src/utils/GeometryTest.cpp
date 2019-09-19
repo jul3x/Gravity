@@ -286,3 +286,31 @@ TEST(GeometryTest, IsCollidable) {
     lhs.setPosition(2.0f, 2.0f);
     EXPECT_FALSE(utils::isCollidable(lhs, rhs));
 }
+
+TEST(GeometryTest, IsPointInRectangle) {
+    EXPECT_TRUE(utils::isPointInRectangle({0, 0}, {0, 0}, {10, 10}));
+    EXPECT_FALSE(utils::isPointInRectangle({-0.01, 0}, {0, 0}, {10, 10}));
+    EXPECT_TRUE(utils::isPointInRectangle({-0.01, 0}, {-0.02, 0}, {10, 10}));
+
+    EXPECT_FALSE(utils::isPointInRectangle({10, 0}, {0, 0}, {10, 10}));
+    EXPECT_TRUE(utils::isPointInRectangle({9.99, 0}, {0, 0}, {10, 10}));
+    EXPECT_TRUE(utils::isPointInRectangle({0, 9.99}, {0, 0}, {10, 10}));
+    EXPECT_FALSE(utils::isPointInRectangle({0, 10}, {0, 0}, {10, 10}));
+
+    EXPECT_TRUE(utils::isPointInRectangle({-5, -3}, {-5, -3}, {10, 1}));
+    EXPECT_FALSE(utils::isPointInRectangle({-5.01, -3}, {-5, -3}, {10, 1}));
+    EXPECT_FALSE(utils::isPointInRectangle({-5, -3.01}, {-5, -3}, {10, 1}));
+
+    EXPECT_FALSE(utils::isPointInRectangle({5, -3}, {-5, -3}, {10, 1}));
+    EXPECT_TRUE(utils::isPointInRectangle({4.99, -3}, {-5, -3}, {10, 1}));
+    EXPECT_FALSE(utils::isPointInRectangle({4.99, -2}, {-5, -3}, {10, 1}));
+    EXPECT_TRUE(utils::isPointInRectangle({4.99, -2.01}, {-5, -3}, {10, 1}));
+
+    EXPECT_FALSE(utils::isPointInRectangle({5, -2}, {-5, -3}, {10, 1}));
+    EXPECT_FALSE(utils::isPointInRectangle({-5, -2}, {-5, -3}, {10, 1}));
+    EXPECT_TRUE(utils::isPointInRectangle({-5, -2.01}, {-5, -3}, {10, 1}));
+
+    EXPECT_THROW(utils::isPointInRectangle({0, 0}, {0, 0}, {-1, 0}), std::invalid_argument);
+    EXPECT_THROW(utils::isPointInRectangle({0, 0}, {0, 0}, {-1, -1}), std::invalid_argument);
+    EXPECT_THROW(utils::isPointInRectangle({0, 0}, {0, 0}, {1, -1}), std::invalid_argument);
+}

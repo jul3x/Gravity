@@ -4,12 +4,10 @@
 
 #include <chrono>
 
-#include <Engine.h>
+#include <system/Engine.h>
 
 
-Engine::Engine() : physics_(planets_) {
-    addPlanet({CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f}, {}, 50.0f);
-}
+Engine::Engine() : physics_(planets_), state_(State::PAUSED) {}
 
 void Engine::update(int frame_rate) {
     restartClock();
@@ -23,16 +21,19 @@ void Engine::update(int frame_rate) {
 
         user_interface_.handleEvents();
 
-        background_.update(time_elapsed);
-        physics_.update(time_elapsed);
-
-        for (auto it = animations_.begin(); it != animations_.end(); ++it)
+        if (state_ == State::OK)
         {
-            if ((*it)->update(time_elapsed))
+            background_.update(time_elapsed);
+            physics_.update(time_elapsed);
+
+            for (auto it = animations_.begin(); it != animations_.end(); ++it)
             {
-                auto next_it = std::next(it);
-                animations_.erase(it);
-                it = next_it;
+                if ((*it)->update(time_elapsed))
+                {
+                    auto next_it = std::next(it);
+                    animations_.erase(it);
+                    it = next_it;
+                }
             }
         }
 
@@ -55,11 +56,29 @@ void Engine::update(int frame_rate) {
 
             Graphics::getInstance().draw(user_interface_);
 
+            user_interface_.drawGui();
+
             Graphics::getInstance().display();
         }
 
         ensureConstantFrameRate(frame_rate);
     }
+}
+
+void Engine::setSimulationState(bool run) {
+    state_ = run ? State::OK : State::PAUSED;
+}
+
+Engine::State Engine::getSimulationState() {
+    return state_;
+}
+
+std::list<Planet> Engine::getPlanets() const {
+    return planets_;
+}
+
+void Engine::updatePlanetsList(const std::list<Planet> &planets) {
+    planets_ = planets;
 }
 
 void Engine::addPlanet(const sf::Vector2f &pos, const sf::Vector2f &vel, float r) {

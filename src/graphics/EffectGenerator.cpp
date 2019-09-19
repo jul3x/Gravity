@@ -3,11 +3,11 @@
 //
 
 
-#include <ResourceManager.h>
+#include <system/ResourceManager.h>
 
 #include <graphics/EffectGenerator.h>
 
-#include <Config.h>
+#include <system/Config.h>
 
 
 void EffectGenerator::initialize() {

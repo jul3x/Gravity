@@ -48,3 +48,6 @@ test/build_test/*
 
 # gtest
 *googletest*
+
+# saved systems
+data/systems/*

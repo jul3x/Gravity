@@ -10,7 +10,7 @@
 #include <physics/RungeKuttaSolver.h>
 #include <physics/GravityEquation.h>
 #include <objects/Planet.h>
-#include <Config.h>
+#include <system/Config.h>
 
 class Physics {
 
@@ -25,7 +25,7 @@ public:
 private:
     inline void applyCollisions();
     inline void applyGravitationalMovement(float time_elapsed);
-    
+
     inline void applyMomentumConservation(Planet &first,
                                           const Planet &second);
     inline void applyDestruction(std::list<Planet>::iterator &first,

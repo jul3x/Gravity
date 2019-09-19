@@ -10,7 +10,7 @@
 
 #include <objects/AbstractDrawableObject.h>
 
-#include <ResourceManager.h>
+#include <system/ResourceManager.h>
 
 
 class Animation : public AbstractDrawableObject {

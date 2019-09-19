@@ -6,7 +6,7 @@
 #define GRAVITY_GRAPHICS_SPAWNANIMATION_H
 
 #include <graphics/Animation.h>
-#include <Config.h>
+#include <system/Config.h>
 
 
 class SpawnAnimation : public Animation {

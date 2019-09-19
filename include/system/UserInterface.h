@@ -2,15 +2,17 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#ifndef GRAVITY_GRAPHICS_USERINTERFACE_H
-#define GRAVITY_GRAPHICS_USERINTERFACE_H
+#ifndef GRAVITY_SYSTEM_USERINTERFACE_H
+#define GRAVITY_SYSTEM_USERINTERFACE_H
 
+#include <TGUI/TGUI.hpp>
 
 #include <objects/AbstractDrawableObject.h>
-#include <Config.h>
+#include <system/Config.h>
+
 
 class UserInterface : public AbstractDrawableObject {
-    
+
 public:
     explicit UserInterface();
 
@@ -18,15 +20,27 @@ public:
     UserInterface& operator=(const UserInterface&) = delete;
 
     void handleEvents();
+    void drawGui();
 
 private:
     enum class State {
+        MENU,
+        GALAXY
+    };
+
+    enum class MouseState {
         NOT_PRESSED,
         PRESSED
     };
 
+    static tgui::Button::Ptr generateButton(const sf::Vector2i &pos,
+                                            const sf::Vector2i &size,
+                                            const std::string &text);
+
     virtual void draw(sf::RenderTarget &target,
                       sf::RenderStates states) const;
+
+    inline void addWidgets();
 
     inline void handleScrolling(sf::RenderWindow &graphics_window,
                                 sf::View &view,
@@ -40,7 +54,12 @@ private:
                                       const sf::Vector2f &current_velocity);
     inline void setCursorRadius(float new_r);
 
+    static const std::string GUI_THEME_NAME_;
+    static const std::string MAPS_PATH_;
+    static constexpr int MENU_WIDTH_PX_ = 250;
+
     State state_;
+    MouseState mouse_state_;
 
     sf::Vector2i previous_mouse_pos_;
 
@@ -51,7 +70,16 @@ private:
     // velocity graphics representation
     sf::ConvexShape shaft_;
     sf::ConvexShape arrow_l_, arrow_r_;
+
+    // menu
+    tgui::Gui gui_;
+    sf::RectangleShape menu_background_;
+
+    tgui::Button::Ptr exit_button_, save_button_, load_button_, run_button_;
+    tgui::ListBox::Ptr map_list_;
+    tgui::EditBox::Ptr new_map_name_;
+    tgui::Label::Ptr information_;
 };
 
 
-#endif //GRAVITY_GRAPHICS_USERINTERFACE_H
+#endif //GRAVITY_SYSTEM_USERINTERFACE_H

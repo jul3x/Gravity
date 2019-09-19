@@ -3,8 +3,10 @@
 //
 
 #include <SFML/Graphics/Vertex.hpp>
+#include <system/ResourceManager.h>
 
 #include <objects/Planet.h>
+
 
 Planet::Planet(const sf::Vector2f &position, const sf::Vector2f &velocity, float radius) : 
     AbstractCelestialBody(position, velocity, radius) {}

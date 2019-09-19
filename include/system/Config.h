@@ -2,8 +2,8 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#ifndef GRAVITY_CONFIG_H
-#define GRAVITY_CONFIG_H
+#ifndef GRAVITY_SYSTEM_CONFIG_H
+#define GRAVITY_SYSTEM_CONFIG_H
 
 #include <map>
 #include <iostream>
@@ -130,4 +130,4 @@ private:
 
 #define CFG Config::getInstance()
 
-#endif //GRAVITY_CONFIG_H
+#endif //GRAVITY_SYSTEM_CONFIG_H

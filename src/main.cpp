@@ -2,8 +2,8 @@
 // Created by jprolejko on 26.02.19.
 //
 
-#include <Config.h>
-#include <Engine.h>
+#include <system/Config.h>
+#include <system/Engine.h>
 
 int main()
 {

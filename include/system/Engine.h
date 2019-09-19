@@ -2,8 +2,8 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#ifndef GRAVITY_ENGINE_H
-#define GRAVITY_ENGINE_H
+#ifndef GRAVITY_SYSTEM_ENGINE_H
+#define GRAVITY_SYSTEM_ENGINE_H
 
 #include <memory>
 
@@ -11,13 +11,18 @@
 #include <graphics/SpawnAnimation.h>
 #include <graphics/Explosion.h>
 #include <graphics/Graphics.h>
-#include <UserInterface.h>
+#include <system/UserInterface.h>
 #include <physics/Physics.h>
 
 
 class Engine {
 
 public:
+    enum class State {
+        OK,
+        PAUSED
+    };
+
     Engine(const Engine&) = delete;
     Engine& operator=(const Engine&) = delete;
 
@@ -27,6 +32,12 @@ public:
     }
 
     void update(int frame_rate);
+    void setSimulationState(bool run);
+    Engine::State getSimulationState();
+
+    std::list<Planet> getPlanets() const;
+    void updatePlanetsList(const std::list<Planet> &planets);
+
     void addPlanet(const sf::Vector2f &pos,
                    const sf::Vector2f &vel,
                    float r);
@@ -39,6 +50,8 @@ private:
 
     void ensureConstantFrameRate(int frame_rate);
     void restartClock();
+
+    State state_;
 
     Physics physics_;
 
@@ -53,4 +66,4 @@ private:
 };
 
 
-#endif //GRAVITY_ENGINE_H
+#endif //GRAVITY_SYSTEM_ENGINE_H

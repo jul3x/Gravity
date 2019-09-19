@@ -2,19 +2,21 @@
 // Created by jprolejko on 27.02.19.
 //
 
-#include <iostream> 
+#include <iostream>
 
-#include <Engine.h>
-#include <ResourceManager.h>
+#include <system/Engine.h>
+#include <system/ResourceManager.h>
 #include <utils/Geometry.h>
 #include <utils/Numeric.h>
 #include <graphics/Graphics.h>
 
-#include <UserInterface.h>
+#include <system/UserInterface.h>
 
+const std::string UserInterface::GUI_THEME_NAME_ = "gui_theme";
+const std::string UserInterface::MAPS_PATH_ = "data/systems/";
 
-UserInterface::UserInterface() {
-    state_ = State::NOT_PRESSED;
+UserInterface::UserInterface() : gui_(Graphics::getInstance().getWindow()) {
+    mouse_state_ = MouseState::NOT_PRESSED;
     cursor_planet_.setTexture(&ResourceManager::getInstance().getTexture("planet"));
     cursor_planet_.setFillColor(sf::Color(CFG.getInt("cursor_planet_color")));
     setCursorRadius(10.0f);
@@ -33,6 +35,13 @@ UserInterface::UserInterface() {
     arrow_r_.setOrigin(0.0f, 0.0f);
 
     current_zoom_ = 1.0f;
+
+    menu_background_.setSize({UserInterface::MENU_WIDTH_PX_,
+                              static_cast<float>(Graphics::getInstance().getWindow().getSize().y) + 100 /* titlebar */});
+    menu_background_.setPosition(0.0f, 0.0f);
+    menu_background_.setFillColor({255, 255, 255, 20});
+
+    this->addWidgets();
 }
 
 void UserInterface::handleEvents() {
@@ -45,8 +54,20 @@ void UserInterface::handleEvents() {
     auto current_velocity = utils::vectorLengthLimit(mouse_difference,
                                                      CFG.getFloat("max_set_velocity") * CFG.getFloat("pixels_per_km"));
 
+    if (utils::isPointInRectangle(static_cast<sf::Vector2f>(mouse_pos), {0.0f, 0.0f},
+                                  {UserInterface::MENU_WIDTH_PX_, static_cast<float>(graphics_window.getSize().y)}))
+    {
+        state_ = State::MENU;
+    }
+    else
+    {
+        state_ = State::GALAXY;
+    }
+
     while (graphics_window.pollEvent(event))
     {
+        gui_.handleEvent(event);
+
         switch (event.type)
         {
             case sf::Event::Closed:
@@ -57,34 +78,46 @@ void UserInterface::handleEvents() {
             case sf::Event::Resized:
             {
                 auto visible_area = sf::Vector2f(event.size.width, event.size.height);
+                gui_.setView(sf::View(sf::FloatRect(0.0f, 0.0f, visible_area.x, visible_area.y)));
+
+                auto bg_size = menu_background_.getSize();
+                menu_background_.setSize({bg_size.x, visible_area.y});
                 view.setSize(visible_area);
 
                 auto dynamic_view = Graphics::getInstance().getDynamicView();
                 dynamic_view.setSize(visible_area);
                 dynamic_view.zoom(current_zoom_);
                 Graphics::getInstance().setDynamicView(dynamic_view);
-                
+
                 break;
             }
             case sf::Event::MouseButtonPressed:
             {
-                previous_mouse_pos_ = mouse_pos;
-
-                state_ = State::PRESSED;
+                if (state_ != State::MENU)
+                {
+                    previous_mouse_pos_ = mouse_pos;
+                    mouse_state_ = MouseState::PRESSED;
+                }
                 break;
             }
             case sf::Event::MouseButtonReleased:
             {
-                Engine::getInstance().addPlanet(graphics_window.mapPixelToCoords(previous_mouse_pos_) /
-                                                    CFG.getFloat("pixels_per_km"),
-                                                current_velocity / CFG.getFloat("pixels_per_km"), cursor_r_);
+                if (mouse_state_ == MouseState::PRESSED)
+                {
+                    Engine::getInstance().addPlanet(graphics_window.mapPixelToCoords(previous_mouse_pos_) /
+                                                        CFG.getFloat("pixels_per_km"),
+                                                    current_velocity / CFG.getFloat("pixels_per_km"), cursor_r_);
+                }
 
-                state_ = State::NOT_PRESSED;
+                mouse_state_ = MouseState::NOT_PRESSED;
                 break;
             }
             case sf::Event::MouseWheelScrolled:
             {
-                handleScrolling(graphics_window, view, mouse_pos, event.mouseWheelScroll.delta);
+                if (state_ != State::MENU)
+                {
+                    handleScrolling(graphics_window, view, mouse_pos, event.mouseWheelScroll.delta);
+                }
                 break;
             }
             case sf::Event::KeyPressed:
@@ -102,15 +135,122 @@ void UserInterface::handleEvents() {
     handleInterfaceStates(graphics_window, mouse_pos, current_velocity);
 }
 
+tgui::Button::Ptr UserInterface::generateButton(const sf::Vector2i &pos,
+                                                const sf::Vector2i &size,
+                                                const std::string &text) {
+    auto button = tgui::Button::create();
+    button->setRenderer(ResourceManager::getInstance().getTheme(UserInterface::GUI_THEME_NAME_).getRenderer("Button"));
+    button->setPosition(pos.x, pos.y);
+    button->setText(text);
+    button->setSize(size.x, size.y);
+    return button;
+}
+
 void UserInterface::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    if (state_ == State::PRESSED && !utils::isNearlyEqual(shaft_.getLocalBounds().width, 0.0f, 0.01f))
+    if (mouse_state_ == MouseState::PRESSED && !utils::isNearlyEqual(shaft_.getLocalBounds().width, 0.0f, 0.01f))
     {
         target.draw(shaft_, states);
         target.draw(arrow_l_, states);
         target.draw(arrow_r_, states);
     }
 
-    target.draw(cursor_planet_, states);
+    if (state_ != State::MENU || mouse_state_ == MouseState::PRESSED)
+    {
+        target.draw(cursor_planet_, states);
+    }
+}
+
+void UserInterface::drawGui() {
+    auto temp_view = Graphics::getInstance().getWindow().getView();
+    Graphics::getInstance().getWindow().setView(gui_.getView());
+    Graphics::getInstance().getWindow().draw(menu_background_);
+    Graphics::getInstance().getWindow().setView(temp_view);
+
+    gui_.draw();
+}
+
+inline void UserInterface::addWidgets() {
+    static const sf::Vector2i SIZE = {140, 30};
+    static int POS_X = (UserInterface::MENU_WIDTH_PX_ - SIZE.x) / 2;
+
+    tgui::Theme &theme = ResourceManager::getInstance().getTheme(UserInterface::GUI_THEME_NAME_);
+
+    information_ = tgui::Label::create();
+    information_->setRenderer(theme.getRenderer("Label"));
+    information_->setText("");
+    information_->setPosition(UserInterface::MENU_WIDTH_PX_ + 20.0f, 20.0f);
+    information_->setTextSize(16);
+    gui_.add(information_);
+
+    exit_button_ = UserInterface::generateButton({POS_X, 70}, SIZE, "Exit");
+    exit_button_->connect("pressed", [&](){ Graphics::getInstance().getWindow().close(); });
+    gui_.add(exit_button_);
+
+    new_map_name_ = tgui::EditBox::create();
+    new_map_name_->setRenderer(theme.getRenderer("EditBox"));
+    new_map_name_->setSize(SIZE.x, SIZE.y);
+    new_map_name_->setPosition(POS_X, 150);
+    new_map_name_->setDefaultText("New map name");
+    gui_.add(new_map_name_);
+
+    save_button_ = UserInterface::generateButton({POS_X, 180}, SIZE, "Save system");
+    save_button_->connect("pressed", [&](){
+            std::list<Planet> planets = Engine::getInstance().getPlanets();
+            if (ResourceManager::getInstance().saveGravitySystem(planets, UserInterface::MAPS_PATH_, new_map_name_->getText()))
+            {
+                map_list_->addItem(new_map_name_->getText());
+                information_->setText("System successfully saved!");
+            }
+            else
+            {
+                information_->setText("System saving failed!");
+            }
+        });
+    gui_.add(save_button_);
+
+    map_list_ = tgui::ListBox::create();
+    map_list_->setRenderer(theme.getRenderer("ListBox"));
+    map_list_->setSize(SIZE.x, SIZE.y * 4);
+    map_list_->setItemHeight(SIZE.y);
+    map_list_->setPosition(POS_X, 270);
+
+    std::list<std::string> map_names = ResourceManager::getInstance().getGravitySystems(UserInterface::MAPS_PATH_);
+
+    for (const auto &name : map_names)
+    {
+        map_list_->addItem(name);
+    }
+    gui_.add(map_list_);
+
+    load_button_ = UserInterface::generateButton({POS_X, 390}, SIZE, "Load system");
+    load_button_->connect("pressed", [&](){
+            std::list<Planet> planets = ResourceManager::getInstance().getGravitySystem(
+                UserInterface::MAPS_PATH_, static_cast<std::string>(map_list_->getSelectedItem()));
+
+            if (!planets.empty())
+            {
+                Engine::getInstance().updatePlanetsList(planets);
+                information_->setText("System successfully loaded!");
+            }
+            else
+            {
+                information_->setText("System loading failed!");
+            }
+        });
+    gui_.add(load_button_);
+
+    run_button_ = UserInterface::generateButton({POS_X, 490}, SIZE, "Run simulation");
+    run_button_->connect("pressed", [this](){
+            Engine::getInstance().setSimulationState(Engine::getInstance().getSimulationState() == Engine::State::PAUSED);
+            run_button_->setText(Engine::getInstance().getSimulationState() == Engine::State::OK ?
+                                        "Pause simulation" : "Run simulation");
+
+            if (Engine::getInstance().getSimulationState() == Engine::State::OK)
+            {
+                information_->setText("");
+            }
+        });
+    gui_.add(run_button_);
 }
 
 inline void UserInterface::handleScrolling(sf::RenderWindow &graphics_window, sf::View &view,
@@ -177,15 +317,15 @@ inline void UserInterface::handleKeyPressed(sf::RenderWindow &graphics_window, s
 
 inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_window, const sf::Vector2i &mouse_pos,
                                                  const sf::Vector2f &current_velocity) {
-    switch (state_)
+    switch (mouse_state_)
     {
-        case State::NOT_PRESSED:
+        case MouseState::NOT_PRESSED:
         {
             cursor_planet_.setPosition(graphics_window.mapPixelToCoords(mouse_pos));
             previous_mouse_pos_ = mouse_pos;
             break;
         }
-        case State::PRESSED:
+        case MouseState::PRESSED:
         {
             static float ARROW_LENGTH = CFG.getFloat("arrow_width") * 3.0f;
             auto mouse_coords = graphics_window.mapPixelToCoords(previous_mouse_pos_);
@@ -204,7 +344,7 @@ inline void UserInterface::handleInterfaceStates(sf::RenderWindow &graphics_wind
             shaft_.setPoint(0, {0, 0});
             shaft_.setPoint(1, {shaft_length, - CFG.getFloat("arrow_width") / 2.0f});
             shaft_.setPoint(2, {shaft_length, CFG.getFloat("arrow_width") / 2.0f});
-            
+
             arrow_l_.setPoint(0, {shaft_length, 0});
             arrow_l_.setPoint(1, {shaft_length + ARROW_LENGTH, 0});
             arrow_l_.setPoint(2, {shaft_length - ARROW_LENGTH, - ARROW_LENGTH});
