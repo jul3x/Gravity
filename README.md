@@ -8,10 +8,16 @@ Simulation of gravitational forces between planets with user interaction. Provid
 
 -----
 
+## Usage
+Every cosmic system can be loaded and saved by using menu bar on the left side of application. Simulation can be paused and resumed - depending on what you need.  
+
 ## Control
 Application handles mouse and keyboard events. Click ``left mouse button`` to place a planet (don't release!) and then move mouse somewhere else to adjust starting velocity of the planet. To change size (and mass) of the desired object use combination of ``Left Ctrl`` + ``mouse scroll``. Be careful - size of each planet is limited!
 
 To move the view of your own planetary system use ``keyboard arrows``. If you want to zoom in or zoom out - use ``mouse scroll``.
+
+## Configuration
+Environment configuration is editable via config.j3x file in data directory. Feel free to modify it.
 
 -----
 
@@ -21,7 +27,7 @@ Build is as **simple** as it is possible [CMake]. Use provided in package ``buil
 
 ## Dependencies
 
-* C++14 compiler 
+* C++14 compiler
 * CMake >=3.6
 * SFML >=2.4 library
 * GTest - latest master
@@ -40,18 +46,22 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 -----
 
 ## Changelog
+* 24-09-2019 - Gravity 0.7.0
+    - Added menu bar with map saving/loading and pausing button.
+    - Added spawning animation.
+    - Auto screen resolution detection added.
 
 * 06-09-2019 - Gravity 0.6.1
-    - Fixed building issues
+    - Fixed building issues.
 
 * 05-09-2019 - Gravity 0.6.0
-    - Added trails of planets
-    - Added destruction animation
+    - Added trails of planets.
+    - Added destruction animation.
 
 * 28-08-2019 - Gravity 0.5.0
-    - GTest integration with unit testing
-    - Travis CI integration
-    - Configuration file extracted from code
+    - GTest integration with unit testing.
+    - Travis CI integration.
+    - Configuration file extracted from code.
 
 * 03-07-2019 - Gravity 0.4.0
     - Upgraded and fixed UI.
@@ -70,5 +80,5 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ~jul3x
 
-[VERSION]: https://img.shields.io/badge/version-0.6.1-blue.svg
-[logo]: data/logo.png
+[VERSION]: https://img.shields.io/badge/version-0.7.0-blue.svg
+[logo]: data/textures/logo.png

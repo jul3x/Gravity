@@ -2,7 +2,7 @@
 // Created by jprolejko on 06.03.19.
 //
 
-#include <Engine.h>
+#include <system/Engine.h>
 #include <utils/Geometry.h>
 
 #include <physics/Physics.h>
@@ -11,16 +11,16 @@
 Physics::Physics(std::list<Planet> &planets) : planets_(planets), equation_(planets_), solver_(equation_) {}
 
 void Physics::update(float time_elapsed) {
+    applyCollisions();
+    applyGravitationalMovement(time_elapsed);
+
     for (auto &planet : planets_)
     {
         planet.update(time_elapsed);
     }
-    
-    applyCollisions(time_elapsed);
-    applyGravitationalMovement(time_elapsed);
 }
 
-inline void Physics::applyCollisions(float time_elapsed) {
+inline void Physics::applyCollisions() {
     auto current_planet = planets_.begin();
     bool move_forward;
 

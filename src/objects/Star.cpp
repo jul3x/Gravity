@@ -3,7 +3,7 @@
 //
 
 
-#include <Config.h>
+#include <system/Config.h>
 
 #include <objects/Star.h>
 
@@ -14,7 +14,7 @@ void Star::update(float time_elapsed) {
     {
         change_direction = -change_direction;
     }
-    
+
     this->setTransparency(this->getTransparency() + static_cast<int>(change_direction * time_elapsed));
     this->setPosition(this->getPosition() + time_elapsed * velocity_);
 

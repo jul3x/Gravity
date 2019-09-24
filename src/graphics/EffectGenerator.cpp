@@ -3,11 +3,11 @@
 //
 
 
-#include <ResourceManager.h>
+#include <system/ResourceManager.h>
 
 #include <graphics/EffectGenerator.h>
 
-#include <Config.h>
+#include <system/Config.h>
 
 
 void EffectGenerator::initialize() {
@@ -37,7 +37,7 @@ void EffectGenerator::renderCurrentGaussianBlur(sf::RenderTarget &target) {
     ResourceManager::getInstance().getShader("blur").setUniform(
         "texture", sf::Shader::CurrentTexture);
     ResourceManager::getInstance().getShader("blur").setUniform(
-        "blur_radius", sf::Vector2f(0.4f / CFG.getInt("window_width_px"), 0.0f));
+        "blur_radius", sf::Vector2f(0.7f / CFG.getInt("window_width_px"), 0.0f));
     
     static sf::Sprite sprite(texture_.getTexture());
 
@@ -49,6 +49,6 @@ void EffectGenerator::renderCurrentGaussianBlur(sf::RenderTarget &target) {
     ResourceManager::getInstance().getShader("blur").setUniform(
         "texture", sf::Shader::CurrentTexture);
     ResourceManager::getInstance().getShader("blur").setUniform(
-        "blur_radius", sf::Vector2f(0.0f, 0.4f / CFG.getInt("window_height_px")));
+        "blur_radius", sf::Vector2f(0.0f, 0.7f / CFG.getInt("window_height_px")));
     target.draw(sprite_2, &ResourceManager::getInstance().getShader("blur"));
 }

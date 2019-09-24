@@ -12,13 +12,18 @@
 
 namespace utils {
 
-template <class T>
+template<class T>
 T getRandom(const T &left, const T &right) {
     static std::random_device rd;
     static std::mt19937 mt(rd());
     std::uniform_real_distribution<> distribution(static_cast<double>(left), static_cast<double>(right));
 
     return static_cast<T>(distribution(mt));
+}
+
+template<>
+inline int getRandom<int>(const int &left, const int &right) {
+    return static_cast<int>(std::lround(utils::getRandom<float>(left, right)));
 }
 
 inline bool isBetween(float num, float a, float b) {

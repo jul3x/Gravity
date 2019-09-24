@@ -7,7 +7,7 @@
 
 Graphics::Graphics() : settings_(0, 0, 8),
                        window_(sf::VideoMode(CFG.getInt("window_width_px"), CFG.getInt("window_height_px")),
-                                             "Gravity", sf::Style::Default, settings_) {
+                                             "Gravity - simple simulation of gravitational forces", sf::Style::Default, settings_) {
     current_view_ = window_.getView();
     current_view_.setSize(CFG.getInt("window_width_px"), CFG.getInt("window_height_px"));
     current_view_.setCenter(CFG.getInt("window_width_px") / 2.0f, CFG.getInt("window_height_px") / 2.0f);
@@ -42,6 +42,7 @@ void Graphics::setDynamicView(sf::View &view) {
 sf::View& Graphics::getStaticView() {
     return standard_view_;
 }
+
 sf::View& Graphics::getDynamicView() {
     return current_view_;
 }
