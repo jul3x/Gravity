@@ -47,21 +47,21 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ## Changelog
 * 24-09-2019 - Gravity 0.7.0
-    - Added menu bar with map saving/loading and pausing button
-    - Added spawning animation
-    - Auto screen resolution detection added
+    - Added menu bar with map saving/loading and pausing button.
+    - Added spawning animation.
+    - Auto screen resolution detection added.
 
 * 06-09-2019 - Gravity 0.6.1
-    - Fixed building issues
+    - Fixed building issues.
 
 * 05-09-2019 - Gravity 0.6.0
-    - Added trails of planets
-    - Added destruction animation
+    - Added trails of planets.
+    - Added destruction animation.
 
 * 28-08-2019 - Gravity 0.5.0
-    - GTest integration with unit testing
-    - Travis CI integration
-    - Configuration file extracted from code
+    - GTest integration with unit testing.
+    - Travis CI integration.
+    - Configuration file extracted from code.
 
 * 03-07-2019 - Gravity 0.4.0
     - Upgraded and fixed UI.
@@ -80,5 +80,5 @@ If you want to build unit tests - run ``build_and_run_tests.bash`` script in mai
 
 ~jul3x
 
-[VERSION]: https://img.shields.io/badge/version-0.6.1-blue.svg
-[logo]: data/logo.png
+[VERSION]: https://img.shields.io/badge/version-0.7.0-blue.svg
+[logo]: data/textures/logo.png
