@@ -59,7 +59,7 @@ std::list<Planet> GravitySystemLoader::loadGravitySystem(const std::string &path
 
     for (const auto &system : std::experimental::filesystem::directory_iterator(path))
     {
-        std::string name = system.path();
+        std::string name = system.path().string();
         name.erase(0, name.rfind('/') + 1);
         systems.push_back(name);
     }
