@@ -13,7 +13,7 @@
 #include <system/UserInterface.h>
 
 const std::string UserInterface::GUI_THEME_NAME_ = "gui_theme";
-const std::string UserInterface::MAPS_PATH_ = "data/systems/";
+const std::string UserInterface::MAPS_PATH_ = "../data/systems/";
 
 UserInterface::UserInterface() : gui_(Graphics::getInstance().getWindow()) {
     mouse_state_ = MouseState::NOT_PRESSED;

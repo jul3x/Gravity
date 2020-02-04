@@ -9,7 +9,7 @@ int main()
 {
     constexpr int FRAME_RATE = 60;
 
-    CFG.initialize("data/config.j3x");
+    CFG.initialize("../data/config.j3x");
 
     if (CFG.getInt("auto_resolution"))
     {

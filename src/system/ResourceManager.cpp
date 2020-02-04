@@ -51,7 +51,7 @@ tgui::Theme& ResourceManager::getTheme(const std::string &key) {
     {
         try
         {
-            themes_[key] = tgui::Theme("data/" + key + ".txt");
+            themes_[key] = tgui::Theme("../data/" + key + ".txt");
             std::cout << "[ResourceManager] Theme " << key << " is loaded!" << std::endl;
         }
         catch (std::runtime_error &e)
@@ -110,7 +110,7 @@ void ResourceManager::lazyLoadTexture(const std::string &key) {
 }
 
 void ResourceManager::loadTexture(const std::string &key) {
-    if (!textures_[key].loadFromFile("data/textures/" + key + ".png"))
+    if (!textures_[key].loadFromFile("../data/textures/" + key + ".png"))
     {
         throw std::runtime_error("[ResourceManager] " + key + " texture file not successfully loaded.");
     }
@@ -122,7 +122,7 @@ void ResourceManager::loadShader(const std::string &key) {
         throw std::runtime_error("[ResourceManager] Shaders are not available!");
     }
 
-    if (!shaders_[key].loadFromFile("data/shaders/" + key + ".frag", sf::Shader::Fragment))
+    if (!shaders_[key].loadFromFile("../data/shaders/" + key + ".frag", sf::Shader::Fragment))
     {
         throw std::runtime_error("[ResourceManager] " + key + " shader file not found or is corrupted!");
     }
